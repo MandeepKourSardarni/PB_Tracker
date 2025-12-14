@@ -59,11 +59,22 @@
 
     button, input, select { font-family:inherit; }
 
-    .wrap{
-      max-width: var(--w);
-      margin: 0 auto;
-      padding: 98px 18px 26px;
-    }
+:root{
+  --appbarH: 84px; /* JS will override this dynamically */
+}
+
+.wrap{
+  max-width: var(--w);
+  margin: 0 auto;
+  padding: calc(var(--appbarH) + 18px) 18px 26px;
+}
+
+/* remove these old fixed ones (IMPORTANT)
+@media (max-width: 560px){
+  .wrap{ padding-top: 112px; }
+}
+*/
+
 
     /* ---------- APP BAR ---------- */
     .appbar{
