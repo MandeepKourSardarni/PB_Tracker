@@ -124,13 +124,13 @@
       box-shadow: 0 10px 26px rgba(124,92,255,.18);
     }
 
+    /* RIGHT TOOLBAR - keep one row on desktop */
     .rightTools{
       display:flex;
       align-items:center;
-      gap: 10px;
+      gap: 8px;
       justify-content:flex-end;
-      min-width: 320px;
-      flex-wrap:wrap;
+      flex-wrap:nowrap;
     }
 
     .select{
@@ -139,12 +139,12 @@
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
       color: var(--text);
-      padding: 10px 38px 10px 12px;
+      padding: 10px 34px 10px 12px;
       border-radius: 14px;
-      font-weight:700;
+      font-weight:800;
       outline:none;
       cursor:pointer;
-      min-width: 210px;
+      min-width: 200px;
     }
     .selectWrap{ position:relative; }
     .selectWrap:after{
@@ -158,7 +158,7 @@
       font-size: 12px;
     }
 
-    /* Dropdown visibility fix (best effort across browsers) */
+    /* dropdown visibility fix */
     select, option {
       color: var(--text);
       background-color: #0a1020;
@@ -168,13 +168,14 @@
       background-color: #0a1020;
     }
 
+    /* Buttons fit to text */
     .btn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
       color: var(--text);
-      padding: 10px 14px;
+      padding: 10px 12px;
       border-radius: 14px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
       transition: .18s ease;
       box-shadow: var(--shadow2);
@@ -207,8 +208,7 @@
     @media (max-width: 980px){
       .grid{ grid-template-columns: 1fr; }
       .brand{ min-width: 160px; }
-      .rightTools{ min-width: unset; }
-      .select{ min-width: 190px; }
+      .select{ min-width: 180px; }
     }
 
     .card{
@@ -246,7 +246,8 @@
       background: rgba(255,255,255,.05);
       color: var(--muted);
       font-size: 12px;
-      font-weight:800;
+      font-weight:900;
+      white-space:nowrap;
     }
 
     .kpis{
@@ -380,20 +381,30 @@
       padding: 20px;
     }
     .modalOverlay.show{ display:flex; }
+
+    /* KEY FIX: MODAL SCROLL */
     .modal{
-      width: min(620px, 100%);
+      width: min(700px, 100%);
+      max-height: calc(100vh - 70px);
+      overflow:auto;
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,.12);
       background: linear-gradient(180deg, rgba(18,26,48,.95), rgba(10,14,26,.95));
       box-shadow: var(--shadow);
       padding: 16px;
     }
+
     .modalTop{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap: 12px;
       margin-bottom: 12px;
+      position: sticky;
+      top: 0;
+      background: linear-gradient(180deg, rgba(18,26,48,.98), rgba(18,26,48,.85));
+      padding-bottom: 10px;
+      z-index: 2;
     }
     .modalTop h3{
       margin:0;
@@ -414,6 +425,7 @@
       width: 38px; height: 38px;
       cursor:pointer;
       font-weight: 900;
+      flex: 0 0 auto;
     }
 
     .form{
@@ -421,7 +433,6 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .form.one{ grid-template-columns: 1fr; }
     .field{
       display:flex;
       flex-direction:column;
@@ -440,7 +451,7 @@
       border-radius: 14px;
       padding: 10px 12px;
       outline:none;
-      font-weight: 800;
+      font-weight: 900;
     }
     .help{
       font-size: 12px;
@@ -466,6 +477,11 @@
       justify-content:flex-end;
       margin-top: 12px;
       flex-wrap:wrap;
+      position: sticky;
+      bottom: 0;
+      background: linear-gradient(0deg, rgba(18,26,48,.98), rgba(18,26,48,.85));
+      padding-top: 10px;
+      z-index: 2;
     }
 
     /* Multi-entry rows */
@@ -485,9 +501,6 @@
       border-radius: 16px;
       padding: 10px;
     }
-    @media (max-width: 560px){
-      .entryRow{ grid-template-columns: 1fr; }
-    }
     .miniBtn{
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
@@ -497,6 +510,7 @@
       font-weight: 900;
       cursor:pointer;
       transition:.18s ease;
+      white-space:nowrap;
     }
     .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
     .miniBtnDanger{
@@ -514,21 +528,22 @@
     .screen{ display:none; }
     .screen.active{ display:block; }
 
+    /* Mobile behavior: allow wrap, but keep Reset next to Add Race if possible */
     @media (max-width: 560px){
       .tabs{ display:none; }
       .brandText span{ display:none; }
-      .form{ grid-template-columns: 1fr; }
-      .btn{ padding: 10px 12px; }
       .wrap{ padding-top: 84px; }
-      .rightTools{ justify-content:flex-start; }
+      .rightTools{ flex-wrap:wrap; justify-content:flex-start; }
       .select{ min-width: 100%; }
+      .form{ grid-template-columns: 1fr; }
+      .entryRow{ grid-template-columns: 1fr; }
+      .modal{ max-height: calc(100vh - 40px); }
     }
   </style>
 </head>
 
 <body>
 
-  <!-- APP BAR -->
   <div class="appbar">
     <div class="appbarInner">
 
@@ -571,6 +586,7 @@
     <section id="screenHome" class="screen active">
       <div class="grid">
 
+        <!-- LEFT CARD -->
         <div class="card">
           <div class="cardHeader">
             <div>
@@ -636,19 +652,25 @@
           </div>
         </div>
 
+        <!-- RIGHT CARD -->
         <div class="card">
           <div class="cardHeader">
             <div>
-              <div class="title">Recent Races</div>
-              <div class="sub">Most recent entries (sorted newest first).</div>
+              <div class="title">PB Summary + Recent Races</div>
+              <div class="sub">All PBs (by distance) + latest entries.</div>
             </div>
             <div class="pill" id="pillPBCount">0 PBs</div>
           </div>
 
+          <!-- NEW: PB SUMMARY ON HOME -->
+          <div id="pbSummaryWrap"></div>
+
+          <div style="height:10px;"></div>
+
           <div id="recentWrap"></div>
 
           <div class="foot">
-            New PBs are automatically detected for each distance.
+            PBs are calculated per athlete per distance.
           </div>
         </div>
 
@@ -798,24 +820,6 @@
 
   </div>
 
-  <!-- LOCATION SUGGESTIONS -->
-  <datalist id="locationList">
-    <option value="Milton"></option>
-    <option value="Hamilton"></option>
-    <option value="Oakville"></option>
-    <option value="Burlington"></option>
-    <option value="Mississauga"></option>
-    <option value="Toronto"></option>
-    <option value="Markham"></option>
-    <option value="Etobicoke"></option>
-    <option value="Kitchener"></option>
-    <option value="Waterloo"></option>
-    <option value="Cambridge"></option>
-    <option value="Guelph"></option>
-    <option value="Niagara"></option>
-    <option value="London"></option>
-  </datalist>
-
   <!-- MODAL: ADD ATHLETE -->
   <div class="modalOverlay" id="modalAthlete">
     <div class="modal">
@@ -897,8 +901,9 @@
 
         <div class="field">
           <label>Location</label>
-          <input id="enLocation" class="input" list="locationList" placeholder="e.g., Milton" />
-          <div class="help">Type a city or rink name (suggestions available).</div>
+          <!-- UPDATED: plain text, no dropdown -->
+          <input id="enLocation" class="input" placeholder="e.g., Scarborough" />
+          <div class="help">Type any location (city or rink).</div>
         </div>
 
         <div class="field" style="grid-column:1 / -1;">
@@ -955,13 +960,6 @@
 
 
   <script>
-    /* ==========================================================
-      PB VELOCITYBOARD — SINGLE FILE EDITION (UPDATED)
-      - Edit athlete
-      - Dropdown visibility fix
-      - Location + multi-distance entries per event
-    ========================================================== */
-
     const LS_KEY = "pb_velocityboard_v7_singlefile";
     const LS_PREF = "pb_velocityboard_prefs_v7";
 
@@ -996,6 +994,7 @@
     const pillCount = document.getElementById("pillCount");
     const pillPBCount = document.getElementById("pillPBCount");
     const recentWrap = document.getElementById("recentWrap");
+    const pbSummaryWrap = document.getElementById("pbSummaryWrap");
 
     const pillAnalytics = document.getElementById("pillAnalytics");
     const anBest90 = document.getElementById("anBest90");
@@ -1012,11 +1011,9 @@
     const defaultDistance = document.getElementById("defaultDistance");
     const timeHint = document.getElementById("timeHint");
 
-    // Trend chart
     const canvas = document.getElementById("trendCanvas");
     const ctx = canvas.getContext("2d");
 
-    // Buttons
     document.getElementById("btnAddAthlete").addEventListener("click", () => openModal("modalAthlete"));
     document.getElementById("btnEditAthlete").addEventListener("click", openEditAthlete);
     document.getElementById("btnAddEntry").addEventListener("click", () => {
@@ -1029,7 +1026,6 @@
     });
     document.getElementById("btnReset").addEventListener("click", () => openModal("modalReset"));
 
-    // Modal close handlers
     document.querySelectorAll("[data-close]").forEach(btn => {
       btn.addEventListener("click", () => closeModal(btn.getAttribute("data-close")));
     });
@@ -1039,53 +1035,40 @@
       });
     });
 
-    // Save athlete
     document.getElementById("saveAthlete").addEventListener("click", saveAthlete);
-
-    // Save athlete edits
     document.getElementById("saveAthleteEdits").addEventListener("click", saveAthleteEdits);
-
-    // Save entry (multi)
     document.getElementById("saveEntry").addEventListener("click", saveEntryMulti);
-
-    // Reset
     document.getElementById("doReset").addEventListener("click", doResetAll);
 
-    // Export
     document.getElementById("btnExportJSON").addEventListener("click", exportJSON);
     document.getElementById("btnExportCSV").addEventListener("click", exportCSV);
     document.getElementById("btnImport").addEventListener("click", importJSON);
 
-    // Tabs
     tabBtns.forEach(btn => btn.addEventListener("click", () => switchTab(btn.dataset.tab)));
 
-    // Athlete select change
     athleteSelect.addEventListener("change", () => {
       state.activeAthleteId = athleteSelect.value || null;
       saveState();
       renderAll();
     });
 
-    // Distance filter
     distanceFilter.addEventListener("change", () => renderAll());
 
-    // Settings
     defaultDistance.addEventListener("change", () => {
       prefs.defaultDistance = defaultDistance.value;
       savePrefs();
       distanceFilter.value = prefs.defaultDistance;
       renderAll();
     });
+
     timeHint.addEventListener("input", () => {
       prefs.timeHint = timeHint.value.trim() || "00:52.300";
       savePrefs();
     });
 
-    // Multi rows
     const entryRowsEl = document.getElementById("entryRows");
     document.getElementById("btnAddRow").addEventListener("click", () => addEntryRow());
 
-    // Init
     init();
 
     function init(){
@@ -1121,7 +1104,6 @@
       });
     }
 
-    // ---------- STORAGE ----------
     function loadState(){
       try{
         const raw = localStorage.getItem(LS_KEY);
@@ -1152,7 +1134,6 @@
       return "a_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
     }
 
-    // ---------- TIME HELPERS ----------
     function parseTimeToMs(t){
       if(!t) return null;
       t = (""+t).trim();
@@ -1212,7 +1193,6 @@
       return pb;
     }
 
-    // ---------- ACTIONS ----------
     function showError(id, msg){
       const el = document.getElementById(id);
       el.textContent = msg;
@@ -1262,7 +1242,6 @@
       renderAll();
     }
 
-    // Edit athlete name
     function openEditAthlete(){
       const ath = getActiveAthlete();
       if(!ath){
@@ -1303,30 +1282,22 @@
       renderAll();
     }
 
-    // Multi-entry race modal open/reset
     function openEntryModal(){
       clearErrors();
-
-      // date default
       const dateEl = document.getElementById("enDate");
       dateEl.valueAsDate = new Date();
 
-      // location + notes
       document.getElementById("enLocation").value = "";
       document.getElementById("enNotes").value = "";
 
-      // reset rows
       entryRowsEl.innerHTML = "";
-      addEntryRow("400m", "", true); // first row default
+      addEntryRow("400m", "", true);
       openModal("modalEntry");
     }
 
     function addEntryRow(distance="500m", time="", isFirst=false){
-      const rowId = "r_" + Math.random().toString(16).slice(2);
-
       const row = document.createElement("div");
       row.className = "entryRow";
-      row.dataset.rowId = rowId;
 
       row.innerHTML = `
         <div class="field">
@@ -1383,7 +1354,7 @@
         return;
       }
       if(!location){
-        showError("entryErr","Please enter a location (e.g., Milton).");
+        showError("entryErr","Please enter a location (e.g., Scarborough).");
         return;
       }
 
@@ -1393,8 +1364,7 @@
         return;
       }
 
-      // compute PB map before
-      const beforePBMap = computePBMap(ath.entries || {});
+      const beforePBMap = computePBMap(ath.entries || []);
       let savedCount = 0;
       let pbMessages = [];
 
@@ -1422,7 +1392,6 @@
         ath.entries.push(entry);
         savedCount++;
 
-        // check PB after for that distance (compute fast by comparing with beforePB)
         if(beforePB == null || ms < beforePB){
           const diff = beforePB == null ? null : (beforePB - ms);
           const msg = diff == null
@@ -1458,7 +1427,6 @@
       renderAll();
     }
 
-    // ---------- RENDER ----------
     function renderAll(){
       renderAthleteSelect();
       renderHome();
@@ -1501,18 +1469,28 @@
         pillAthlete.textContent = "No athlete selected";
         pillCount.textContent = "0 races";
         pillPBCount.textContent = "0 PBs";
+
         kpiPB.textContent = "—";
         kpiPBDistance.textContent = "Pick a distance";
         kpiLatest.textContent = "—";
         kpiLatestMeta.textContent = "—";
         kpiAvg10.textContent = "—";
         kpiCons.textContent = "—";
+
+        pbSummaryWrap.innerHTML = `
+          <div class="empty">
+            <strong>No athlete selected</strong>
+            <p>Add an athlete and start entering races to see PBs here.</p>
+          </div>
+        `;
+
         recentWrap.innerHTML = `
           <div class="empty">
             <strong>Add your first athlete</strong>
             <p>Click <b>Add Athlete</b>, then add race entries to track PBs, trends, and progress.</p>
           </div>
         `;
+
         drawChart([], dist);
         return;
       }
@@ -1524,6 +1502,43 @@
       const pbMap = computePBMap(entriesAll);
       const pbCount = Object.keys(pbMap).length;
       pillPBCount.textContent = `${pbCount} PBs`;
+
+      // PB Summary (NEW on home)
+      if(pbCount === 0){
+        pbSummaryWrap.innerHTML = `
+          <div class="empty">
+            <strong>No PBs yet</strong>
+            <p>Add race entries and PBs will appear here automatically for each distance.</p>
+          </div>
+        `;
+      }else{
+        const distances = Object.keys(pbMap).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+        pbSummaryWrap.innerHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Distance</th>
+                <th>PB</th>
+                <th>Date</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${distances.map(d=>{
+                const pb = pbMap[d];
+                return `
+                  <tr>
+                    <td><span class="badge">${d}</span></td>
+                    <td><b>${msToTime(pb.ms)}</b></td>
+                    <td>${fmtDate(pb.date)}</td>
+                    <td style="color:rgba(255,255,255,.75)">${escapeHtml(pb.location || "—")}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+      }
 
       const entries = dist === "ALL" ? entriesAll : entriesAll.filter(e => e.distance === dist);
 
@@ -1561,10 +1576,9 @@
           </div>
         `;
       }else{
-        const pbByDist = pbMap;
         const rows = entriesAll.slice(0,12).map(e => {
           const ms = parseTimeToMs(e.time);
-          const isPB = pbByDist[e.distance] && ms != null && ms === pbByDist[e.distance].ms;
+          const isPB = pbMap[e.distance] && ms != null && ms === pbMap[e.distance].ms;
           const badge = isPB
             ? `<span class="badge badgePB">🏅 PB</span>`
             : `<span class="badge badgeOK">Saved</span>`;
@@ -1674,7 +1688,6 @@
       pillExport.textContent = ath ? `Selected: ${ath.name}` : "No athlete";
     }
 
-    // ---------- CHART DRAW ----------
     function drawChart(entries, dist){
       const data = [...entries]
         .filter(e => parseTimeToMs(e.time)!=null)
@@ -1682,8 +1695,7 @@
 
       const points = data.map(e => ({
         x: new Date(e.date).getTime(),
-        y: parseTimeToMs(e.time),
-        label: `${fmtDate(e.date)} • ${e.distance} • ${e.time}`
+        y: parseTimeToMs(e.time)
       }));
 
       ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -1769,12 +1781,9 @@
         ctx.fill();
       });
 
-      ctx.fillStyle = "rgba(255,255,255,.78)";
-      ctx.font = "900 20px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-      ctx.fillText("Trend Line", padL, 26);
+      /* UPDATED: removed "Trend Line" title drawn on canvas */
     }
 
-    // ---------- EXPORT / IMPORT ----------
     function exportJSON(){
       const blob = new Blob([JSON.stringify({ state, prefs }, null, 2)], { type:"application/json" });
       downloadBlob(blob, "PB-VelocityBoard-backup.json");
@@ -1864,7 +1873,6 @@
       reader.readAsText(file);
     }
 
-    // ---------- UTILS ----------
     function escapeHtml(str){
       return String(str)
         .replaceAll("&","&amp;")
