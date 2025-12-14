@@ -12,7 +12,7 @@
       --accent:#2f6bff;
       --accent2:#2bb7ff;
 
-      --text:#0f1526;             /* unified text color */
+      --text:#0f1526;
       --muted:rgba(15,21,38,.62);
       --muted2:rgba(15,21,38,.46);
 
@@ -26,7 +26,7 @@
 
       --w: 1180px;
       --gap: 14px;
-      --appbarH: 84px; /* JS overrides */
+      --appbarH: 84px;
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
@@ -53,7 +53,6 @@
       padding: calc(var(--appbarH) + 18px) 18px 26px;
     }
 
-    /* ========= APP BAR ========= */
     .appbar{
       position:fixed;
       top:0; left:0; right:0;
@@ -71,7 +70,7 @@
       justify-content:space-between;
       gap: 12px;
       padding: 12px 18px;
-      flex-wrap: wrap; /* phones */
+      flex-wrap: wrap;
     }
     .brand{
       display:flex;
@@ -106,13 +105,11 @@
       border-radius: 999px;
       background: rgba(255,255,255,.70);
       flex: 0 0 auto;
-
       overflow-x:auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
     }
     .tabs::-webkit-scrollbar{ display:none; }
-
     .tabBtn{
       border:0;
       padding: 9px 14px;
@@ -167,7 +164,6 @@
       outline:none;
       cursor:pointer;
     }
-
     select, option{
       color: var(--text);
       background-color: #ffffff;
@@ -189,7 +185,6 @@
       box-shadow: none;
     }
     .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
-
     .btnPrimary{
       border: none;
       background: linear-gradient(135deg, rgba(47,107,255,.98), rgba(43,183,255,.92));
@@ -201,11 +196,9 @@
       background: rgba(226,59,87,.10);
     }
 
-    /* ========= GLASS CARDS ========= */
     .card{
       border: 1px solid rgba(255,255,255,.16);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.68));
+      background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.68));
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 16px;
@@ -239,7 +232,7 @@
 
     .kpis{
       display:grid;
-      grid-template-columns: 1fr 1fr; /* PB + Distance Focus */
+      grid-template-columns: 1fr 1fr;
       gap: 10px;
       margin-top: 12px;
     }
@@ -256,17 +249,8 @@
     .kpi .value{ margin-top: 6px; font-size: 18px; font-weight: 900; letter-spacing:.3px; }
     .kpi .mini{ margin-top: 4px; color: var(--muted2); font-size: 12px; }
 
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-    }
-    .field label{
-      font-size: 12px;
-      font-weight: 900;
-      color: var(--muted);
-      letter-spacing:.2px;
-    }
+    .field{ display:flex; flex-direction:column; gap: 6px; }
+    .field label{ font-size: 12px; font-weight: 900; color: var(--muted); letter-spacing:.2px; }
     .input, .select2{
       border:1px solid rgba(15,21,38,.12);
       background: rgba(255,255,255,.92);
@@ -339,10 +323,7 @@
       transition:.18s ease;
     }
     .iconBtn:hover{ transform: translateY(-1px); background: rgba(15,21,38,.06); }
-    .iconBtnDanger{
-      background: rgba(226,59,87,.10);
-      border: 1px solid rgba(226,59,87,.22);
-    }
+    .iconBtnDanger{ background: rgba(226,59,87,.10); border: 1px solid rgba(226,59,87,.22); }
 
     .chart{
       width:100%;
@@ -394,7 +375,6 @@
     .banner strong{ font-weight: 900; }
     .banner .small{ color: var(--muted); font-size: 12px; margin-top: 3px; }
 
-    /* ========= UNO-STYLE DISTANCE CARDS ========= */
     .handWrap{
       margin-top: 12px;
       padding: 6px 2px 12px;
@@ -425,18 +405,8 @@
       position:relative;
       overflow:hidden;
     }
-    .distTop{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap: 10px;
-    }
-    .distTitle{
-      display:flex;
-      flex-direction:column;
-      gap: 4px;
-      min-width: 0;
-    }
+    .distTop{ display:flex; align-items:flex-start; justify-content:space-between; gap: 10px; }
+    .distTitle{ display:flex; flex-direction:column; gap: 4px; min-width: 0; }
     .distTitle .big{
       font-weight: 950;
       font-size: 16px;
@@ -454,14 +424,7 @@
       text-overflow:ellipsis;
       max-width: 240px;
     }
-
-    .distStats{
-      display:flex;
-      flex-direction:column;
-      align-items:flex-end;
-      gap: 4px;
-      flex: 0 0 auto;
-    }
+    .distStats{ display:flex; flex-direction:column; align-items:flex-end; gap: 4px; flex: 0 0 auto; }
     .distStats .pb{
       font-weight: 950;
       font-size: 13px;
@@ -471,12 +434,7 @@
       border: 1px solid rgba(47,107,255,.16);
       white-space:nowrap;
     }
-    .distStats .count{
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 900;
-      white-space:nowrap;
-    }
+    .distStats .count{ font-size: 12px; color: var(--muted); font-weight: 900; white-space:nowrap; }
 
     .distList{
       border-radius: 14px;
@@ -484,7 +442,7 @@
       background: rgba(255,255,255,.88);
       padding: 8px;
       overflow-y: auto;
-      max-height: 320px; /* vertical scroll inside card */
+      max-height: 320px;
       -webkit-overflow-scrolling: touch;
     }
 
@@ -500,18 +458,8 @@
     }
     .entryItem:last-child{ margin-bottom: 0; }
 
-    .entryMain{
-      display:flex;
-      flex-direction:column;
-      gap: 4px;
-      min-width: 0;
-    }
-    .entryMain .line1{
-      display:flex;
-      gap: 8px;
-      align-items:center;
-      flex-wrap:wrap;
-    }
+    .entryMain{ display:flex; flex-direction:column; gap: 4px; min-width: 0; }
+    .entryMain .line1{ display:flex; gap: 8px; align-items:center; flex-wrap:wrap; }
     .entryMain .time{
       font-weight: 950;
       font-size: 14px;
@@ -538,18 +486,11 @@
       max-width: 280px;
     }
 
-    .entryActions{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      align-items:flex-end;
-      justify-content:flex-start;
-    }
+    .entryActions{ display:flex; flex-direction:column; gap: 8px; align-items:flex-end; justify-content:flex-start; }
 
     .screen{ display:none; }
     .screen.active{ display:block; }
 
-    /* ========= MODALS ========= */
     .modalOverlay{
       position:fixed;
       inset:0;
@@ -586,18 +527,8 @@
       padding-bottom: 10px;
       z-index: 2;
     }
-    .modalTop h3{
-      margin:0;
-      font-size: 16px;
-      font-weight: 900;
-      color: var(--text);
-    }
-    .modalTop p{
-      margin:4px 0 0;
-      color: var(--muted);
-      font-size: 13px;
-      line-height:1.4;
-    }
+    .modalTop h3{ margin:0; font-size: 16px; font-weight: 900; color: var(--text); }
+    .modalTop p{ margin:4px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
     .xbtn{
       border: 1px solid rgba(15,21,38,.10);
       background: rgba(15,21,38,.04);
@@ -635,12 +566,7 @@
       z-index: 2;
     }
 
-    .entryRows{
-      display:flex;
-      flex-direction:column;
-      gap: 10px;
-      margin-top: 8px;
-    }
+    .entryRows{ display:flex; flex-direction:column; gap: 10px; margin-top: 8px; }
     .entryRow{
       display:grid;
       grid-template-columns: 1fr 1fr auto;
@@ -663,17 +589,9 @@
       white-space:nowrap;
     }
     .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
-    .miniBtnDanger{
-      border:1px solid rgba(226,59,87,.22);
-      background: rgba(226,59,87,.10);
-    }
+    .miniBtnDanger{ border:1px solid rgba(226,59,87,.22); background: rgba(226,59,87,.10); }
 
-    .foot{
-      margin-top: 14px;
-      color: var(--muted2);
-      font-size: 12px;
-      line-height:1.45;
-    }
+    .foot{ margin-top: 14px; color: var(--muted2); font-size: 12px; line-height:1.45; }
 
     @media (max-width: 560px){
       .brandText span{ display:none; }
@@ -733,7 +651,6 @@
       <div class="small" id="pbBannerText">Saved.</div>
     </div>
 
-    <!-- HOME -->
     <section id="screenHome" class="screen active">
       <div class="card">
         <div class="cardHeader">
@@ -744,27 +661,16 @@
           <div class="pill" id="pillAthlete">No athlete selected</div>
         </div>
 
-        <!-- PB + Distance Focus side by side -->
         <div class="kpis">
           <div class="kpi">
             <div class="label">PB (Selected Distance)</div>
             <div class="value" id="kpiPB">—</div>
-            <div class="mini" id="kpiPBDistance">Pick a distance</div>
+            <div class="mini" id="kpiPBDistance">Select a distance to display PB</div>
           </div>
 
           <div class="kpi">
             <div class="label">Distance Focus</div>
-            <select id="distanceFilter" class="select2">
-              <option value="ALL">All distances</option>
-              <option value="111m">111m</option>
-              <option value="222m">222m</option>
-              <option value="333m">333m</option>
-              <option value="400m">400m</option>
-              <option value="500m">500m</option>
-              <option value="800m">800m</option>
-              <option value="1000m">1000m</option>
-              <option value="1500m">1500m</option>
-            </select>
+            <select id="distanceFilter" class="select2"></select>
             <div class="mini" id="pillCount" style="margin-top:6px; color:var(--muted); font-weight:900;">0 races</div>
           </div>
         </div>
@@ -791,11 +697,10 @@
 
         <div id="cardsWrap" class="handWrap"></div>
 
-        <div class="foot">Tip: Everything is saved on this device (local storage). Export JSON for backup.</div>
+        <div class="foot">Tip: Everything is saved on this device (local storage).</div>
       </div>
     </section>
 
-    <!-- ANALYTICS -->
     <section id="screenAnalytics" class="screen">
       <div class="card">
         <div class="cardHeader">
@@ -810,7 +715,7 @@
           <div class="kpi">
             <div class="label">PB (Selected Distance)</div>
             <div class="value" id="anPB">—</div>
-            <div class="mini" id="anPBMeta">—</div>
+            <div class="mini" id="anPBMeta">Select a distance to display PB</div>
           </div>
 
           <div class="kpi">
@@ -825,31 +730,30 @@
           <canvas id="trendCanvas" width="1200" height="420"></canvas>
         </div>
 
-        <div class="foot">Use this chart to see progress over time. Filter by distance for a clean line.</div>
+        <div class="foot">Chart updates only when you change Distance Focus.</div>
       </div>
     </section>
 
-    <!-- EXPORT -->
     <section id="screenExport" class="screen">
       <div class="card">
         <div class="cardHeader">
           <div>
-            <div class="title">Export / Backup</div>
-            <div class="sub">Download your data so you can move devices or share with a coach.</div>
+            <div class="title">CSV Import / Template</div>
+            <div class="sub">Download the template, fill it, and upload to import into the selected athlete.</div>
           </div>
           <div class="pill" id="pillExport">—</div>
         </div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap;">
-          <button class="btn" id="btnExportCSV">Download CSV ( of the selected athlete)</button>
-          <button class="btn" id="btnDownloadTemplate">⬇️ Download CSV Template, just fill details and upload</button>
+          <button class="btn" id="btnExportCSV">Download CSV (selected athlete)</button>
+          <button class="btn" id="btnDownloadTemplate">⬇️ Download CSV Template</button>
         </div>
 
         <div class="empty" style="margin-top:12px;">
-          <strong>CSV Import</strong>
-          <p>Fill the template and upload it here to quickly add rows to the selected athlete.</p>
+          <strong>Upload CSV</strong>
+          <p>CSV rows will be added to the currently selected athlete.</p>
           <div class="field" style="margin-top:10px;">
-            <label>Upload CSV</label>
+            <label>Choose CSV</label>
             <input class="input" id="csvFile" type="file" accept=".csv" />
           </div>
           <div style="margin-top:10px;">
@@ -860,13 +764,12 @@
       </div>
     </section>
 
-    <!-- SETTINGS -->
     <section id="screenSettings" class="screen">
       <div class="card">
         <div class="cardHeader">
           <div>
             <div class="title">Settings</div>
-            <div class="sub">Simple preferences.</div>
+            <div class="sub">Preferences.</div>
           </div>
           <div class="pill">Local Storage</div>
         </div>
@@ -874,17 +777,7 @@
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 10px;" class="formGrid">
           <div class="field">
             <label>Default Distance Focus</label>
-            <select id="defaultDistance" class="select2">
-              <option value="ALL">All distances</option>
-              <option value="111m">111m</option>
-              <option value="222m">222m</option>
-              <option value="333m">333m</option>
-              <option value="400m">400m</option>
-              <option value="500m">500m</option>
-              <option value="800m">800m</option>
-              <option value="1000m">1000m</option>
-              <option value="1500m">1500m</option>
-            </select>
+            <select id="defaultDistance" class="select2"></select>
           </div>
 
           <div class="field">
@@ -895,19 +788,19 @@
 
         <div class="empty" style="margin-top:12px;">
           <strong>Storage note</strong>
-          <p>All data is stored on this device. To start fresh: Reset. To move devices download the csv template of athlete, reupload on other device on this page </p>
+          <p>All data is stored on this device. To start fresh: Reset.</p>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- MODAL: ADD ATHLETE -->
+  <!-- MODALS -->
   <div class="modalOverlay" id="modalAthlete">
     <div class="modal">
       <div class="modalTop">
         <div>
           <h3>Add Athlete</h3>
-          <p>Create an athlete profile. You can add races after that.</p>
+          <p>Create an athlete profile.</p>
         </div>
         <button class="xbtn" data-close="modalAthlete">✕</button>
       </div>
@@ -932,13 +825,12 @@
     </div>
   </div>
 
-  <!-- MODAL: EDIT ATHLETE -->
   <div class="modalOverlay" id="modalEditAthlete">
     <div class="modal">
       <div class="modalTop">
         <div>
           <h3>Edit Athlete</h3>
-          <p>Update athlete name (and birth year). Entries stay the same.</p>
+          <p>Update athlete name (and birth year).</p>
         </div>
         <button class="xbtn" data-close="modalEditAthlete">✕</button>
       </div>
@@ -963,13 +855,12 @@
     </div>
   </div>
 
-  <!-- MODAL: ADD ENTRY -->
   <div class="modalOverlay" id="modalEntry">
     <div class="modal">
       <div class="modalTop">
         <div>
           <h3>Add Race Entry</h3>
-          <p>Same date + location can include multiple distances (400/500/800/1000 etc.).</p>
+          <p>Same date + location can include multiple distances.</p>
         </div>
         <button class="xbtn" data-close="modalEntry">✕</button>
       </div>
@@ -1008,13 +899,12 @@
     </div>
   </div>
 
-  <!-- MODAL: RESET -->
   <div class="modalOverlay" id="modalReset">
     <div class="modal">
       <div class="modalTop">
         <div>
           <h3>Reset</h3>
-          <p>This removes your stored data on this device. Type <strong>RESET</strong> to confirm.</p>
+          <p>This removes stored data on this device. Type <strong>RESET</strong> to confirm.</p>
         </div>
         <button class="xbtn" data-close="modalReset">✕</button>
       </div>
@@ -1034,11 +924,14 @@
   </div>
 
   <script>
-    const LS_KEY = "pb_velocityboard_v8_singlefile_cards";
-    const LS_PREF = "pb_velocityboard_prefs_v8";
+    const LS_KEY = "pb_velocityboard_v9_singlefile_cards";
+    const LS_PREF = "pb_velocityboard_prefs_v9";
 
     const defaultState = { athletes: [], activeAthleteId: null };
     const defaultPrefs = { defaultDistance: "ALL", timeHint: "00:52.300" };
+
+    // If user keeps ALL, we will auto-pick a “best available” distance for PB + chart:
+    const PREFERRED_DISTANCES = ["400m","500m","800m","1000m","1500m","333m","222m","111m"];
 
     let state = loadState();
     let prefs = loadPrefs();
@@ -1052,8 +945,10 @@
     };
 
     const athleteSelect = document.getElementById("athleteSelect");
+
     const distanceFilter = document.getElementById("distanceFilter");
     const analyticsDistance = document.getElementById("analyticsDistance");
+    const defaultDistance = document.getElementById("defaultDistance");
 
     const pbBanner = document.getElementById("pbBanner");
     const pbBannerText = document.getElementById("pbBannerText");
@@ -1075,15 +970,14 @@
     const csvFile = document.getElementById("csvFile");
     const importMsg = document.getElementById("importMsg");
 
-    const defaultDistance = document.getElementById("defaultDistance");
     const timeHint = document.getElementById("timeHint");
 
     const canvas = document.getElementById("trendCanvas");
     const ctx = canvas.getContext("2d");
 
+    // Buttons
     document.getElementById("btnAddAthlete").addEventListener("click", () => openModal("modalAthlete"));
     document.getElementById("btnEditAthlete").addEventListener("click", openEditAthlete);
-
     document.getElementById("btnAddEntry").addEventListener("click", () => {
       if(!getActiveAthlete()){
         flashBanner("Please add/select an athlete first.", false);
@@ -1092,9 +986,9 @@
       }
       openEntryModal();
     });
-
     document.getElementById("btnReset").addEventListener("click", () => openModal("modalReset"));
 
+    // Modal close
     document.querySelectorAll("[data-close]").forEach(btn => {
       btn.addEventListener("click", () => closeModal(btn.getAttribute("data-close")));
     });
@@ -1104,30 +998,39 @@
       });
     });
 
+    // Save actions
     document.getElementById("saveAthlete").addEventListener("click", saveAthlete);
     document.getElementById("saveAthleteEdits").addEventListener("click", saveAthleteEdits);
     document.getElementById("saveEntry").addEventListener("click", saveEntryMulti);
     document.getElementById("doReset").addEventListener("click", doResetAll);
+
+    // Export/Import
     document.getElementById("btnExportCSV").addEventListener("click", exportCSV);
     document.getElementById("btnDownloadTemplate").addEventListener("click", downloadTemplateCSV);
     document.getElementById("btnImportCSV").addEventListener("click", importCSVIntoSelectedAthlete);
 
+    // Tabs
     tabBtns.forEach(btn => btn.addEventListener("click", () => switchTab(btn.dataset.tab)));
 
+    // Athlete selection
     athleteSelect.addEventListener("change", () => {
       state.activeAthleteId = athleteSelect.value || null;
       saveState();
-      renderAll();
+      // If ALL is selected, we might need to pick available distance for chart/PB
+      ensureDistanceDefaults();
+      renderAll(true); // true = allow chart redraw
     });
 
+    // Distance Focus:
+    // IMPORTANT: chart should change ONLY when they change distance value.
     distanceFilter.addEventListener("change", () => {
       analyticsDistance.value = distanceFilter.value;
-      renderAll();
+      renderAll(true); // chart redraw allowed only on distance change
     });
 
     analyticsDistance.addEventListener("change", () => {
       distanceFilter.value = analyticsDistance.value;
-      renderAll();
+      renderAll(true);
     });
 
     defaultDistance.addEventListener("change", () => {
@@ -1135,7 +1038,7 @@
       savePrefs();
       distanceFilter.value = prefs.defaultDistance;
       analyticsDistance.value = prefs.defaultDistance;
-      renderAll();
+      renderAll(true);
     });
 
     timeHint.addEventListener("input", () => {
@@ -1143,17 +1046,18 @@
       savePrefs();
     });
 
+    // Add entry rows
     const entryRowsEl = document.getElementById("entryRows");
     document.getElementById("btnAddRow").addEventListener("click", () => addEntryRow());
 
-    // Delete entry (delegation) for UNO cards
+    // Delete entry (delegation)
     cardsWrap.addEventListener("click", (e) => {
       const btn = e.target.closest("[data-del-entry-id]");
       if(!btn) return;
       deleteEntry(btn.getAttribute("data-del-entry-id"));
     });
 
-    // Keep page padding in sync with appbar height
+    // Appbar height sync
     function syncAppbarHeight(){
       const appbar = document.querySelector(".appbar");
       if(!appbar) return;
@@ -1168,22 +1072,51 @@
       if(!state.athletes) state = structuredClone(defaultState);
       if(!prefs) prefs = structuredClone(defaultPrefs);
 
+      // Build distance options (includes ALL)
+      const distOptionsHtml = `
+        <option value="ALL">All distances</option>
+        <option value="111m">111m</option>
+        <option value="222m">222m</option>
+        <option value="333m">333m</option>
+        <option value="400m">400m</option>
+        <option value="500m">500m</option>
+        <option value="800m">800m</option>
+        <option value="1000m">1000m</option>
+        <option value="1500m">1500m</option>
+      `;
+
+      distanceFilter.innerHTML = distOptionsHtml;
+      analyticsDistance.innerHTML = distOptionsHtml;
+      defaultDistance.innerHTML = distOptionsHtml;
+
       defaultDistance.value = prefs.defaultDistance;
       timeHint.value = prefs.timeHint;
-      distanceFilter.value = prefs.defaultDistance;
 
-      // build analyticsDistance options from the same list
-      analyticsDistance.innerHTML = distanceFilter.innerHTML;
+      // If pref is ALL, still keep it. We'll auto-pick for PB/chart only.
+      distanceFilter.value = prefs.defaultDistance;
       analyticsDistance.value = prefs.defaultDistance;
 
-      renderAll();
+      ensureDistanceDefaults();
+      renderAll(true);
       syncAppbarHeight();
+    }
+
+    // If default focus is ALL, we keep dropdown on ALL,
+    // but for PB + chart we choose a best available distance if possible.
+    function ensureDistanceDefaults(){
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      // If the current selected focus is not ALL and not present in data, keep it (user intent),
+      // but we will show "No entries for X" gracefully.
+      // If focus is ALL, we pick a best available distance for PB/chart only.
     }
 
     function switchTab(tab){
       tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
       Object.keys(screens).forEach(k => screens[k].classList.toggle("active", k === tab));
-      renderAll();
+      // tab switch should NOT force chart change unless a distance change happened.
+      renderAll(false);
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
@@ -1215,9 +1148,7 @@
         return structuredClone(defaultState);
       }
     }
-    function saveState(){
-      localStorage.setItem(LS_KEY, JSON.stringify(state));
-    }
+    function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
     function loadPrefs(){
       try{
         const raw = localStorage.getItem(LS_PREF);
@@ -1226,9 +1157,7 @@
         return structuredClone(defaultPrefs);
       }
     }
-    function savePrefs(){
-      localStorage.setItem(LS_PREF, JSON.stringify(prefs));
-    }
+    function savePrefs(){ localStorage.setItem(LS_PREF, JSON.stringify(prefs)); }
 
     function getActiveAthlete(){
       return state.athletes.find(a => a.id === state.activeAthleteId) || null;
@@ -1273,11 +1202,6 @@
       return [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date));
     }
 
-    function mean(arr){
-      if(!arr.length) return null;
-      return arr.reduce((s,x)=>s+x,0)/arr.length;
-    }
-
     function computePBMap(entries){
       const pb = {};
       for(const e of entries){
@@ -1310,23 +1234,10 @@
       const name = document.getElementById("athName").value.trim();
       const year = document.getElementById("athYear").value.trim();
 
-      if(!name){
-        showError("athleteErr","Please enter a name.");
-        return;
-      }
-      if(year && !/^\d{4}$/.test(year)){
-        showError("athleteErr","Birth year should be 4 digits (e.g., 2014).");
-        return;
-      }
+      if(!name){ showError("athleteErr","Please enter a name."); return; }
+      if(year && !/^\d{4}$/.test(year)){ showError("athleteErr","Birth year should be 4 digits (e.g., 2014)."); return; }
 
-      const newAth = {
-        id: uid(),
-        name,
-        birthYear: year || "",
-        createdAt: new Date().toISOString(),
-        entries: []
-      };
-
+      const newAth = { id: uid(), name, birthYear: year || "", createdAt: new Date().toISOString(), entries: [] };
       state.athletes.push(newAth);
       state.activeAthleteId = newAth.id;
       saveState();
@@ -1335,16 +1246,14 @@
       document.getElementById("athYear").value = "";
       closeModal("modalAthlete");
 
+      // On first athlete, if user left ALL, keep it. We will pick best available for PB/chart later.
       flashBanner(`Athlete added: ${name}`, false);
-      renderAll();
+      renderAll(true);
     }
 
     function openEditAthlete(){
       const ath = getActiveAthlete();
-      if(!ath){
-        flashBanner("No athlete selected.", false);
-        return;
-      }
+      if(!ath){ flashBanner("No athlete selected.", false); return; }
       document.getElementById("editAthName").value = ath.name || "";
       document.getElementById("editAthYear").value = ath.birthYear || "";
       openModal("modalEditAthlete");
@@ -1353,22 +1262,13 @@
     function saveAthleteEdits(){
       clearErrors();
       const ath = getActiveAthlete();
-      if(!ath){
-        showError("editAthErr","No athlete selected.");
-        return;
-      }
+      if(!ath){ showError("editAthErr","No athlete selected."); return; }
 
       const name = document.getElementById("editAthName").value.trim();
       const year = document.getElementById("editAthYear").value.trim();
 
-      if(!name){
-        showError("editAthErr","Please enter a name.");
-        return;
-      }
-      if(year && !/^\d{4}$/.test(year)){
-        showError("editAthErr","Birth year should be 4 digits (e.g., 2014).");
-        return;
-      }
+      if(!name){ showError("editAthErr","Please enter a name."); return; }
+      if(year && !/^\d{4}$/.test(year)){ showError("editAthErr","Birth year should be 4 digits (e.g., 2014)."); return; }
 
       ath.name = name;
       ath.birthYear = year || "";
@@ -1376,14 +1276,13 @@
       closeModal("modalEditAthlete");
 
       flashBanner("Athlete updated.", false);
-      renderAll();
+      renderAll(false); // no chart redraw needed
     }
 
     function openEntryModal(){
       clearErrors();
       const dateEl = document.getElementById("enDate");
       dateEl.valueAsDate = new Date();
-
       document.getElementById("enLocation").value = "";
       document.getElementById("enNotes").value = "";
 
@@ -1422,9 +1321,7 @@
       `;
 
       entryRowsEl.appendChild(row);
-
-      const distSel = row.querySelector(".jsDist");
-      distSel.value = distance;
+      row.querySelector(".jsDist").value = distance;
 
       const removeBtn = row.querySelector(".jsRemove");
       removeBtn.addEventListener("click", () => {
@@ -1436,29 +1333,17 @@
     function saveEntryMulti(){
       clearErrors();
       const ath = getActiveAthlete();
-      if(!ath){
-        showError("entryErr","No athlete selected. Add/select an athlete first.");
-        return;
-      }
+      if(!ath){ showError("entryErr","No athlete selected. Add/select an athlete first."); return; }
 
       const date = document.getElementById("enDate").value;
       const location = document.getElementById("enLocation").value.trim();
       const notes = document.getElementById("enNotes").value.trim();
 
-      if(!date){
-        showError("entryErr","Please select a date.");
-        return;
-      }
-      if(!location){
-        showError("entryErr","Please enter a location (e.g., Scarborough).");
-        return;
-      }
+      if(!date){ showError("entryErr","Please select a date."); return; }
+      if(!location){ showError("entryErr","Please enter a location (e.g., Scarborough)."); return; }
 
       const rows = [...entryRowsEl.querySelectorAll(".entryRow")];
-      if(rows.length === 0){
-        showError("entryErr","Please add at least one distance/time.");
-        return;
-      }
+      if(rows.length === 0){ showError("entryErr","Please add at least one distance/time."); return; }
 
       const beforePBMap = computePBMap(ath.entries || []);
       let savedCount = 0;
@@ -1478,11 +1363,7 @@
 
         const entry = {
           id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
-          date,
-          distance: dist,
-          time: timeStr,
-          location,
-          notes
+          date, distance: dist, time: timeStr, location, notes
         };
 
         ath.entries.push(entry);
@@ -1500,13 +1381,34 @@
       saveState();
       closeModal("modalEntry");
 
+      // If user is on ALL and we now have entries, prefer to auto-select 400/500 if available
+      autoPickFocusIfAll();
+
       if(pbMessages.length){
         flashBanner(`🎉 ${ath.name}: ${pbMessages[0]}${pbMessages.length>1 ? ` (+${pbMessages.length-1} more)` : ""}`, true);
       }else{
         flashBanner(`${savedCount} race entr${savedCount===1?"y":"ies"} saved for ${ath.name}.`, false);
       }
 
-      renderAll();
+      renderAll(false); // do NOT redraw chart unless distance changed by user; we keep chart stable
+    }
+
+    function autoPickFocusIfAll(){
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      // Only if dropdown is ALL (both home + analytics) - we set to best available
+      if(distanceFilter.value !== "ALL" || analyticsDistance.value !== "ALL") return;
+
+      const avail = getAvailableDistances(ath.entries || []);
+      const pick = pickPreferredDistance(avail);
+
+      if(pick){
+        distanceFilter.value = pick;
+        analyticsDistance.value = pick;
+        // This is a distance change programmatically -> allow chart redraw
+        renderAll(true);
+      }
     }
 
     function deleteEntry(entryId){
@@ -1522,27 +1424,27 @@
       ath.entries = (ath.entries || []).filter(e => e.id !== entryId);
       saveState();
       flashBanner("Entry deleted.", false);
-      renderAll();
+      renderAll(false);
     }
 
     function doResetAll(){
       clearErrors();
       const txt = document.getElementById("resetConfirm").value.trim();
-      if(txt !== "RESET"){
-        showError("resetErr","Please type RESET exactly to confirm.");
-        return;
-      }
+      if(txt !== "RESET"){ showError("resetErr","Please type RESET exactly to confirm."); return; }
       localStorage.removeItem(LS_KEY);
       state = structuredClone(defaultState);
       closeModal("modalReset");
       flashBanner("All data cleared on this device.", false);
-      renderAll();
+      renderAll(true);
     }
 
-    function renderAll(){
+    // allowChartRedraw:
+    // - TRUE when user changes distance (or we programmatically set distance)
+    // - FALSE when just rerendering due to tab switch / edits / add entry etc.
+    function renderAll(allowChartRedraw){
       renderAthleteSelect();
       renderHome();
-      renderAnalytics();
+      renderAnalytics(allowChartRedraw);
       renderExport();
       syncAppbarHeight();
     }
@@ -1557,8 +1459,6 @@
         athleteSelect.appendChild(opt);
         state.activeAthleteId = null;
         saveState();
-
-        // also keep pills consistent
         pillAthlete.textContent = "No athlete selected";
         pillAnalytics.textContent = "No athlete";
         return;
@@ -1578,16 +1478,43 @@
       athleteSelect.value = state.activeAthleteId;
     }
 
+    function getAvailableDistances(entries){
+      const set = new Set();
+      for(const e of entries){
+        if(e && e.distance) set.add(e.distance);
+      }
+      return set;
+    }
+
+    function pickPreferredDistance(availSet){
+      for(const d of PREFERRED_DISTANCES){
+        if(availSet.has(d)) return d;
+      }
+      return null;
+    }
+
+    // Decide what “effective distance” to use for PB/chart:
+    // - If user selected a specific distance => use it
+    // - If user selected ALL => we DO NOT show “Fastest PB (any distance)”
+    //   Instead show message until we can auto-pick a preferred distance.
+    function effectiveDistanceOrNull(ath){
+      const sel = distanceFilter.value;
+      if(sel !== "ALL") return sel;
+
+      const avail = getAvailableDistances(ath.entries || []);
+      const pick = pickPreferredDistance(avail);
+      return pick; // may be null
+    }
+
     function renderHome(){
       const ath = getActiveAthlete();
-      const dist = distanceFilter.value;
 
       if(!ath){
         pillAthlete.textContent = "No athlete selected";
         pillCount.textContent = "0 races";
         pillPBCount.textContent = "0 PBs";
         kpiPB.textContent = "—";
-        kpiPBDistance.textContent = "Pick a distance";
+        kpiPBDistance.textContent = "Select a distance to display PB";
         pbSummaryWrap.innerHTML = `
           <div class="empty">
             <strong>No athlete selected</strong>
@@ -1611,19 +1538,27 @@
       const pbCount = Object.keys(pbMap).length;
       pillPBCount.textContent = `${pbCount} PBs`;
 
-      // PB KPI (selected distance)
-      if(dist !== "ALL"){
-        const pb = pbMap[dist] ? pbMap[dist].ms : null;
-        kpiPB.textContent = pb != null ? msToTime(pb) : "—";
-        kpiPBDistance.textContent = pb != null ? `${dist} best` : `No PB for ${dist}`;
+      const eff = effectiveDistanceOrNull(ath);
+
+      // PB KPI rules you asked:
+      // - If ALL and no 400/500/etc available => show message, not “Fastest PB”
+      // - If ALL but we can auto-pick => show PB for that picked distance (still keep dropdown on ALL, until you change it)
+      if(distanceFilter.value === "ALL"){
+        if(!eff){
+          kpiPB.textContent = "—";
+          kpiPBDistance.textContent = "Select a distance to display PB";
+        }else{
+          const pb = pbMap[eff]?.ms ?? null;
+          kpiPB.textContent = pb != null ? msToTime(pb) : "—";
+          kpiPBDistance.textContent = pb != null ? `${eff} best` : `No PB for ${eff}`;
+        }
       }else{
-        const allPBs = Object.values(pbMap).map(x => x.ms);
-        const best = allPBs.length ? Math.min(...allPBs) : null;
-        kpiPB.textContent = best != null ? msToTime(best) : "—";
-        kpiPBDistance.textContent = best != null ? "Fastest PB (any distance)" : "No PBs yet";
+        const pb = pbMap[distanceFilter.value]?.ms ?? null;
+        kpiPB.textContent = pb != null ? msToTime(pb) : "—";
+        kpiPBDistance.textContent = pb != null ? `${distanceFilter.value} best` : `No PB for ${distanceFilter.value}`;
       }
 
-      // PB Summary table
+      // PB Summary
       if(pbCount === 0){
         pbSummaryWrap.innerHTML = `
           <div class="empty">
@@ -1648,7 +1583,7 @@
                 const pb = pbMap[d];
                 return `
                   <tr>
-                    <td><span class="badge">${d}</span></td>
+                    <td><span class="badge">${escapeHtml(d)}</span></td>
                     <td><b>${msToTime(pb.ms)}</b></td>
                     <td>${fmtDate(pb.date)}</td>
                     <td>${escapeHtml((pb.location || "").trim() || "—")}</td>
@@ -1660,26 +1595,28 @@
         `;
       }
 
-      // Build UNO cards grouped by distance
-      const scopedEntries = (dist === "ALL") ? entriesAll : entriesAll.filter(e => e.distance === dist);
+      // UNO Cards grouping:
+      // If ALL => show all distances (as before)
+      // If specific => show only that distance
+      const scopedEntries = (distanceFilter.value === "ALL")
+        ? entriesAll
+        : entriesAll.filter(e => e.distance === distanceFilter.value);
 
       if(scopedEntries.length === 0){
         cardsWrap.innerHTML = `
           <div class="empty" style="min-width: min(520px, 86vw);">
             <strong>No entries</strong>
-            <p>${dist === "ALL" ? "Add races to see cards by distance." : `No entries for ${dist}.`}</p>
+            <p>${distanceFilter.value === "ALL" ? "Add races to see cards by distance." : `No entries for ${distanceFilter.value}.`}</p>
           </div>
         `;
         return;
       }
 
-      // group by distance
       const groups = {};
       for(const e of scopedEntries){
         const key = e.distance || "—";
         (groups[key] ||= []).push(e);
       }
-
       const groupKeys = Object.keys(groups).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
 
       cardsWrap.innerHTML = groupKeys.map(dKey => {
@@ -1691,9 +1628,7 @@
         const itemsHtml = list.map(e=>{
           const ms = parseTimeToMs(e.time);
           const isPB = pbMap[e.distance] && ms != null && ms === pbMap[e.distance].ms;
-          const badge = isPB
-            ? `<span class="badge badgePB">🏅 PB</span>`
-            : `<span class="badge badgeOK">Saved</span>`;
+          const badge = isPB ? `<span class="badge badgePB">🏅 PB</span>` : `<span class="badge badgeOK">Saved</span>`;
 
           return `
             <div class="entryItem">
@@ -1724,24 +1659,21 @@
                 <div class="count">${countLabel}</div>
               </div>
             </div>
-            <div class="distList">
-              ${itemsHtml}
-            </div>
+            <div class="distList">${itemsHtml}</div>
           </div>
         `;
       }).join("");
     }
 
-    function renderAnalytics(){
+    function renderAnalytics(allowChartRedraw){
       const ath = getActiveAthlete();
-      const dist = analyticsDistance.value;
 
       if(!ath){
         pillAnalytics.textContent = "No athlete";
         anPB.textContent = "—";
-        anPBMeta.textContent = "—";
+        anPBMeta.textContent = "Select a distance to display PB";
         anCount.textContent = "—";
-        drawChart([], dist);
+        if(allowChartRedraw) drawChart([], analyticsDistance.value);
         return;
       }
 
@@ -1750,21 +1682,33 @@
       const entriesAll = ath.entries || [];
       const pbMap = computePBMap(entriesAll);
 
-      const scoped = (dist === "ALL") ? entriesAll : entriesAll.filter(e => e.distance === dist);
-      anCount.textContent = `${scoped.length} races in view`;
-
-      if(dist !== "ALL"){
-        const pb = pbMap[dist]?.ms ?? null;
-        anPB.textContent = pb != null ? msToTime(pb) : "—";
-        anPBMeta.textContent = pb != null ? `${dist} best` : `No PB for ${dist}`;
-      }else{
-        const allPBs = Object.values(pbMap).map(x => x.ms);
-        const best = allPBs.length ? Math.min(...allPBs) : null;
-        anPB.textContent = best != null ? msToTime(best) : "—";
-        anPBMeta.textContent = best != null ? "Fastest PB (any distance)" : "No PBs yet";
+      // For Analytics, use analyticsDistance selection:
+      // If ALL => same rule: do not show fastest any distance. Show message unless we can pick 400/500 etc.
+      let effDist = analyticsDistance.value;
+      if(effDist === "ALL"){
+        const avail = getAvailableDistances(entriesAll);
+        const pick = pickPreferredDistance(avail);
+        if(!pick){
+          anPB.textContent = "—";
+          anPBMeta.textContent = "Select a distance to display PB";
+          anCount.textContent = `${entriesAll.length} total races`;
+          if(allowChartRedraw) drawChart([], "ALL");
+          return;
+        }
+        effDist = pick;
       }
 
-      drawChart(sortByDateDesc(scoped), dist);
+      const scoped = entriesAll.filter(e => e.distance === effDist);
+      anCount.textContent = `${scoped.length} races for ${effDist}`;
+
+      const pb = pbMap[effDist]?.ms ?? null;
+      anPB.textContent = pb != null ? msToTime(pb) : "—";
+      anPBMeta.textContent = pb != null ? `${effDist} best` : `No PB for ${effDist}`;
+
+      // CHART RULE: only redraw when allowChartRedraw is true
+      if(allowChartRedraw){
+        drawChart(sortByDateDesc(scoped), effDist);
+      }
     }
 
     function renderExport(){
@@ -1777,10 +1721,7 @@
         .filter(e => parseTimeToMs(e.time)!=null)
         .sort((a,b)=> new Date(a.date)-new Date(b.date));
 
-      const points = data.map(e => ({
-        x: new Date(e.date).getTime(),
-        y: parseTimeToMs(e.time)
-      }));
+      const points = data.map(e => ({ x: new Date(e.date).getTime(), y: parseTimeToMs(e.time) }));
 
       ctx.clearRect(0,0,canvas.width,canvas.height);
 
@@ -1790,10 +1731,10 @@
       if(points.length < 2){
         ctx.fillStyle = labelCol;
         ctx.font = "800 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-        ctx.fillText("Add race entries to see trend", 50, 210);
+        ctx.fillText("Select a distance and add entries to see trend", 50, 210);
         ctx.fillStyle = "rgba(15,21,38,.55)";
         ctx.font = "700 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-        ctx.fillText(dist === "ALL" ? "Tip: choose a distance for a cleaner line." : `Distance: ${dist}`, 50, 245);
+        ctx.fillText(dist === "ALL" ? "Tip: choose 400m/500m for a clean line." : `Distance: ${dist}`, 50, 245);
         return;
       }
 
@@ -1811,8 +1752,8 @@
       let maxY = Math.max(...ys);
 
       const padY = Math.max(120, (maxY-minY)*0.12);
-      minY = minY - padY;
-      maxY = maxY + padY;
+      minY -= padY;
+      maxY += padY;
 
       ctx.strokeStyle = gridCol;
       ctx.lineWidth = 1;
@@ -1830,7 +1771,7 @@
       ctx.font = "800 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
       for(let i=0;i<=gridCount;i++){
         const y = padT + (H/gridCount)*i;
-        const val = maxY - ( (maxY-minY)/gridCount )*i;
+        const val = maxY - ((maxY-minY)/gridCount)*i;
         ctx.fillText(msToTime(Math.round(val)), 14, y+5);
       }
 
@@ -1877,10 +1818,7 @@
 
     function exportCSV(){
       const ath = getActiveAthlete();
-      if(!ath){
-        flashBanner("No athlete selected.", false);
-        return;
-      }
+      if(!ath){ flashBanner("No athlete selected.", false); return; }
       const rows = [["Athlete","BirthYear","Date","Location","Distance","Time","Notes"]];
       for(const e of sortByDateDesc(ath.entries || [])){
         rows.push([ath.name, ath.birthYear || "", e.date, e.location || "", e.distance, e.time, (e.notes||"")]);
@@ -1905,34 +1843,22 @@
     function importCSVIntoSelectedAthlete(){
       clearErrors();
       const ath = getActiveAthlete();
-      if(!ath){
-        showError("importMsg","Please select an athlete first (CSV rows will be added to the selected athlete).");
-        return;
-      }
+      if(!ath){ showError("importMsg","Please select an athlete first."); return; }
       const file = csvFile.files && csvFile.files[0];
-      if(!file){
-        showError("importMsg","Please choose a CSV file first.");
-        return;
-      }
+      if(!file){ showError("importMsg","Please choose a CSV file first."); return; }
 
       const reader = new FileReader();
       reader.onload = () => {
         try{
           const text = String(reader.result || "");
           const rows = parseCSV(text);
-          if(rows.length < 2){
-            showError("importMsg","CSV looks empty. Please use the template.");
-            return;
-          }
+          if(rows.length < 2){ showError("importMsg","CSV looks empty. Please use the template."); return; }
 
           const header = rows[0].map(h => h.trim().toLowerCase());
           const idx = (name) => header.indexOf(name.toLowerCase());
 
           for(const k of ["date","location","distance","time"]){
-            if(idx(k) === -1){
-              showError("importMsg",`Missing column "${k}". Please use the template.`);
-              return;
-            }
+            if(idx(k) === -1){ showError("importMsg",`Missing column "${k}". Please use the template.`); return; }
           }
 
           let added = 0;
@@ -1951,18 +1877,18 @@
 
             ath.entries.push({
               id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
-              date,
-              location,
-              distance,
-              time,
-              notes
+              date, location, distance, time, notes
             });
             added++;
           }
 
           saveState();
           flashBanner(`CSV import complete: ${added} row(s) added to ${ath.name}.`, false);
-          renderAll();
+
+          // If distance is ALL, we can auto-pick for a better default focus (400/500)
+          autoPickFocusIfAll();
+
+          renderAll(false);
 
         }catch(e){
           showError("importMsg","Could not import CSV. Please use the template format.");
@@ -1982,20 +1908,12 @@
         const next = text[i+1];
 
         if(ch === '"' ){
-          if(inQuotes && next === '"'){
-            cur += '"';
-            i++;
-          }else{
-            inQuotes = !inQuotes;
-          }
+          if(inQuotes && next === '"'){ cur += '"'; i++; }
+          else{ inQuotes = !inQuotes; }
           continue;
         }
 
-        if(!inQuotes && ch === ','){
-          row.push(cur);
-          cur = "";
-          continue;
-        }
+        if(!inQuotes && ch === ','){ row.push(cur); cur = ""; continue; }
 
         if(!inQuotes && (ch === '\n' || ch === '\r')){
           if(ch === '\r' && next === '\n') i++;
@@ -2008,12 +1926,27 @@
 
         cur += ch;
       }
-
       row.push(cur);
       rows.push(row);
 
       while(rows.length && rows[rows.length-1].every(c => !String(c||"").trim())) rows.pop();
       return rows;
+    }
+
+    function deleteEntry(entryId){
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const entry = (ath.entries || []).find(e => e.id === entryId);
+      if(!entry) return;
+
+      const msg = `Delete this entry?\n\n${fmtDate(entry.date)} • ${entry.location || "—"} • ${entry.distance} • ${entry.time}`;
+      if(!confirm(msg)) return;
+
+      ath.entries = (ath.entries || []).filter(e => e.id !== entryId);
+      saveState();
+      flashBanner("Entry deleted.", false);
+      renderAll(false);
     }
 
     function downloadBlob(blob, filename){
