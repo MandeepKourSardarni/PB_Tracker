@@ -6,20 +6,25 @@
   <title>PB VelocityBoard</title>
 
   <style>
-    :root{
-      --bg: #0b1020;
-      --text: rgba(255,255,255,.92);
-      --muted: rgba(255,255,255,.68);
-      --muted2: rgba(255,255,255,.50);
-      --primary: #7c5cff;
-      --primary2:#4ad9ff;
-      --danger:#ff4d6d;
-      --ok:#3ee08f;
-      --warn:#ffcc66;
+    /* ============================================================
+       CLEAN PROFESSIONAL THEME (Trenara-like feel)
+       + consistent spacing + table polish + chart tooltip
+    ============================================================ */
 
-      --radius: 18px;
-      --shadow: 0 12px 40px rgba(0,0,0,.35);
-      --shadow2: 0 10px 20px rgba(0,0,0,.22);
+    :root{
+      --text: rgba(20, 24, 38, .92);
+      --muted: rgba(20, 24, 38, .62);
+      --muted2: rgba(20, 24, 38, .46);
+
+      --primary: #2f6bff;
+      --primary2:#2bb7ff;
+      --danger:#e23b57;
+      --ok:#18a965;
+      --warn:#c88b00;
+
+      --radius: 22px;
+      --shadow: 0 18px 60px rgba(15, 18, 28, .08);
+      --shadow2: 0 10px 26px rgba(15, 18, 28, .10);
 
       --w: 1180px;
       --gap: 14px;
@@ -29,15 +34,12 @@
 
     * { box-sizing:border-box; }
     html, body { height:100%; }
+
     body{
       margin:0;
       font-family: var(--font);
       color: var(--text);
-      background:
-        radial-gradient(1200px 800px at 15% 10%, rgba(124,92,255,.28), transparent 60%),
-        radial-gradient(900px 600px at 80% 20%, rgba(74,217,255,.20), transparent 55%),
-        radial-gradient(900px 650px at 40% 90%, rgba(62,224,143,.14), transparent 55%),
-        linear-gradient(180deg, var(--bg), #070a14 70%);
+      background: linear-gradient(180deg, #f7f8fc, #f3f5fb 60%, #eef2fb);
       overflow-x:hidden;
     }
 
@@ -54,9 +56,9 @@
       position:fixed;
       top:0; left:0; right:0;
       z-index:50;
-      backdrop-filter: blur(16px);
-      background: rgba(20, 107, 114, 0.8);
-      border-bottom:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(14px);
+      background: rgba(255,255,255,.78);
+      border-bottom: 1px solid rgba(20,24,38,.10);
     }
     .appbarInner{
       max-width: var(--w);
@@ -77,9 +79,9 @@
       width: 36px; height: 36px;
       border-radius: 12px;
       background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), transparent 55%),
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.30), transparent 55%),
         linear-gradient(135deg, var(--primary), var(--primary2));
-      box-shadow: 0 10px 22px rgba(124,92,255,.25);
+      box-shadow: 0 14px 30px rgba(47,107,255,.18);
     }
     .brandText{
       display:flex;
@@ -89,6 +91,7 @@
     .brandText strong{
       font-size: 15.5px;
       letter-spacing:.2px;
+      font-weight: 900;
     }
     .brandText span{
       font-size: 12px;
@@ -99,27 +102,27 @@
       display:flex;
       gap: 8px;
       padding: 6px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(20,24,38,.10);
       border-radius: 999px;
-      background: rgba(255,255,255,.05);
+      background: rgba(255,255,255,.70);
     }
     .tabBtn{
       border:0;
       padding: 9px 14px;
       border-radius: 999px;
       background: transparent;
-      color: var(--muted);
-      font-weight:600;
+      color: rgba(20,24,38,.62);
+      font-weight:800;
       letter-spacing:.2px;
       cursor:pointer;
       transition: .18s ease;
     }
-    .tabBtn:hover{ color: var(--text); background: rgba(255,255,255,.06); }
+    .tabBtn:hover{ color: rgba(20,24,38,.92); background: rgba(20,24,38,.04); }
     .tabBtn.active{
-      color: var(--text);
-      background: rgba(124,92,255,.22);
-      border: 1px solid rgba(124,92,255,.35);
-      box-shadow: 0 10px 26px rgba(124,92,255,.18);
+      color: rgba(20,24,38,.92);
+      background: rgba(47,107,255,.10);
+      border: 1px solid rgba(47,107,255,.18);
+      box-shadow: none;
     }
 
     .rightTools{
@@ -133,15 +136,15 @@
     .select{
       appearance:none;
       -webkit-appearance:none;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
+      border:1px solid rgba(20,24,38,.12);
+      background: rgba(255,255,255,.92);
       color: var(--text);
       padding: 10px 34px 10px 12px;
       border-radius: 14px;
-      font-weight:800;
+      font-weight:900;
       outline:none;
       cursor:pointer;
-      min-width: 200px;
+      min-width: 210px;
     }
     .selectWrap{ position:relative; }
     .selectWrap:after{
@@ -155,42 +158,33 @@
       font-size: 12px;
     }
 
-    select, option {
-      color: var(--text);
-      background-color: #0a1020;
-    }
-    .select2, .select2 option{
-      color: var(--text);
-      background-color: #0a1020;
-    }
-
     .btn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+      border:1px solid rgba(20,24,38,.12);
+      background: rgba(255,255,255,.86);
+      color: rgba(20,24,38,.92);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight:900;
       cursor:pointer;
       transition: .18s ease;
-      box-shadow: var(--shadow2);
+      box-shadow: none;
       display:inline-flex;
       align-items:center;
       gap: 8px;
       white-space:nowrap;
     }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
     .btn:active{ transform: translateY(0px); }
 
     .btnPrimary{
-      border: 1px solid rgba(124,92,255,.35);
-      background: linear-gradient(135deg, rgba(124,92,255,.42), rgba(74,217,255,.18));
-      box-shadow: 0 14px 34px rgba(124,92,255,.20);
+      border: none;
+      background: linear-gradient(135deg, rgba(47,107,255,.98), rgba(43,183,255,.92));
+      color: white;
     }
     .btnDanger{
-      border: 1px solid rgba(255,77,109,.35);
-      background: rgba(255,77,109,.14);
-      box-shadow: 0 14px 34px rgba(255,77,109,.12);
+      border: 1px solid rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
+      color: rgba(20,24,38,.92);
     }
 
     .grid{
@@ -206,8 +200,8 @@
     }
 
     .card{
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.05));
+      border: 1px solid rgba(20,24,38,.10);
+      background: rgba(255,255,255,.78);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       padding: 16px;
@@ -222,12 +216,13 @@
     .title{
       font-size: 18px;
       font-weight: 900;
-      letter-spacing:.2px;
+      letter-spacing:.1px;
     }
     .sub{
       color: var(--muted);
       font-size: 13px;
       margin-top: 3px;
+      line-height:1.35;
     }
 
     .pill{
@@ -236,9 +231,9 @@
       gap: 8px;
       padding: 7px 10px;
       border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
-      color: var(--muted);
+      border:1px solid rgba(20,24,38,.10);
+      background: rgba(20,24,38,.04);
+      color: rgba(20,24,38,.70);
       font-size: 12px;
       font-weight:900;
       white-space:nowrap;
@@ -254,8 +249,8 @@
       .kpis{ grid-template-columns: repeat(2, 1fr); }
     }
     .kpi{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
+      border:1px solid rgba(20,24,38,.10);
+      background: rgba(255,255,255,.86);
       border-radius: 16px;
       padding: 12px;
     }
@@ -267,9 +262,44 @@
       display:flex;
       flex-wrap:wrap;
       gap: 10px;
-      align-items:center;
+      align-items:flex-end;
       justify-content:space-between;
       margin-top: 12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 220px;
+    }
+    .field label{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing:.2px;
+    }
+
+    .input, .select2{
+      border:1px solid rgba(20,24,38,.12);
+      background: rgba(255,255,255,.92);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 10px 12px;
+      outline:none;
+      font-weight: 900;
+      box-shadow:none;
+    }
+    .input:focus, .select:focus, .select2:focus{
+      outline: none;
+      border-color: rgba(47,107,255,.35);
+      box-shadow: 0 0 0 4px rgba(47,107,255,.12);
+    }
+
+    .help{
+      font-size: 12px;
+      color: var(--muted2);
+      line-height:1.35;
     }
 
     .table{
@@ -278,23 +308,28 @@
       margin-top: 10px;
       overflow:hidden;
       border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid rgba(20,24,38,.10);
     }
     .table th, .table td{
       padding: 10px 10px;
       font-size: 13px;
-      border-bottom:1px solid rgba(255,255,255,.07);
+      border-bottom:1px solid rgba(20,24,38,.06);
       text-align:left;
       vertical-align:top;
     }
     .table th{
-      color: var(--muted);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      color: rgba(20,24,38,.65);
       font-weight: 900;
       font-size: 12px;
       letter-spacing:.3px;
-      background: rgba(255,255,255,.04);
+      background: rgba(20,24,38,.03);
     }
-    .table tr:hover td{ background: rgba(255,255,255,.03); }
+    .table tr:nth-child(even) td{ background: rgba(20,24,38,.012); }
+    .table tr:hover td{ background: rgba(47,107,255,.04); }
+    .num{ text-align:right; }
 
     .badge{
       display:inline-flex;
@@ -304,18 +339,18 @@
       padding: 6px 10px;
       font-size: 12px;
       font-weight: 900;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.05);
+      border:1px solid rgba(20,24,38,.10);
+      background: rgba(20,24,38,.04);
+      color: rgba(20,24,38,.78);
       white-space:nowrap;
     }
-    .badgeOK{ border-color: rgba(62,224,143,.35); background: rgba(62,224,143,.10); }
-    .badgePB{ border-color: rgba(255,204,102,.35); background: rgba(255,204,102,.10); }
+    .badgeOK{ border-color: rgba(24,169,101,.22); background: rgba(24,169,101,.10); }
+    .badgePB{ border-color: rgba(200,139,0,.22); background: rgba(200,139,0,.10); }
 
-    /* Delete icon button inside table */
     .iconBtn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+      border:1px solid rgba(20,24,38,.10);
+      background: rgba(20,24,38,.04);
+      color: rgba(20,24,38,.92);
       width: 34px;
       height: 34px;
       border-radius: 12px;
@@ -324,20 +359,20 @@
       align-items:center;
       justify-content:center;
       transition:.18s ease;
-      box-shadow: var(--shadow2);
+      box-shadow: none;
     }
-    .iconBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .iconBtn:hover{ transform: translateY(-1px); background: rgba(20,24,38,.06); }
     .iconBtnDanger{
-      border-color: rgba(255,77,109,.35);
-      background: rgba(255,77,109,.12);
+      border-color: rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
     }
 
     .chart{
       width:100%;
       height: 240px;
       border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.04);
+      border:1px solid rgba(20,24,38,.10);
+      background: rgba(255,255,255,.86);
       overflow:hidden;
       margin-top: 12px;
       position:relative;
@@ -347,30 +382,45 @@
       height:100%;
       display:block;
     }
-    /* Center aligned chart title */
     .chartHint{
       position:absolute;
       left: 50%;
       transform: translateX(-50%);
       top: 10px;
       font-size: 12px;
-      color: var(--muted);
+      color: rgba(20,24,38,.55);
       font-weight: 900;
       letter-spacing:.2px;
       text-align:center;
-      white-space:nowrap;
       pointer-events:none;
+      white-space:nowrap;
     }
+    .chartTooltip{
+      position:absolute;
+      display:none;
+      pointer-events:none;
+      background: rgba(255,255,255,.96);
+      border: 1px solid rgba(20,24,38,.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      font-size: 12px;
+      color: rgba(20,24,38,.92);
+      min-width: 180px;
+    }
+    .chartTooltip .tTitle{ font-weight: 900; margin-bottom: 4px; }
+    .chartTooltip .tRow{ color: rgba(20,24,38,.72); line-height:1.35; }
+    .chartTooltip .tRow b{ color: rgba(20,24,38,.92); }
 
     .empty{
-      border:1px dashed rgba(255,255,255,.20);
+      border:1px dashed rgba(20,24,38,.22);
       border-radius: 18px;
       padding: 18px;
-      color: var(--muted);
-      background: rgba(255,255,255,.03);
+      color: rgba(20,24,38,.68);
+      background: rgba(255,255,255,.72);
       margin-top: 10px;
     }
-    .empty strong{ color: var(--text); }
+    .empty strong{ color: rgba(20,24,38,.92); }
     .empty p{ margin: 8px 0 0; font-size: 13px; line-height:1.45; }
 
     .banner{
@@ -378,33 +428,37 @@
       margin: 0 0 14px;
       border-radius: 18px;
       padding: 12px 14px;
-      border: 1px solid rgba(255,204,102,.35);
-      background: rgba(255,204,102,.11);
-      box-shadow: 0 18px 50px rgba(255,204,102,.10);
+      border: 1px solid rgba(47,107,255,.18);
+      background: rgba(47,107,255,.08);
+      box-shadow: 0 18px 50px rgba(47,107,255,.10);
+      color: rgba(20,24,38,.92);
     }
     .banner.show{ display:block; }
     .banner strong{ font-weight: 900; }
-    .banner .small{ color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .banner .small{ color: rgba(20,24,38,.62); font-size: 12px; margin-top: 3px; }
 
     .modalOverlay{
       position:fixed;
       inset:0;
-      background: rgba(0,0,0,.55);
+      background: rgba(10,12,18,.40);
       display:none;
       z-index: 100;
       align-items:center;
       justify-content:center;
       padding: 20px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
     }
     .modalOverlay.show{ display:flex; }
 
     .modal{
-      width: min(700px, 100%);
-      max-height: calc(100vh - 70px);
+      width: min(720px, 100%);
+      max-height: calc(100vh - 40px);
       overflow:auto;
+      -webkit-overflow-scrolling: touch;
       border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: linear-gradient(180deg, rgba(18,26,48,.95), rgba(10,14,26,.95));
+      border: 1px solid rgba(20,24,38,.12);
+      background: rgba(255,255,255,.92);
       box-shadow: var(--shadow);
       padding: 16px;
     }
@@ -417,7 +471,7 @@
       margin-bottom: 12px;
       position: sticky;
       top: 0;
-      background: linear-gradient(180deg, rgba(18,26,48,.98), rgba(18,26,48,.85));
+      background: rgba(255,255,255,.92);
       padding-bottom: 10px;
       z-index: 2;
     }
@@ -433,9 +487,9 @@
       line-height:1.4;
     }
     .xbtn{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+      border: 1px solid rgba(20,24,38,.10);
+      background: rgba(20,24,38,.04);
+      color: rgba(20,24,38,.92);
       border-radius: 12px;
       width: 38px; height: 38px;
       cursor:pointer;
@@ -448,37 +502,15 @@
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-    }
-    .field label{
-      font-size: 12px;
-      font-weight: 900;
-      color: var(--muted);
-      letter-spacing:.2px;
-    }
-    .input, .select2{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border-radius: 14px;
-      padding: 10px 12px;
-      outline:none;
-      font-weight: 900;
+    @media (max-width: 560px){
+      .form{ grid-template-columns: 1fr; }
     }
 
-    .help{
-      font-size: 12px;
-      color: var(--muted2);
-      line-height:1.35;
-    }
     .error{
       display:none;
-      color: #ffd1d9;
-      background: rgba(255,77,109,.12);
-      border: 1px solid rgba(255,77,109,.25);
+      color: rgba(20,24,38,.92);
+      background: rgba(226,59,87,.10);
+      border: 1px solid rgba(226,59,87,.22);
       border-radius: 14px;
       padding: 10px 12px;
       font-size: 12px;
@@ -495,7 +527,7 @@
       flex-wrap:wrap;
       position: sticky;
       bottom: 0;
-      background: linear-gradient(0deg, rgba(18,26,48,.98), rgba(18,26,48,.85));
+      background: rgba(255,255,255,.92);
       padding-top: 10px;
       z-index: 2;
     }
@@ -511,15 +543,19 @@
       grid-template-columns: 1fr 1fr auto;
       gap: 10px;
       align-items:end;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(20,24,38,.10);
+      background: rgba(20,24,38,.02);
       border-radius: 16px;
       padding: 10px;
     }
+    @media (max-width: 560px){
+      .entryRow{ grid-template-columns: 1fr; }
+    }
+
     .miniBtn{
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+      border:1px solid rgba(20,24,38,.12);
+      background: rgba(255,255,255,.86);
+      color: rgba(20,24,38,.92);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight: 900;
@@ -527,10 +563,10 @@
       transition:.18s ease;
       white-space:nowrap;
     }
-    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.08); }
+    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
     .miniBtnDanger{
-      border:1px solid rgba(255,77,109,.30);
-      background: rgba(255,77,109,.12);
+      border:1px solid rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
     }
 
     .foot{
@@ -549,194 +585,36 @@
       .wrap{ padding-top: 84px; }
       .rightTools{ flex-wrap:wrap; justify-content:flex-start; }
       .select{ min-width: 100%; }
-      .form{ grid-template-columns: 1fr; }
-      .entryRow{ grid-template-columns: 1fr; }
-      .modal{ max-height: calc(100vh - 40px); }
+      .field{ min-width: 100%; }
       .chartHint{ white-space:normal; width: 90%; }
     }
 
+    /* Session group block */
+    .sessionBlock{
+      border: 1px solid rgba(20,24,38,.10);
+      background: rgba(255,255,255,.86);
+      border-radius: 18px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .sessionHead{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .sessionTitle{
+      font-weight: 900;
+      letter-spacing:.2px;
+    }
+    .sessionMeta{
+      color: rgba(20,24,38,.62);
+      font-size: 12px;
+      font-weight: 800;
+    }
 
-
-/* ============================================================
-   TRENARA-FEEL THEME OVERRIDES (paste at END of <style>)
-   Goal: clean, bright, minimal, spacious, professional
-============================================================ */
-
-/* 1) Light, calm base */
-:root{
-  --bg: #f6f7fb;
-  --text: rgba(20, 24, 38, .92);
-  --muted: rgba(20, 24, 38, .62);
-  --muted2: rgba(20, 24, 38, .46);
-
-  /* keep your accents but make them calmer */
-  --primary: #2f6bff;
-  --primary2:#2bb7ff;
-  --danger:#e23b57;
-  --ok:#18a965;
-  --warn:#c88b00;
-
-  --shadow: 0 18px 60px rgba(15, 18, 28, .08);
-  --shadow2: 0 10px 26px rgba(15, 18, 28, .10);
-  --radius: 22px;
-}
-
-/* 2) Remove “neon/night” background & switch to bright */
-body{
-  background: linear-gradient(180deg, #f7f8fc, #f3f5fb 60%, #eef2fb);
-  color: var(--text);
-}
-
-/* 3) Appbar becomes clean + white */
-.appbar{
-  background: rgba(255,255,255,.78);
-  border-bottom: 1px solid rgba(20,24,38,.10);
-  backdrop-filter: blur(14px);
-}
-.brandText span{ color: var(--muted); }
-.logo{
-  box-shadow: 0 14px 30px rgba(47,107,255,.18);
-}
-
-/* 4) Tabs: underline/clean pill look */
-.tabs{
-  background: rgba(255,255,255,.70);
-  border: 1px solid rgba(20,24,38,.10);
-}
-.tabBtn{
-  color: rgba(20,24,38,.62);
-  font-weight: 800;
-}
-.tabBtn.active{
-  background: rgba(47,107,255,.10);
-  border: 1px solid rgba(47,107,255,.18);
-  box-shadow: none;
-  color: rgba(20,24,38,.92);
-}
-
-/* 5) Cards become “Trenara clean blocks” */
-.card{
-  background: rgba(255,255,255,.78);
-  border: 1px solid rgba(20,24,38,.10);
-  box-shadow: var(--shadow);
-}
-.title{ letter-spacing: .1px; }
-.sub{ color: var(--muted); }
-
-/* 6) Inputs/selects: large, crisp, soft focus ring */
-.input, .select, .select2{
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(20,24,38,.12);
-  color: var(--text);
-  box-shadow: none;
-}
-.input:focus, .select:focus, .select2:focus{
-  outline: none;
-  border-color: rgba(47,107,255,.35);
-  box-shadow: 0 0 0 4px rgba(47,107,255,.12);
-}
-
-/* dropdown options readable */
-select, option{
-  background-color: #ffffff;
-  color: rgba(20,24,38,.92);
-}
-
-/* 7) Buttons: flatter, modern */
-.btn{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(20,24,38,.12);
-  color: rgba(20,24,38,.92);
-  box-shadow: none;
-}
-.btn:hover{ background: rgba(255,255,255,.96); transform: translateY(-1px); }
-.btnPrimary{
-  background: linear-gradient(135deg, rgba(47,107,255,.98), rgba(43,183,255,.92));
-  border: none;
-  color: white;
-}
-.btnPrimary:hover{ filter: brightness(1.02); }
-.btnDanger{
-  background: rgba(226,59,87,.10);
-  border: 1px solid rgba(226,59,87,.22);
-  color: rgba(20,24,38,.92);
-}
-
-/* 8) KPIs: calmer */
-.kpi{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(20,24,38,.10);
-}
-.kpi .label{ color: var(--muted); }
-.kpi .mini{ color: var(--muted2); }
-
-/* 9) Table: clean lines, no dark bands */
-.table{
-  border: 1px solid rgba(20,24,38,.10);
-}
-.table th{
-  background: rgba(20,24,38,.03);
-  color: rgba(20,24,38,.65);
-}
-.table td{
-  border-bottom: 1px solid rgba(20,24,38,.06);
-}
-.table tr:hover td{ background: rgba(47,107,255,.04); }
-
-/* 10) Chart: light panel */
-.chart{
-  background: rgba(255,255,255,.86);
-  border: 1px solid rgba(20,24,38,.10);
-}
-.chartHint{
-  color: rgba(20,24,38,.55);
-}
-
-/* 11) Pills/badges */
-.pill, .badge{
-  background: rgba(20,24,38,.04);
-  border: 1px solid rgba(20,24,38,.10);
-  color: rgba(20,24,38,.70);
-}
-.badgePB{ background: rgba(200,139,0,.10); border-color: rgba(200,139,0,.22); }
-.badgeOK{ background: rgba(24,169,101,.10); border-color: rgba(24,169,101,.22); }
-
-/* 12) Banner becomes subtle */
-.banner{
-  background: rgba(47,107,255,.08);
-  border-color: rgba(47,107,255,.18);
-  color: rgba(20,24,38,.92);
-}
-
-/* 13) Modals become clean */
-.modalOverlay{ background: rgba(10,12,18,.40); }
-.modal{
-  background: rgba(255,255,255,.92);
-  border: 1px solid rgba(20,24,38,.12);
-}
-.modalTop{
-  background: rgba(255,255,255,.92);
-}
-.xbtn{
-  background: rgba(20,24,38,.04);
-  border: 1px solid rgba(20,24,38,.10);
-  color: rgba(20,24,38,.92);
-}
-
-/* 14) Reduce extra heavy shadows on icon buttons */
-.iconBtn{
-  background: rgba(20,24,38,.04);
-  border: 1px solid rgba(20,24,38,.10);
-  box-shadow: none;
-}
-.iconBtnDanger{
-  background: rgba(226,59,87,.10);
-  border: 1px solid rgba(226,59,87,.22);
-}
-
-
-
-    
   </style>
 </head>
 
@@ -776,7 +654,7 @@ select, option{
   <div class="wrap">
 
     <div id="pbBanner" class="banner">
-      <strong>🎉 New PB!</strong>
+      <strong>🎉 Update</strong>
       <div class="small" id="pbBannerText">Saved.</div>
     </div>
 
@@ -787,7 +665,7 @@ select, option{
           <div class="cardHeader">
             <div>
               <div class="title">Performance Snapshot</div>
-              <div class="sub">Latest results + PB highlights for the selected athlete.</div>
+              <div class="sub">KPIs + trend for the selected athlete, filtered by distance/location.</div>
             </div>
             <div class="pill" id="pillAthlete">No athlete selected</div>
           </div>
@@ -819,7 +697,7 @@ select, option{
           </div>
 
           <div class="row">
-            <div class="field" style="min-width:240px;">
+            <div class="field">
               <label for="distanceFilter">Distance Focus</label>
               <select id="distanceFilter" class="select2">
                 <option value="ALL">All distances</option>
@@ -832,27 +710,35 @@ select, option{
                 <option value="1000m">1000m</option>
                 <option value="1500m">1500m</option>
               </select>
-              <div class="help">This filter affects KPIs and the chart.</div>
+              <div class="help">Affects KPIs + chart + recent groups.</div>
+            </div>
+
+            <div class="field">
+              <label for="locationFilter">Location Filter</label>
+              <input id="locationFilter" class="input" placeholder="All locations (type to filter)" list="locationList" />
+              <datalist id="locationList"></datalist>
+              <div class="help">Type “Scarborough”, “Milton”, etc. Leave blank = All.</div>
             </div>
 
             <div class="pill" id="pillCount">0 races</div>
           </div>
 
-          <div class="chart">
+          <div class="chart" id="chartBox">
             <div class="chartHint">Trend (Time vs Race Date)</div>
+            <div class="chartTooltip" id="chartTooltip"></div>
             <canvas id="trendCanvas" width="1200" height="420"></canvas>
           </div>
 
           <div class="foot">
-            Tip: Your data is saved on this device (local storage). Use Export if you want a backup.
+            Tip: Data is saved on this device (local storage). Export JSON for backup.
           </div>
         </div>
 
         <div class="card">
           <div class="cardHeader">
             <div>
-              <div class="title">PB Summary + Recent Races</div>
-              <div class="sub">All PBs (by distance) + latest entries.</div>
+              <div class="title">PB Summary + Recent Sessions</div>
+              <div class="sub">PBs by distance + grouped sessions (Date + Location).</div>
             </div>
             <div class="pill" id="pillPBCount">0 PBs</div>
           </div>
@@ -864,7 +750,7 @@ select, option{
           <div id="recentWrap"></div>
 
           <div class="foot">
-            PBs are calculated per athlete per distance.
+            Sessions are grouped by <b>Date + Location</b>.
           </div>
         </div>
 
@@ -877,9 +763,18 @@ select, option{
         <div class="cardHeader">
           <div>
             <div class="title">Analytics</div>
-            <div class="sub">Clean, coach-friendly insight — PB progression, averages, and consistency.</div>
+            <div class="sub">PB progression + simple compare mode (side-by-side PBs).</div>
           </div>
           <div class="pill" id="pillAnalytics">—</div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="compareSelect">Compare with (optional)</label>
+            <select id="compareSelect" class="select2"></select>
+            <div class="help">Pick another athlete to compare PBs side-by-side.</div>
+          </div>
+          <div class="pill" id="pillCompare">Compare: Off</div>
         </div>
 
         <div class="kpis">
@@ -910,7 +805,7 @@ select, option{
 
         <table class="table" id="pbTable">
           <thead>
-            <tr>
+            <tr id="pbHeadRow">
               <th>Distance</th>
               <th>PB Time</th>
               <th>Date</th>
@@ -922,7 +817,7 @@ select, option{
         </table>
 
         <div class="foot">
-          PBs are computed per athlete per distance.
+          Compare mode shows two PB columns when enabled.
         </div>
       </div>
     </section>
@@ -958,7 +853,7 @@ select, option{
             </div>
           </div>
 
-          <div class="field">
+          <div class="field" style="min-width:100%;">
             <label>Upload JSON backup</label>
             <input class="input" id="importFile" type="file" accept=".json" />
             <div class="help">This will merge athletes.</div>
@@ -999,9 +894,9 @@ select, option{
           </div>
 
           <div class="field">
-            <label>Time Format Reminder</label>
+            <label>Time Placeholder</label>
             <input id="timeHint" class="input" value="00:52.300" />
-            <div class="help">Shown as placeholder in Add Race.</div>
+            <div class="help">Used as placeholder in Add/Edit entry.</div>
           </div>
         </div>
 
@@ -1051,7 +946,7 @@ select, option{
       <div class="modalTop">
         <div>
           <h3>Edit Athlete</h3>
-          <p>Update the athlete name (and birth year). PBs and entries remain unchanged.</p>
+          <p>Update the athlete name (and birth year).</p>
         </div>
         <button class="xbtn" data-close="modalEditAthlete">✕</button>
       </div>
@@ -1104,7 +999,7 @@ select, option{
         </div>
       </div>
 
-      <div class="field" style="margin-top:10px;">
+      <div class="field" style="margin-top:10px; min-width:100%;">
         <label>Distances & Times</label>
 
         <div class="entryRows" id="entryRows"></div>
@@ -1123,6 +1018,60 @@ select, option{
     </div>
   </div>
 
+  <!-- MODAL: EDIT ENTRY -->
+  <div class="modalOverlay" id="modalEditEntry">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Edit Entry</h3>
+          <p>Update date/location/distance/time/notes for this race.</p>
+        </div>
+        <button class="xbtn" data-close="modalEditEntry">✕</button>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label>Date</label>
+          <input id="eeDate" class="input" type="date" />
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input id="eeLocation" class="input" />
+        </div>
+
+        <div class="field">
+          <label>Distance</label>
+          <select id="eeDistance" class="select2">
+            <option value="111m">111m</option>
+            <option value="222m">222m</option>
+            <option value="333m">333m</option>
+            <option value="400m">400m</option>
+            <option value="500m">500m</option>
+            <option value="800m">800m</option>
+            <option value="1000m">1000m</option>
+            <option value="1500m">1500m</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Time (mm:ss.mmm)</label>
+          <input id="eeTime" class="input" />
+        </div>
+
+        <div class="field" style="grid-column:1 / -1;">
+          <label>Notes</label>
+          <input id="eeNotes" class="input" />
+        </div>
+      </div>
+
+      <div id="editEntryErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalEditEntry">Cancel</button>
+        <button class="btn btnPrimary" id="saveEntryEdits">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
   <!-- MODAL: RESET -->
   <div class="modalOverlay" id="modalReset">
     <div class="modal">
@@ -1134,7 +1083,7 @@ select, option{
         <button class="xbtn" data-close="modalReset">✕</button>
       </div>
 
-      <div class="field">
+      <div class="field" style="min-width:100%;">
         <label>Type RESET</label>
         <input id="resetConfirm" class="input" placeholder="RESET" />
       </div>
@@ -1150,14 +1099,17 @@ select, option{
 
 
   <script>
-    const LS_KEY = "pb_velocityboard_v7_singlefile";
-    const LS_PREF = "pb_velocityboard_prefs_v7";
+    const LS_KEY = "pb_velocityboard_v8_singlefile";
+    const LS_PREF = "pb_velocityboard_prefs_v8";
 
     const defaultState = { athletes: [], activeAthleteId: null };
     const defaultPrefs = { defaultDistance: "ALL", timeHint: "00:52.300" };
 
     let state = loadState();
     let prefs = loadPrefs();
+
+    // Compare mode (lightweight)
+    let compareAthleteId = null;
 
     const tabBtns = [...document.querySelectorAll(".tabBtn")];
     const screens = {
@@ -1168,7 +1120,12 @@ select, option{
     };
 
     const athleteSelect = document.getElementById("athleteSelect");
+    const compareSelect = document.getElementById("compareSelect");
+    const pillCompare = document.getElementById("pillCompare");
+
     const distanceFilter = document.getElementById("distanceFilter");
+    const locationFilter = document.getElementById("locationFilter");
+    const locationList = document.getElementById("locationList");
 
     const pbBanner = document.getElementById("pbBanner");
     const pbBannerText = document.getElementById("pbBannerText");
@@ -1193,6 +1150,7 @@ select, option{
     const anPBCount = document.getElementById("anPBCount");
     const anTotal = document.getElementById("anTotal");
     const pbTableBody = document.querySelector("#pbTable tbody");
+    const pbHeadRow = document.getElementById("pbHeadRow");
 
     const pillExport = document.getElementById("pillExport");
     const importFile = document.getElementById("importFile");
@@ -1203,6 +1161,19 @@ select, option{
 
     const canvas = document.getElementById("trendCanvas");
     const ctx = canvas.getContext("2d");
+    const chartBox = document.getElementById("chartBox");
+    const chartTooltip = document.getElementById("chartTooltip");
+
+    let lastDrawMeta = null; // for tooltip hit testing
+
+    // Entry edit modal fields
+    const eeDate = document.getElementById("eeDate");
+    const eeLocation = document.getElementById("eeLocation");
+    const eeDistance = document.getElementById("eeDistance");
+    const eeTime = document.getElementById("eeTime");
+    const eeNotes = document.getElementById("eeNotes");
+    const editEntryErr = document.getElementById("editEntryErr");
+    let editingEntryId = null;
 
     document.getElementById("btnAddAthlete").addEventListener("click", () => openModal("modalAthlete"));
     document.getElementById("btnEditAthlete").addEventListener("click", openEditAthlete);
@@ -1228,6 +1199,7 @@ select, option{
     document.getElementById("saveAthlete").addEventListener("click", saveAthlete);
     document.getElementById("saveAthleteEdits").addEventListener("click", saveAthleteEdits);
     document.getElementById("saveEntry").addEventListener("click", saveEntryMulti);
+    document.getElementById("saveEntryEdits").addEventListener("click", saveEntryEdits);
     document.getElementById("doReset").addEventListener("click", doResetAll);
 
     document.getElementById("btnExportJSON").addEventListener("click", exportJSON);
@@ -1239,10 +1211,17 @@ select, option{
     athleteSelect.addEventListener("change", () => {
       state.activeAthleteId = athleteSelect.value || null;
       saveState();
+      if(compareAthleteId === state.activeAthleteId) compareAthleteId = null;
+      renderAll();
+    });
+
+    compareSelect.addEventListener("change", () => {
+      compareAthleteId = compareSelect.value || null;
       renderAll();
     });
 
     distanceFilter.addEventListener("change", () => renderAll());
+    locationFilter.addEventListener("input", () => renderAll());
 
     defaultDistance.addEventListener("change", () => {
       prefs.defaultDistance = defaultDistance.value;
@@ -1259,12 +1238,25 @@ select, option{
     const entryRowsEl = document.getElementById("entryRows");
     document.getElementById("btnAddRow").addEventListener("click", () => addEntryRow());
 
-    // Table delete delegation (works after rerender)
+    // Delegation: delete + edit from recent sessions
     recentWrap.addEventListener("click", (e) => {
-      const btn = e.target.closest("[data-del-entry-id]");
-      if(!btn) return;
-      const entryId = btn.getAttribute("data-del-entry-id");
-      deleteEntry(entryId);
+      const delBtn = e.target.closest("[data-del-entry-id]");
+      if(delBtn){
+        deleteEntry(delBtn.getAttribute("data-del-entry-id"));
+        return;
+      }
+      const editBtn = e.target.closest("[data-edit-entry-id]");
+      if(editBtn){
+        openEditEntryModal(editBtn.getAttribute("data-edit-entry-id"));
+        return;
+      }
+    });
+
+    // Chart tooltip events
+    canvas.addEventListener("mousemove", onChartMove);
+    canvas.addEventListener("mouseleave", () => {
+      chartTooltip.style.display = "none";
+      if(lastDrawMeta) drawChart(lastDrawMeta.entries, lastDrawMeta.dist, lastDrawMeta.loc);
     });
 
     init();
@@ -1300,6 +1292,7 @@ select, option{
         const el = document.getElementById(id);
         if(el){ el.classList.remove("show"); el.textContent=""; }
       });
+      if(editEntryErr){ editEntryErr.classList.remove("show"); editEntryErr.textContent=""; }
     }
 
     function loadState(){
@@ -1328,8 +1321,15 @@ select, option{
     function getActiveAthlete(){
       return state.athletes.find(a => a.id === state.activeAthleteId) || null;
     }
+    function getAthleteById(id){
+      return state.athletes.find(a => a.id === id) || null;
+    }
     function uid(){
       return "a_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+    }
+
+    function normalizeLoc(s){
+      return (s || "").trim().toLowerCase();
     }
 
     function parseTimeToMs(t){
@@ -1399,8 +1399,8 @@ select, option{
 
     function flashBanner(msg, isPB){
       pbBannerText.textContent = msg;
-      pbBanner.style.borderColor = isPB ? "rgba(255,204,102,.35)" : "rgba(255,255,255,.12)";
-      pbBanner.style.background = isPB ? "rgba(255,204,102,.11)" : "rgba(255,255,255,.06)";
+      pbBanner.style.borderColor = isPB ? "rgba(200,139,0,.22)" : "rgba(47,107,255,.18)";
+      pbBanner.style.background = isPB ? "rgba(200,139,0,.10)" : "rgba(47,107,255,.08)";
       pbBanner.classList.add("show");
       clearTimeout(flashBanner._t);
       flashBanner._t = setTimeout(()=> pbBanner.classList.remove("show"), 4200);
@@ -1498,7 +1498,7 @@ select, option{
       row.className = "entryRow";
 
       row.innerHTML = `
-        <div class="field">
+        <div class="field" style="min-width:0;">
           <label>Distance</label>
           <select class="select2 jsDist">
             <option value="111m">111m</option>
@@ -1512,21 +1512,19 @@ select, option{
           </select>
         </div>
 
-        <div class="field">
+        <div class="field" style="min-width:0;">
           <label>Time (mm:ss.mmm)</label>
-          <!-- CHANGE #1: removed the Example text below; placeholder only -->
           <input class="input jsTime" placeholder="${escapeHtml(prefs.timeHint || "00:52.300")}" value="${escapeHtml(time || "")}" />
         </div>
 
         <div style="display:flex; justify-content:flex-end;">
-          <button class="miniBtn miniBtnDanger jsRemove" ${isFirst ? "disabled style='opacity:.45; cursor:not-allowed;'" : ""}>Remove</button>
+          <button class="miniBtn miniBtnDanger jsRemove" ${isFirst ? "disabled style='opacity:.55; cursor:not-allowed;'" : ""}>Remove</button>
         </div>
       `;
 
       entryRowsEl.appendChild(row);
 
-      const distSel = row.querySelector(".jsDist");
-      distSel.value = distance;
+      row.querySelector(".jsDist").value = distance;
 
       const removeBtn = row.querySelector(".jsRemove");
       removeBtn.addEventListener("click", () => {
@@ -1603,11 +1601,86 @@ select, option{
       closeModal("modalEntry");
 
       if(pbMessages.length){
-        flashBanner(`🎉 ${ath.name}: ${pbMessages[0]}${pbMessages.length>1 ? ` (+${pbMessages.length-1} more)` : ""}`, true);
+        flashBanner(`🏅 ${ath.name}: ${pbMessages[0]}${pbMessages.length>1 ? ` (+${pbMessages.length-1} more)` : ""}`, true);
       }else{
-        flashBanner(`${savedCount} race entr${savedCount===1?"y":"ies"} saved for ${ath.name}.`, false);
+        flashBanner(`${savedCount} entr${savedCount===1?"y":"ies"} saved for ${ath.name}.`, false);
       }
 
+      renderAll();
+    }
+
+    function openEditEntryModal(entryId){
+      clearErrors();
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const entry = (ath.entries || []).find(e => e.id === entryId);
+      if(!entry) return;
+
+      editingEntryId = entryId;
+
+      eeDate.value = entry.date || "";
+      eeLocation.value = entry.location || "";
+      eeDistance.value = entry.distance || "400m";
+      eeTime.value = entry.time || "";
+      eeTime.placeholder = prefs.timeHint || "00:52.300";
+      eeNotes.value = entry.notes || "";
+
+      openModal("modalEditEntry");
+    }
+
+    function saveEntryEdits(){
+      editEntryErr.classList.remove("show");
+      editEntryErr.textContent = "";
+
+      const ath = getActiveAthlete();
+      if(!ath || !editingEntryId){
+        editEntryErr.textContent = "No entry selected to edit.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      const date = eeDate.value;
+      const location = eeLocation.value.trim();
+      const distance = eeDistance.value;
+      const timeStr = eeTime.value.trim();
+      const notes = eeNotes.value.trim();
+
+      if(!date){
+        editEntryErr.textContent = "Please select a date.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+      if(!location){
+        editEntryErr.textContent = "Please enter a location.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+      const ms = parseTimeToMs(timeStr);
+      if(ms == null){
+        editEntryErr.textContent = `Invalid time. Use mm:ss.mmm (example: ${prefs.timeHint}).`;
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      const entry = (ath.entries || []).find(e => e.id === editingEntryId);
+      if(!entry){
+        editEntryErr.textContent = "Entry not found.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      entry.date = date;
+      entry.location = location;
+      entry.distance = distance;
+      entry.time = timeStr;
+      entry.notes = notes;
+
+      saveState();
+      closeModal("modalEditEntry");
+      editingEntryId = null;
+
+      flashBanner("Entry updated.", false);
       renderAll();
     }
 
@@ -1636,6 +1709,7 @@ select, option{
       }
       localStorage.removeItem(LS_KEY);
       state = structuredClone(defaultState);
+      compareAthleteId = null;
       closeModal("modalReset");
       flashBanner("All data cleared on this device.", false);
       renderAll();
@@ -1643,6 +1717,8 @@ select, option{
 
     function renderAll(){
       renderAthleteSelect();
+      renderCompareSelect();
+      renderLocationDatalist();
       renderHome();
       renderAnalytics();
       renderExport();
@@ -1675,9 +1751,66 @@ select, option{
       athleteSelect.value = state.activeAthleteId;
     }
 
+    function renderCompareSelect(){
+      compareSelect.innerHTML = "";
+      const active = getActiveAthlete();
+
+      const none = document.createElement("option");
+      none.value = "";
+      none.textContent = "None (Compare Off)";
+      compareSelect.appendChild(none);
+
+      for(const a of state.athletes){
+        if(active && a.id === active.id) continue;
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = a.name + (a.birthYear ? ` (${a.birthYear})` : "");
+        compareSelect.appendChild(opt);
+      }
+
+      if(compareAthleteId && state.athletes.some(a => a.id === compareAthleteId)){
+        compareSelect.value = compareAthleteId;
+      }else{
+        compareSelect.value = "";
+        compareAthleteId = null;
+      }
+
+      pillCompare.textContent = compareAthleteId ? "Compare: On" : "Compare: Off";
+    }
+
+    function renderLocationDatalist(){
+      locationList.innerHTML = "";
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const set = new Set();
+      for(const e of (ath.entries || [])){
+        const loc = (e.location || "").trim();
+        if(loc) set.add(loc);
+      }
+      [...set].sort((a,b)=>a.localeCompare(b)).forEach(loc=>{
+        const opt = document.createElement("option");
+        opt.value = loc;
+        locationList.appendChild(opt);
+      });
+    }
+
+    function getFilters(){
+      const dist = distanceFilter.value;
+      const loc = locationFilter.value.trim();
+      return { dist, loc };
+    }
+
+    function applyFilters(entries, dist, loc){
+      let out = [...entries];
+      if(dist !== "ALL") out = out.filter(e => e.distance === dist);
+      if(loc) out = out.filter(e => normalizeLoc(e.location) === normalizeLoc(loc));
+      return out;
+    }
+
     function renderHome(){
       const ath = getActiveAthlete();
-      const dist = distanceFilter.value;
+      const { dist, loc } = getFilters();
 
       if(!ath){
         pillAthlete.textContent = "No athlete selected";
@@ -1697,27 +1830,25 @@ select, option{
             <p>Add an athlete and start entering races to see PBs here.</p>
           </div>
         `;
-
         recentWrap.innerHTML = `
           <div class="empty">
             <strong>Add your first athlete</strong>
             <p>Click <b>Add Athlete</b>, then add race entries to track PBs, trends, and progress.</p>
           </div>
         `;
-
-        drawChart([], dist);
+        drawChart([], dist, loc);
         return;
       }
 
       pillAthlete.textContent = ath.name + (ath.birthYear ? ` • ${ath.birthYear}` : "");
+
       const entriesAll = sortByDateDesc(ath.entries || []);
-      pillCount.textContent = `${entriesAll.length} races`;
+      const pbMapAll = computePBMap(entriesAll);
 
-      const pbMap = computePBMap(entriesAll);
-      const pbCount = Object.keys(pbMap).length;
-      pillPBCount.textContent = `${pbCount} PBs`;
+      pillPBCount.textContent = `${Object.keys(pbMapAll).length} PBs`;
 
-      if(pbCount === 0){
+      // PB Summary is for ALL entries (not filtered), as a “profile PB”
+      if(Object.keys(pbMapAll).length === 0){
         pbSummaryWrap.innerHTML = `
           <div class="empty">
             <strong>No PBs yet</strong>
@@ -1725,26 +1856,26 @@ select, option{
           </div>
         `;
       }else{
-        const distances = Object.keys(pbMap).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+        const distances = Object.keys(pbMapAll).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
         pbSummaryWrap.innerHTML = `
           <table class="table">
             <thead>
               <tr>
                 <th>Distance</th>
-                <th>PB</th>
+                <th class="num">PB</th>
                 <th>Date</th>
                 <th>Location</th>
               </tr>
             </thead>
             <tbody>
               ${distances.map(d=>{
-                const pb = pbMap[d];
+                const pb = pbMapAll[d];
                 return `
                   <tr>
                     <td><span class="badge">${d}</span></td>
-                    <td><b>${msToTime(pb.ms)}</b></td>
+                    <td class="num"><b>${msToTime(pb.ms)}</b></td>
                     <td>${fmtDate(pb.date)}</td>
-                    <td style="color:rgba(255,255,255,.75)">${escapeHtml(pb.location || "—")}</td>
+                    <td>${escapeHtml(pb.location || "—")}</td>
                   </tr>
                 `;
               }).join("")}
@@ -1753,89 +1884,127 @@ select, option{
         `;
       }
 
-      const entries = dist === "ALL" ? entriesAll : entriesAll.filter(e => e.distance === dist);
+      // Filtered entries affect KPIs + chart + sessions
+      const filtered = applyFilters(entriesAll, dist, loc);
+      pillCount.textContent = `${filtered.length} races`;
 
-      const latest = entries[0] || null;
+      const latest = filtered[0] || null;
       if(latest){
         kpiLatest.textContent = latest.time;
         kpiLatestMeta.textContent = `${latest.distance} • ${latest.location || "—"} • ${fmtDate(latest.date)}`;
       }else{
         kpiLatest.textContent = "—";
-        kpiLatestMeta.textContent = dist === "ALL" ? "No entries yet" : `No entries for ${dist}`;
+        kpiLatestMeta.textContent = dist === "ALL" && !loc ? "No entries yet" : "No entries for current filters";
       }
 
+      // KPI PB for selected distance (within filter scope if location typed; otherwise global)
       if(dist !== "ALL"){
-        const pb = pbMap[dist] ? pbMap[dist].ms : null;
-        kpiPB.textContent = pb != null ? msToTime(pb) : "—";
-        kpiPBDistance.textContent = pb != null ? `${dist} best` : `No PB for ${dist}`;
+        let pbMs = null;
+        if(loc){
+          const pbMapLoc = computePBMap(filtered);
+          pbMs = pbMapLoc[dist]?.ms ?? null;
+          kpiPBDistance.textContent = pbMs != null ? `${dist} best (this location)` : `No PB for ${dist} here`;
+        }else{
+          pbMs = pbMapAll[dist]?.ms ?? null;
+          kpiPBDistance.textContent = pbMs != null ? `${dist} best` : `No PB for ${dist}`;
+        }
+        kpiPB.textContent = pbMs != null ? msToTime(pbMs) : "—";
       }else{
-        const allPBs = Object.values(pbMap).map(x => x.ms);
+        const allPBs = Object.values(pbMapAll).map(x => x.ms);
         const best = allPBs.length ? Math.min(...allPBs) : null;
         kpiPB.textContent = best != null ? msToTime(best) : "—";
         kpiPBDistance.textContent = best != null ? "Fastest PB (any distance)" : "No PBs yet";
       }
 
-      const last10 = entries.slice(0,10).map(e => parseTimeToMs(e.time)).filter(x => x!=null);
+      const last10 = filtered.slice(0,10).map(e => parseTimeToMs(e.time)).filter(x => x!=null);
       const avg10 = last10.length ? mean(last10) : null;
       const sd10 = last10.length ? stddev(last10) : null;
       kpiAvg10.textContent = avg10 != null ? msToTime(Math.round(avg10)) : "—";
       kpiCons.textContent = sd10 != null ? (sd10/1000).toFixed(3) + "s" : "—";
 
-      if(entriesAll.length === 0){
+      // Group sessions by (date + location)
+      renderSessions(filtered, pbMapAll, dist, loc);
+
+      drawChart(filtered, dist, loc);
+    }
+
+    function renderSessions(entriesFiltered, pbMapAll){
+      if(entriesFiltered.length === 0){
         recentWrap.innerHTML = `
           <div class="empty">
-            <strong>No races yet</strong>
-            <p>Add race entries to start tracking improvements and PBs.</p>
+            <strong>No sessions for current filters</strong>
+            <p>Try clearing the location filter or choosing “All distances”.</p>
           </div>
         `;
-      }else{
-        const rows = entriesAll.slice(0,12).map(e => {
+        return;
+      }
+
+      // Group by date+location (normalized)
+      const groups = new Map();
+      for(const e of entriesFiltered){
+        const key = `${e.date}__${normalizeLoc(e.location)}`;
+        if(!groups.has(key)){
+          groups.set(key, { date: e.date, location: e.location || "", items: [] });
+        }
+        groups.get(key).items.push(e);
+      }
+
+      // Sort groups by date desc
+      const groupArr = [...groups.values()].sort((a,b)=> new Date(b.date) - new Date(a.date));
+
+      // Limit to last 10 sessions for cleanliness
+      const show = groupArr.slice(0,10);
+
+      recentWrap.innerHTML = show.map(g=>{
+        const items = [...g.items].sort((a,b)=> a.distance.localeCompare(b.distance, undefined, {numeric:true}));
+        const rows = items.map(e=>{
           const ms = parseTimeToMs(e.time);
-          const isPB = pbMap[e.distance] && ms != null && ms === pbMap[e.distance].ms;
+          const isPB = pbMapAll[e.distance] && ms != null && ms === pbMapAll[e.distance].ms;
           const badge = isPB
             ? `<span class="badge badgePB">🏅 PB</span>`
             : `<span class="badge badgeOK">Saved</span>`;
 
           return `
             <tr>
-              <td>${fmtDate(e.date)}</td>
-              <td>${escapeHtml(e.location || "—")}</td>
-              <td>${e.distance}</td>
-              <td><b>${e.time}</b></td>
+              <td><span class="badge">${e.distance}</span></td>
+              <td class="num"><b>${escapeHtml(e.time)}</b></td>
               <td>${badge}</td>
-              <td style="color:rgba(255,255,255,.70)">${e.notes ? escapeHtml(e.notes) : "—"}</td>
-              <!-- CHANGE #3: Delete column -->
-              <td style="width:60px;">
+              <td style="color:rgba(20,24,38,.72)">${e.notes ? escapeHtml(e.notes) : "—"}</td>
+              <td style="width:92px;">
+                <button class="iconBtn" title="Edit entry" data-edit-entry-id="${e.id}">✏️</button>
                 <button class="iconBtn iconBtnDanger" title="Delete entry" data-del-entry-id="${e.id}">🗑️</button>
               </td>
             </tr>
           `;
         }).join("");
 
-        recentWrap.innerHTML = `
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Location</th>
-                <th>Distance</th>
-                <th>Time</th>
-                <th>Status</th>
-                <th>Notes</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-        `;
-      }
+        return `
+          <div class="sessionBlock">
+            <div class="sessionHead">
+              <div class="sessionTitle">${fmtDate(g.date)} • ${escapeHtml(g.location || "—")}</div>
+              <div class="sessionMeta">${items.length} entr${items.length===1?"y":"ies"}</div>
+            </div>
 
-      drawChart(entries, dist);
+            <table class="table" style="margin-top:0;">
+              <thead>
+                <tr>
+                  <th>Distance</th>
+                  <th class="num">Time</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }).join("");
     }
 
     function renderAnalytics(){
       const ath = getActiveAthlete();
-      const dist = distanceFilter.value;
+      const { dist } = getFilters();
 
       if(!ath){
         pillAnalytics.textContent = "No athlete";
@@ -1850,7 +2019,6 @@ select, option{
 
       const entriesAll = ath.entries || [];
       pillAnalytics.textContent = ath.name + (dist !== "ALL" ? ` • Focus: ${dist}` : "");
-
       anTotal.textContent = String(entriesAll.length);
 
       const pbMap = computePBMap(entriesAll);
@@ -1883,22 +2051,56 @@ select, option{
         anImp5.textContent = "—";
       }
 
-      const distances = Object.keys(pbMap).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
-      if(!distances.length){
-        pbTableBody.innerHTML = `<tr><td colspan="5">No PBs yet. Add race entries.</td></tr>`;
+      // Compare PB table (side-by-side)
+      const comp = compareAthleteId ? getAthleteById(compareAthleteId) : null;
+      if(comp){
+        const pbMap2 = computePBMap(comp.entries || []);
+        const allD = new Set([...Object.keys(pbMap), ...Object.keys(pbMap2)]);
+        const distances = [...allD].sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+
+        pbHeadRow.innerHTML = `
+          <th>Distance</th>
+          <th class="num">${escapeHtml(ath.name)} PB</th>
+          <th class="num">${escapeHtml(comp.name)} PB</th>
+          <th>${escapeHtml(ath.name)} Date/Loc</th>
+          <th>${escapeHtml(comp.name)} Date/Loc</th>
+        `;
+
+        pbTableBody.innerHTML = distances.length ? distances.map(d=>{
+          const a1 = pbMap[d];
+          const a2 = pbMap2[d];
+          return `
+            <tr>
+              <td><span class="badge">${d}</span></td>
+              <td class="num"><b>${a1 ? msToTime(a1.ms) : "—"}</b></td>
+              <td class="num"><b>${a2 ? msToTime(a2.ms) : "—"}</b></td>
+              <td style="color:rgba(20,24,38,.72)">${a1 ? `${fmtDate(a1.date)} • ${escapeHtml(a1.location||"—")}` : "—"}</td>
+              <td style="color:rgba(20,24,38,.72)">${a2 ? `${fmtDate(a2.date)} • ${escapeHtml(a2.location||"—")}` : "—"}</td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="5">No PBs yet.</td></tr>`;
       }else{
-        pbTableBody.innerHTML = distances.map(d=>{
+        pbHeadRow.innerHTML = `
+          <th>Distance</th>
+          <th class="num">PB Time</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Notes</th>
+        `;
+
+        const distances = Object.keys(pbMap).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+        pbTableBody.innerHTML = distances.length ? distances.map(d=>{
           const pb = pbMap[d];
           return `
             <tr>
               <td><span class="badge">${d}</span></td>
-              <td><b>${msToTime(pb.ms)}</b></td>
+              <td class="num"><b>${msToTime(pb.ms)}</b></td>
               <td>${fmtDate(pb.date)}</td>
               <td>${escapeHtml(pb.location || "—")}</td>
-              <td style="color:rgba(255,255,255,.72)">${pb.notes ? escapeHtml(pb.notes) : "—"}</td>
+              <td style="color:rgba(20,24,38,.72)">${pb.notes ? escapeHtml(pb.notes) : "—"}</td>
             </tr>
           `;
-        }).join("");
+        }).join("") : `<tr><td colspan="5">No PBs yet. Add race entries.</td></tr>`;
       }
     }
 
@@ -1907,25 +2109,28 @@ select, option{
       pillExport.textContent = ath ? `Selected: ${ath.name}` : "No athlete";
     }
 
-    function drawChart(entries, dist){
+    function drawChart(entries, dist, loc){
       const data = [...entries]
         .filter(e => parseTimeToMs(e.time)!=null)
         .sort((a,b)=> new Date(a.date)-new Date(b.date));
 
       const points = data.map(e => ({
         x: new Date(e.date).getTime(),
-        y: parseTimeToMs(e.time)
+        y: parseTimeToMs(e.time),
+        meta: e
       }));
 
       ctx.clearRect(0,0,canvas.width,canvas.height);
 
+      lastDrawMeta = { entries, dist, loc, points, data };
+
       if(points.length < 2){
-        ctx.fillStyle = "rgba(255,255,255,.65)";
-        ctx.font = "700 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+        ctx.fillStyle = "rgba(20,24,38,.70)";
+        ctx.font = "800 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
         ctx.fillText("Add race entries to see trend", 50, 210);
-        ctx.fillStyle = "rgba(255,255,255,.45)";
-        ctx.font = "600 18px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-        ctx.fillText(dist === "ALL" ? "Tip: choose a distance for a cleaner line." : `Distance: ${dist}`, 50, 245);
+        ctx.fillStyle = "rgba(20,24,38,.55)";
+        ctx.font = "700 16px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+        ctx.fillText("Tip: pick a distance + location for the cleanest trend line.", 50, 240);
         return;
       }
 
@@ -1946,9 +2151,9 @@ select, option{
       minY = minY - padY;
       maxY = maxY + padY;
 
-      ctx.strokeStyle = "rgba(255,255,255,.08)";
+      // grid
+      ctx.strokeStyle = "rgba(20,24,38,.07)";
       ctx.lineWidth = 1;
-
       const gridCount = 5;
       for(let i=0;i<=gridCount;i++){
         const y = padT + (H/gridCount)*i;
@@ -1958,7 +2163,8 @@ select, option{
         ctx.stroke();
       }
 
-      ctx.fillStyle = "rgba(255,255,255,.55)";
+      // y labels
+      ctx.fillStyle = "rgba(20,24,38,.55)";
       ctx.font = "800 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
       for(let i=0;i<=gridCount;i++){
         const y = padT + (H/gridCount)*i;
@@ -1966,7 +2172,8 @@ select, option{
         ctx.fillText(msToTime(Math.round(val)), 14, y+5);
       }
 
-      ctx.fillStyle = "rgba(255,255,255,.55)";
+      // x labels (start/end)
+      ctx.fillStyle = "rgba(20,24,38,.55)";
       ctx.font = "800 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
       ctx.fillText(fmtDate(new Date(minX).toISOString().slice(0,10)), padL, canvas.height-18);
       const endLabel = fmtDate(new Date(maxX).toISOString().slice(0,10));
@@ -1976,10 +2183,12 @@ select, option{
       const toX = (x)=> padL + ((x-minX)/(maxX-minX))*W;
       const toY = (y)=> padT + ((maxY-y)/(maxY-minY))*H;
 
+      // line gradient
       const grad = ctx.createLinearGradient(padL,0,padL+W,0);
-      grad.addColorStop(0, "rgba(124,92,255,.92)");
-      grad.addColorStop(1, "rgba(74,217,255,.92)");
+      grad.addColorStop(0, "rgba(47,107,255,.92)");
+      grad.addColorStop(1, "rgba(43,183,255,.92)");
 
+      // draw line
       ctx.strokeStyle = grad;
       ctx.lineWidth = 4;
       ctx.beginPath();
@@ -1991,14 +2200,118 @@ select, option{
       });
       ctx.stroke();
 
+      // dots
       points.forEach((p)=>{
         const x = toX(p.x);
         const y = toY(p.y);
+        ctx.fillStyle = "rgba(20,24,38,.92)";
+        ctx.beginPath();
+        ctx.arc(x,y,4.5,0,Math.PI*2);
+        ctx.fill();
         ctx.fillStyle = "rgba(255,255,255,.95)";
         ctx.beginPath();
-        ctx.arc(x,y,5,0,Math.PI*2);
+        ctx.arc(x,y,2.4,0,Math.PI*2);
         ctx.fill();
       });
+
+      // PB marker within current points (min y)
+      let pbIdx = 0;
+      for(let i=1;i<points.length;i++){
+        if(points[i].y < points[pbIdx].y) pbIdx = i;
+      }
+      const pbP = points[pbIdx];
+      const pbX = toX(pbP.x);
+      const pbY = toY(pbP.y);
+
+      ctx.strokeStyle = "rgba(200,139,0,.95)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(pbX, pbY, 8.5, 0, Math.PI*2);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(200,139,0,.12)";
+      ctx.beginPath();
+      ctx.arc(pbX, pbY, 10.5, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(200,139,0,.95)";
+      ctx.font = "900 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+      ctx.fillText("PB", pbX + 12, pbY + 5);
+
+      // store transform for tooltip
+      lastDrawMeta.t = { padL,padR,padT,padB,W,H,minX,maxX,minY,maxY,toX,toY };
+    }
+
+    function onChartMove(ev){
+      if(!lastDrawMeta || !lastDrawMeta.points || lastDrawMeta.points.length < 2) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mx = ((ev.clientX - rect.left) / rect.width) * canvas.width;
+      const my = ((ev.clientY - rect.top) / rect.height) * canvas.height;
+
+      const t = lastDrawMeta.t;
+      if(!t) return;
+
+      // Only if inside plot area
+      if(mx < t.padL || mx > t.padL + t.W || my < t.padT || my > t.padT + t.H){
+        chartTooltip.style.display = "none";
+        return;
+      }
+
+      // Find nearest point by x distance
+      let best = null;
+      for(const p of lastDrawMeta.points){
+        const px = t.toX(p.x);
+        const py = t.toY(p.y);
+        const dx = px - mx;
+        const dy = py - my;
+        const d2 = dx*dx + dy*dy;
+        if(!best || d2 < best.d2) best = { p, px, py, d2 };
+      }
+      if(!best) return;
+
+      // Redraw and overlay crosshair + highlight
+      drawChart(lastDrawMeta.entries, lastDrawMeta.dist, lastDrawMeta.loc);
+
+      ctx.strokeStyle = "rgba(47,107,255,.25)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(best.px, t.padT);
+      ctx.lineTo(best.px, t.padT + t.H);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(t.padL, best.py);
+      ctx.lineTo(t.padL + t.W, best.py);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(47,107,255,.18)";
+      ctx.beginPath();
+      ctx.arc(best.px, best.py, 11, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(47,107,255,.95)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(best.px, best.py, 7.5, 0, Math.PI*2);
+      ctx.stroke();
+
+      // Tooltip content
+      const e = best.p.meta;
+      chartTooltip.innerHTML = `
+        <div class="tTitle">${escapeHtml(e.distance)} • <b>${escapeHtml(e.time)}</b></div>
+        <div class="tRow"><b>Date:</b> ${fmtDate(e.date)}</div>
+        <div class="tRow"><b>Location:</b> ${escapeHtml(e.location || "—")}</div>
+        <div class="tRow"><b>Notes:</b> ${escapeHtml(e.notes || "—")}</div>
+      `;
+
+      // Position tooltip near cursor
+      const tx = ev.clientX - rect.left + 12;
+      const ty = ev.clientY - rect.top + 12;
+
+      chartTooltip.style.left = Math.min(tx, rect.width - 210) + "px";
+      chartTooltip.style.top = Math.min(ty, rect.height - 120) + "px";
+      chartTooltip.style.display = "block";
     }
 
     function exportJSON(){
@@ -2091,7 +2404,7 @@ select, option{
     }
 
     function escapeHtml(str){
-      return String(str)
+      return String(str ?? "")
         .replaceAll("&","&amp;")
         .replaceAll("<","&lt;")
         .replaceAll(">","&gt;")
