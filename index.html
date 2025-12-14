@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PB VelocityBoard</title>
+
+  <style>
+    /* ============================================================
+       PB VelocityBoard — Royal Blue + Glass UI (Mobile Friendly)
+       Fixes:
+       1) Tabs + subtitle visible on phone
+       2) All text black (including chart labels)
+       3) Royal dark blue + glass blocks
+       4) Removed Consistency KPI
+       5) PB Summary location shows correctly
+       6) Download template CSV/Excel + Import CSV
+    ============================================================ */
+
+    :root{
+      --text: rgba(10, 12, 20, .94);
+      --muted: rgba(10, 12, 20, .64);
+      --muted2: rgba(10, 12, 20, .50);
+
+      --royal: #0b2b7a;
+      --royal2:#1c58ff;
+      --royal3:#2bb7ff;
+
+      --primary: #1c58ff;
+      --danger:#e23b57;
+      --ok:#18a965;
+      --warn:#c88b00;
+
+      --radius: 22px;
+      --shadow: 0 18px 60px rgba(10, 14, 30, .14);
+      --shadow2: 0 10px 26px rgba(10, 14, 30, .16);
+
+      --w: 1180px;
+      --gap: 14px;
+
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+
+    * { box-sizing:border-box; }
+    html, body { height:100%; }
+
+    body{
+      margin:0;
+      font-family: var(--font);
+      color: var(--text);
+      overflow-x:hidden;
+
+      /* Royal dark blue background */
+      background:
+        radial-gradient(1100px 500px at 20% 10%, rgba(43,183,255,.16), transparent 60%),
+        radial-gradient(900px 520px at 80% 20%, rgba(28,88,255,.18), transparent 60%),
+        linear-gradient(180deg, #061a44, #071a3e 45%, #04112c 100%);
+    }
+
+    button, input, select { font-family:inherit; }
+
+    .wrap{
+      max-width: var(--w);
+      margin: 0 auto;
+      padding: 98px 18px 26px;
+    }
+
+    /* ---------- APP BAR ---------- */
+    .appbar{
+      position:fixed;
+      top:0; left:0; right:0;
+      z-index:50;
+      backdrop-filter: blur(18px);
+      background: rgba(255,255,255,.78);
+      border-bottom: 1px solid rgba(10,12,20,.12);
+    }
+    .appbarInner{
+      max-width: var(--w);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+      padding: 12px 18px;
+      flex-wrap:wrap;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap: 10px;
+      min-width: 220px;
+    }
+    .logo{
+      width: 36px; height: 36px;
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 55%),
+        linear-gradient(135deg, var(--royal), var(--royal2));
+      box-shadow: 0 14px 30px rgba(28,88,255,.22);
+    }
+    .brandText{
+      display:flex;
+      flex-direction:column;
+      line-height:1.12;
+    }
+    .brandText strong{
+      font-size: 15.5px;
+      letter-spacing:.2px;
+      font-weight: 900;
+      color: rgba(10,12,20,.94);
+    }
+    .brandText span{
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .tabs{
+      display:flex;
+      gap: 8px;
+      padding: 6px;
+      border:1px solid rgba(10,12,20,.12);
+      border-radius: 999px;
+      background: rgba(255,255,255,.80);
+    }
+    .tabBtn{
+      border:0;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: transparent;
+      color: rgba(10,12,20,.70);
+      font-weight:900;
+      letter-spacing:.2px;
+      cursor:pointer;
+      transition: .18s ease;
+      white-space:nowrap;
+    }
+    .tabBtn:hover{ color: rgba(10,12,20,.94); background: rgba(10,12,20,.05); }
+    .tabBtn.active{
+      color: rgba(10,12,20,.94);
+      background: rgba(28,88,255,.10);
+      border: 1px solid rgba(28,88,255,.18);
+    }
+
+    .rightTools{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+    }
+
+    .select{
+      appearance:none;
+      -webkit-appearance:none;
+      border:1px solid rgba(10,12,20,.14);
+      background: rgba(255,255,255,.92);
+      color: var(--text);
+      padding: 10px 34px 10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      outline:none;
+      cursor:pointer;
+      min-width: 210px;
+    }
+    .selectWrap{ position:relative; }
+    .selectWrap:after{
+      content:"▾";
+      position:absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-52%);
+      color: var(--muted);
+      pointer-events:none;
+      font-size: 12px;
+    }
+
+    .btn{
+      border:1px solid rgba(10,12,20,.14);
+      background: rgba(255,255,255,.86);
+      color: rgba(10,12,20,.94);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight:900;
+      cursor:pointer;
+      transition: .18s ease;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
+    .btn:active{ transform: translateY(0px); }
+
+    .btnPrimary{
+      border: none;
+      background: linear-gradient(135deg, rgba(11,43,122,.98), rgba(28,88,255,.95));
+      color: white;
+      box-shadow: 0 14px 30px rgba(28,88,255,.18);
+    }
+    .btnDanger{
+      border: 1px solid rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
+      color: rgba(10,12,20,.94);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: var(--gap);
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width: 160px; }
+      .select{ min-width: 180px; }
+    }
+
+    /* Glass blocks */
+    .card{
+      border: 1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(16px);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+    .cardHeader{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .title{
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing:.1px;
+      color: rgba(10,12,20,.94);
+    }
+    .sub{
+      color: var(--muted);
+      font-size: 13px;
+      margin-top: 3px;
+      line-height:1.35;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border:1px solid rgba(10,12,20,.12);
+      background: rgba(10,12,20,.04);
+      color: rgba(10,12,20,.78);
+      font-size: 12px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+
+    .kpis{
+      display:grid;
+      grid-template-columns: repeat(3, 1fr); /* removed Consistency KPI */
+      gap: 10px;
+      margin-top: 12px;
+    }
+    @media (max-width: 980px){
+      .kpis{ grid-template-columns: repeat(2, 1fr); }
+    }
+    .kpi{
+      border:1px solid rgba(10,12,20,.12);
+      background: rgba(255,255,255,.86);
+      border-radius: 16px;
+      padding: 12px;
+    }
+    .kpi .label{ color: var(--muted); font-size: 12px; font-weight:900; }
+    .kpi .value{ margin-top: 6px; font-size: 18px; font-weight: 900; letter-spacing:.3px; color: rgba(10,12,20,.94); }
+    .kpi .mini{ margin-top: 4px; color: var(--muted2); font-size: 12px; }
+
+    .row{
+      display:flex;
+      flex-wrap:wrap;
+      gap: 10px;
+      align-items:flex-end;
+      justify-content:space-between;
+      margin-top: 12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap: 6px;
+      min-width: 220px;
+    }
+    .field label{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      letter-spacing:.2px;
+    }
+
+    .input, .select2{
+      border:1px solid rgba(10,12,20,.14);
+      background: rgba(255,255,255,.92);
+      color: rgba(10,12,20,.94);
+      border-radius: 14px;
+      padding: 10px 12px;
+      outline:none;
+      font-weight: 900;
+    }
+    .input:focus, .select:focus, .select2:focus{
+      outline: none;
+      border-color: rgba(28,88,255,.35);
+      box-shadow: 0 0 0 4px rgba(28,88,255,.12);
+    }
+
+    .help{
+      font-size: 12px;
+      color: var(--muted2);
+      line-height:1.35;
+    }
+
+    .table{
+      width:100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(10,12,20,.12);
+    }
+    .table th, .table td{
+      padding: 10px 10px;
+      font-size: 13px;
+      border-bottom:1px solid rgba(10,12,20,.06);
+      text-align:left;
+      vertical-align:top;
+      color: rgba(10,12,20,.92);
+    }
+    .table th{
+      position: sticky;
+      top: 0;
+      z-index: 1;
+      color: rgba(10,12,20,.70);
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing:.3px;
+      background: rgba(10,12,20,.03);
+    }
+    .table tr:nth-child(even) td{ background: rgba(10,12,20,.012); }
+    .table tr:hover td{ background: rgba(28,88,255,.05); }
+    .num{ text-align:right; }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      font-weight: 900;
+      border:1px solid rgba(10,12,20,.12);
+      background: rgba(10,12,20,.04);
+      color: rgba(10,12,20,.84);
+      white-space:nowrap;
+    }
+    .badgeOK{ border-color: rgba(24,169,101,.22); background: rgba(24,169,101,.10); }
+    .badgePB{ border-color: rgba(200,139,0,.22); background: rgba(200,139,0,.10); }
+
+    .iconBtn{
+      border:1px solid rgba(10,12,20,.12);
+      background: rgba(10,12,20,.04);
+      color: rgba(10,12,20,.94);
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      transition:.18s ease;
+    }
+    .iconBtn:hover{ transform: translateY(-1px); background: rgba(10,12,20,.06); }
+    .iconBtnDanger{
+      border-color: rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
+    }
+
+    .chart{
+      width:100%;
+      height: 240px;
+      border-radius: 16px;
+      border:1px solid rgba(10,12,20,.12);
+      background: rgba(255,255,255,.86);
+      overflow:hidden;
+      margin-top: 12px;
+      position:relative;
+    }
+    .chart canvas{
+      width:100%;
+      height:100%;
+      display:block;
+    }
+    .chartHint{
+      position:absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 10px;
+      font-size: 12px;
+      color: rgba(10,12,20,.62);
+      font-weight: 900;
+      letter-spacing:.2px;
+      text-align:center;
+      pointer-events:none;
+      white-space:nowrap;
+    }
+    .chartTooltip{
+      position:absolute;
+      display:none;
+      pointer-events:none;
+      background: rgba(255,255,255,.97);
+      border: 1px solid rgba(10,12,20,.12);
+      border-radius: 14px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow2);
+      font-size: 12px;
+      color: rgba(10,12,20,.94);
+      min-width: 180px;
+    }
+    .chartTooltip .tTitle{ font-weight: 900; margin-bottom: 4px; color: rgba(10,12,20,.94); }
+    .chartTooltip .tRow{ color: rgba(10,12,20,.78); line-height:1.35; }
+    .chartTooltip .tRow b{ color: rgba(10,12,20,.94); }
+
+    .empty{
+      border:1px dashed rgba(255,255,255,.45);
+      border-radius: 18px;
+      padding: 18px;
+      color: rgba(10,12,20,.84);
+      background: rgba(255,255,255,.74);
+      margin-top: 10px;
+    }
+    .empty strong{ color: rgba(10,12,20,.94); }
+    .empty p{ margin: 8px 0 0; font-size: 13px; line-height:1.45; color: rgba(10,12,20,.76); }
+
+    .banner{
+      display:none;
+      margin: 0 0 14px;
+      border-radius: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(28,88,255,.20);
+      background: rgba(255,255,255,.78);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 18px 50px rgba(28,88,255,.12);
+      color: rgba(10,12,20,.94);
+    }
+    .banner.show{ display:block; }
+    .banner strong{ font-weight: 900; }
+    .banner .small{ color: rgba(10,12,20,.70); font-size: 12px; margin-top: 3px; }
+
+    .modalOverlay{
+      position:fixed;
+      inset:0;
+      background: rgba(4, 8, 18, .55);
+      display:none;
+      z-index: 100;
+      align-items:center;
+      justify-content:center;
+      padding: 20px;
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .modalOverlay.show{ display:flex; }
+
+    .modal{
+      width: min(720px, 100%);
+      max-height: calc(100vh - 40px);
+      overflow:auto;
+      -webkit-overflow-scrolling: touch;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.30);
+      background: rgba(255,255,255,.90);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    .modalTop{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+      position: sticky;
+      top: 0;
+      background: rgba(255,255,255,.90);
+      padding-bottom: 10px;
+      z-index: 2;
+    }
+    .modalTop h3{
+      margin:0;
+      font-size: 16px;
+      font-weight: 900;
+      color: rgba(10,12,20,.94);
+    }
+    .modalTop p{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height:1.4;
+    }
+    .xbtn{
+      border: 1px solid rgba(10,12,20,.12);
+      background: rgba(10,12,20,.04);
+      color: rgba(10,12,20,.94);
+      border-radius: 12px;
+      width: 38px; height: 38px;
+      cursor:pointer;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 560px){
+      .form{ grid-template-columns: 1fr; }
+    }
+
+    .error{
+      display:none;
+      color: rgba(10,12,20,.94);
+      background: rgba(226,59,87,.10);
+      border: 1px solid rgba(226,59,87,.22);
+      border-radius: 14px;
+      padding: 10px 12px;
+      font-size: 12px;
+      font-weight: 900;
+      margin-top: 10px;
+    }
+    .error.show{ display:block; }
+
+    .modalActions{
+      display:flex;
+      gap: 10px;
+      justify-content:flex-end;
+      margin-top: 12px;
+      flex-wrap:wrap;
+      position: sticky;
+      bottom: 0;
+      background: rgba(255,255,255,.90);
+      padding-top: 10px;
+      z-index: 2;
+    }
+
+    .entryRows{
+      display:flex;
+      flex-direction:column;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .entryRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 10px;
+      align-items:end;
+      border: 1px solid rgba(10,12,20,.12);
+      background: rgba(10,12,20,.02);
+      border-radius: 16px;
+      padding: 10px;
+    }
+    @media (max-width: 560px){
+      .entryRow{ grid-template-columns: 1fr; }
+    }
+
+    .miniBtn{
+      border:1px solid rgba(10,12,20,.14);
+      background: rgba(255,255,255,.86);
+      color: rgba(10,12,20,.94);
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor:pointer;
+      transition:.18s ease;
+      white-space:nowrap;
+    }
+    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
+    .miniBtnDanger{
+      border:1px solid rgba(226,59,87,.22);
+      background: rgba(226,59,87,.10);
+    }
+
+    .foot{
+      margin-top: 14px;
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      line-height:1.45;
+    }
+
+    .screen{ display:none; }
+    .screen.active{ display:block; }
+
+    /* Mobile: keep tabs visible, stack nicely */
+    @media (max-width: 560px){
+      .wrap{ padding-top: 112px; }
+      .appbarInner{ gap: 10px; }
+      .brand{ min-width: unset; }
+      .tabs{
+        width: 100%;
+        justify-content:space-between;
+        overflow:auto;
+        -webkit-overflow-scrolling: touch;
+      }
+      .rightTools{
+        width: 100%;
+        justify-content:flex-start;
+      }
+      .select{ min-width: 100%; }
+      .field{ min-width: 100%; }
+      .chartHint{ white-space:normal; width: 92%; }
+    }
+
+    /* Session group block */
+    .sessionBlock{
+      border: 1px solid rgba(10,12,20,.12);
+      background: rgba(255,255,255,.86);
+      border-radius: 18px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+    .sessionHead{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+    .sessionTitle{
+      font-weight: 900;
+      letter-spacing:.2px;
+      color: rgba(10,12,20,.94);
+    }
+    .sessionMeta{
+      color: rgba(10,12,20,.62);
+      font-size: 12px;
+      font-weight: 800;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="appbar">
+    <div class="appbarInner">
+
+      <div class="brand">
+        <div class="logo"></div>
+        <div class="brandText">
+          <strong>PB VelocityBoard</strong>
+          <span>Track • Improve • Celebrate</span>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist" aria-label="PB VelocityBoard Tabs">
+        <button class="tabBtn active" data-tab="home">Home</button>
+        <button class="tabBtn" data-tab="analytics">Analytics</button>
+        <button class="tabBtn" data-tab="export">Export</button>
+        <button class="tabBtn" data-tab="settings">Settings</button>
+      </div>
+
+      <div class="rightTools">
+        <div class="selectWrap">
+          <select id="athleteSelect" class="select" title="Select Athlete"></select>
+        </div>
+        <button class="btn" id="btnEditAthlete">Edit</button>
+        <button class="btn btnPrimary" id="btnAddAthlete">+ Add Athlete</button>
+        <button class="btn" id="btnAddEntry">+ Add Race</button>
+        <button class="btn btnDanger" id="btnReset">Reset</button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="wrap">
+
+    <div id="pbBanner" class="banner">
+      <strong>🎉 Update</strong>
+      <div class="small" id="pbBannerText">Saved.</div>
+    </div>
+
+    <section id="screenHome" class="screen active">
+      <div class="grid">
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <div class="title">Performance Snapshot</div>
+              <div class="sub">KPIs + trend for the selected athlete, filtered by distance/location.</div>
+            </div>
+            <div class="pill" id="pillAthlete">No athlete selected</div>
+          </div>
+
+          <div class="kpis">
+            <div class="kpi">
+              <div class="label">PB (Selected Distance)</div>
+              <div class="value" id="kpiPB">—</div>
+              <div class="mini" id="kpiPBDistance">Pick a distance</div>
+            </div>
+
+            <div class="kpi">
+              <div class="label">Latest Time</div>
+              <div class="value" id="kpiLatest">—</div>
+              <div class="mini" id="kpiLatestMeta">—</div>
+            </div>
+
+            <div class="kpi">
+              <div class="label">Avg (Last 10)</div>
+              <div class="value" id="kpiAvg10">—</div>
+              <div class="mini">Lower is better</div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="distanceFilter">Distance Focus</label>
+              <select id="distanceFilter" class="select2">
+                <option value="ALL">All distances</option>
+                <option value="111m">111m</option>
+                <option value="222m">222m</option>
+                <option value="333m">333m</option>
+                <option value="400m">400m</option>
+                <option value="500m">500m</option>
+                <option value="800m">800m</option>
+                <option value="1000m">1000m</option>
+                <option value="1500m">1500m</option>
+              </select>
+              <div class="help">Affects KPIs + chart + recent groups.</div>
+            </div>
+
+            <div class="field">
+              <label for="locationFilter">Location Filter</label>
+              <input id="locationFilter" class="input" placeholder="All locations (type to filter)" list="locationList" />
+              <datalist id="locationList"></datalist>
+              <div class="help">Type “Scarborough”, “Milton”, etc. Leave blank = All.</div>
+            </div>
+
+            <div class="pill" id="pillCount">0 races</div>
+          </div>
+
+          <div class="chart" id="chartBox">
+            <div class="chartHint">Trend (Time vs Race Date)</div>
+            <div class="chartTooltip" id="chartTooltip"></div>
+            <canvas id="trendCanvas" width="1200" height="420"></canvas>
+          </div>
+
+          <div class="foot">
+            Tip: Data is saved on this device (local storage). Export JSON for backup.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <div class="title">PB Summary + Recent Sessions</div>
+              <div class="sub">PBs by distance + grouped sessions (Date + Location).</div>
+            </div>
+            <div class="pill" id="pillPBCount">0 PBs</div>
+          </div>
+
+          <div id="pbSummaryWrap"></div>
+
+          <div style="height:10px;"></div>
+
+          <div id="recentWrap"></div>
+
+          <div class="foot">
+            Sessions are grouped by <b>Date + Location</b>.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ANALYTICS -->
+    <section id="screenAnalytics" class="screen">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <div class="title">Analytics</div>
+            <div class="sub">PB progression + simple compare mode (side-by-side PBs).</div>
+          </div>
+          <div class="pill" id="pillAnalytics">—</div>
+        </div>
+
+        <div class="row">
+          <div class="field">
+            <label for="compareSelect">Compare with (optional)</label>
+            <select id="compareSelect" class="select2"></select>
+            <div class="help">Pick another athlete to compare PBs side-by-side.</div>
+          </div>
+          <div class="pill" id="pillCompare">Compare: Off</div>
+        </div>
+
+        <div class="kpis">
+          <div class="kpi">
+            <div class="label">Season Best (90d)</div>
+            <div class="value" id="anBest90">—</div>
+            <div class="mini" id="anBest90Meta">—</div>
+          </div>
+
+          <div class="kpi">
+            <div class="label">Improvement (Last 5)</div>
+            <div class="value" id="anImp5">—</div>
+            <div class="mini">Latest vs oldest of last 5</div>
+          </div>
+
+          <div class="kpi">
+            <div class="label">Total Races</div>
+            <div class="value" id="anTotal">—</div>
+            <div class="mini">Entries stored</div>
+          </div>
+        </div>
+
+        <table class="table" id="pbTable">
+          <thead>
+            <tr id="pbHeadRow">
+              <th>Distance</th>
+              <th>PB Time</th>
+              <th>Date</th>
+              <th>Location</th>
+              <th>Notes</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+
+        <div class="foot">
+          Compare mode shows two PB columns when enabled.
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPORT -->
+    <section id="screenExport" class="screen">
+      <div class="grid">
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <div class="title">Export / Backup</div>
+              <div class="sub">Download your data so you can move devices or share with a coach.</div>
+            </div>
+            <div class="pill" id="pillExport">—</div>
+          </div>
+
+          <div class="row">
+            <button class="btn btnPrimary" id="btnExportJSON">Download JSON</button>
+            <button class="btn" id="btnExportCSV">Download CSV (selected athlete)</button>
+          </div>
+
+          <div class="empty">
+            <strong>Pro tip</strong>
+            <p>Export JSON is the best backup. CSV is handy for coaches who prefer Excel.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardHeader">
+            <div>
+              <div class="title">Templates + Import</div>
+              <div class="sub">Download a blank template, fill it, and import it back quickly.</div>
+            </div>
+          </div>
+
+          <div class="row" style="justify-content:flex-start;">
+            <button class="btn" id="btnTemplateCSV">Download CSV Template</button>
+            <button class="btn" id="btnTemplateXLS">Download Excel Template</button>
+          </div>
+
+          <div class="field" style="min-width:100%; margin-top:12px;">
+            <label>Upload filled CSV template</label>
+            <input class="input" id="importCSVFile" type="file" accept=".csv" />
+            <div class="help">
+              Columns expected: Athlete, BirthYear, Date, Location, Distance, Time, Notes
+              <br>Dates should be YYYY-MM-DD (example: 2025-02-16).
+            </div>
+          </div>
+
+          <div class="modalActions" style="justify-content:flex-start;">
+            <button class="btn btnPrimary" id="btnImportCSV">Import CSV</button>
+          </div>
+
+          <div id="importMsg" class="error"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="screenSettings" class="screen">
+      <div class="card">
+        <div class="cardHeader">
+          <div>
+            <div class="title">Settings</div>
+            <div class="sub">Simple preferences for a clean experience.</div>
+          </div>
+          <div class="pill">Local Storage</div>
+        </div>
+
+        <div class="form">
+          <div class="field">
+            <label>Default Distance Focus</label>
+            <select id="defaultDistance" class="select2">
+              <option value="ALL">All distances</option>
+              <option value="400m">400m</option>
+              <option value="500m">500m</option>
+              <option value="800m">800m</option>
+              <option value="1000m">1000m</option>
+              <option value="1500m">1500m</option>
+            </select>
+            <div class="help">Used when the app loads.</div>
+          </div>
+
+          <div class="field">
+            <label>Time Placeholder</label>
+            <input id="timeHint" class="input" value="00:52.300" />
+            <div class="help">Used as placeholder in Add/Edit entry.</div>
+          </div>
+        </div>
+
+        <div class="empty" style="margin-top:12px;">
+          <strong>Storage note</strong>
+          <p>All data is stored on this device. To start fresh: Reset. To move devices: Export JSON and import it.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- MODALS -->
+  <div class="modalOverlay" id="modalAthlete">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Add Athlete</h3>
+          <p>Create an athlete profile. You can add races after that.</p>
+        </div>
+        <button class="xbtn" data-close="modalAthlete">✕</button>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label>Name</label>
+          <input id="athName" class="input" placeholder="e.g., Samarveer" />
+        </div>
+        <div class="field">
+          <label>Birth Year (optional)</label>
+          <input id="athYear" class="input" inputmode="numeric" placeholder="e.g., 2014" />
+        </div>
+      </div>
+
+      <div id="athleteErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalAthlete">Cancel</button>
+        <button class="btn btnPrimary" id="saveAthlete">Save Athlete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalOverlay" id="modalEditAthlete">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Edit Athlete</h3>
+          <p>Update the athlete name (and birth year).</p>
+        </div>
+        <button class="xbtn" data-close="modalEditAthlete">✕</button>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label>Name</label>
+          <input id="editAthName" class="input" />
+        </div>
+        <div class="field">
+          <label>Birth Year (optional)</label>
+          <input id="editAthYear" class="input" inputmode="numeric" />
+        </div>
+      </div>
+
+      <div id="editAthErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalEditAthlete">Cancel</button>
+        <button class="btn btnPrimary" id="saveAthleteEdits">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalOverlay" id="modalEntry">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Add Race Entry</h3>
+          <p>Same date + location can include multiple distances (400/500/800/1000 etc.).</p>
+        </div>
+        <button class="xbtn" data-close="modalEntry">✕</button>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label>Date</label>
+          <input id="enDate" class="input" type="date" />
+        </div>
+
+        <div class="field">
+          <label>Location</label>
+          <input id="enLocation" class="input" placeholder="e.g., Scarborough" />
+        </div>
+
+        <div class="field" style="grid-column:1 / -1;">
+          <label>Notes (optional)</label>
+          <input id="enNotes" class="input" placeholder="e.g., Meet name, lane, fall, etc." />
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:10px; min-width:100%;">
+        <label>Distances & Times</label>
+
+        <div class="entryRows" id="entryRows"></div>
+
+        <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+          <button class="miniBtn" id="btnAddRow">+ Add another distance</button>
+        </div>
+      </div>
+
+      <div id="entryErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalEntry">Cancel</button>
+        <button class="btn btnPrimary" id="saveEntry">Save Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalOverlay" id="modalEditEntry">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Edit Entry</h3>
+          <p>Update date/location/distance/time/notes for this race.</p>
+        </div>
+        <button class="xbtn" data-close="modalEditEntry">✕</button>
+      </div>
+
+      <div class="form">
+        <div class="field">
+          <label>Date</label>
+          <input id="eeDate" class="input" type="date" />
+        </div>
+        <div class="field">
+          <label>Location</label>
+          <input id="eeLocation" class="input" />
+        </div>
+
+        <div class="field">
+          <label>Distance</label>
+          <select id="eeDistance" class="select2">
+            <option value="111m">111m</option>
+            <option value="222m">222m</option>
+            <option value="333m">333m</option>
+            <option value="400m">400m</option>
+            <option value="500m">500m</option>
+            <option value="800m">800m</option>
+            <option value="1000m">1000m</option>
+            <option value="1500m">1500m</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Time (mm:ss.mmm)</label>
+          <input id="eeTime" class="input" />
+        </div>
+
+        <div class="field" style="grid-column:1 / -1;">
+          <label>Notes</label>
+          <input id="eeNotes" class="input" />
+        </div>
+      </div>
+
+      <div id="editEntryErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalEditEntry">Cancel</button>
+        <button class="btn btnPrimary" id="saveEntryEdits">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modalOverlay" id="modalReset">
+    <div class="modal">
+      <div class="modalTop">
+        <div>
+          <h3>Reset</h3>
+          <p>This removes your stored data on this device. Type <strong>RESET</strong> to confirm.</p>
+        </div>
+        <button class="xbtn" data-close="modalReset">✕</button>
+      </div>
+
+      <div class="field" style="min-width:100%;">
+        <label>Type RESET</label>
+        <input id="resetConfirm" class="input" placeholder="RESET" />
+      </div>
+
+      <div id="resetErr" class="error"></div>
+
+      <div class="modalActions">
+        <button class="btn" data-close="modalReset">Cancel</button>
+        <button class="btn btnDanger" id="doReset">Reset Everything</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const LS_KEY = "pb_velocityboard_v9_glass";
+    const LS_PREF = "pb_velocityboard_prefs_v9";
+
+    const defaultState = { athletes: [], activeAthleteId: null };
+    const defaultPrefs = { defaultDistance: "ALL", timeHint: "00:52.300" };
+
+    let state = loadState();
+    let prefs = loadPrefs();
+
+    let compareAthleteId = null;
+
+    const tabBtns = [...document.querySelectorAll(".tabBtn")];
+    const screens = {
+      home: document.getElementById("screenHome"),
+      analytics: document.getElementById("screenAnalytics"),
+      export: document.getElementById("screenExport"),
+      settings: document.getElementById("screenSettings")
+    };
+
+    const athleteSelect = document.getElementById("athleteSelect");
+    const compareSelect = document.getElementById("compareSelect");
+    const pillCompare = document.getElementById("pillCompare");
+
+    const distanceFilter = document.getElementById("distanceFilter");
+    const locationFilter = document.getElementById("locationFilter");
+    const locationList = document.getElementById("locationList");
+
+    const pbBanner = document.getElementById("pbBanner");
+    const pbBannerText = document.getElementById("pbBannerText");
+
+    const kpiPB = document.getElementById("kpiPB");
+    const kpiPBDistance = document.getElementById("kpiPBDistance");
+    const kpiLatest = document.getElementById("kpiLatest");
+    const kpiLatestMeta = document.getElementById("kpiLatestMeta");
+    const kpiAvg10 = document.getElementById("kpiAvg10");
+
+    const pillAthlete = document.getElementById("pillAthlete");
+    const pillCount = document.getElementById("pillCount");
+    const pillPBCount = document.getElementById("pillPBCount");
+    const recentWrap = document.getElementById("recentWrap");
+    const pbSummaryWrap = document.getElementById("pbSummaryWrap");
+
+    const pillAnalytics = document.getElementById("pillAnalytics");
+    const anBest90 = document.getElementById("anBest90");
+    const anBest90Meta = document.getElementById("anBest90Meta");
+    const anImp5 = document.getElementById("anImp5");
+    const anTotal = document.getElementById("anTotal");
+    const pbTableBody = document.querySelector("#pbTable tbody");
+    const pbHeadRow = document.getElementById("pbHeadRow");
+
+    const pillExport = document.getElementById("pillExport");
+    const importMsg = document.getElementById("importMsg");
+
+    const defaultDistance = document.getElementById("defaultDistance");
+    const timeHint = document.getElementById("timeHint");
+
+    const importCSVFile = document.getElementById("importCSVFile");
+
+    const canvas = document.getElementById("trendCanvas");
+    const ctx = canvas.getContext("2d");
+    const chartTooltip = document.getElementById("chartTooltip");
+
+    let lastDrawMeta = null;
+
+    const eeDate = document.getElementById("eeDate");
+    const eeLocation = document.getElementById("eeLocation");
+    const eeDistance = document.getElementById("eeDistance");
+    const eeTime = document.getElementById("eeTime");
+    const eeNotes = document.getElementById("eeNotes");
+    const editEntryErr = document.getElementById("editEntryErr");
+    let editingEntryId = null;
+
+    document.getElementById("btnAddAthlete").addEventListener("click", () => openModal("modalAthlete"));
+    document.getElementById("btnEditAthlete").addEventListener("click", openEditAthlete);
+    document.getElementById("btnAddEntry").addEventListener("click", () => {
+      if(!getActiveAthlete()){
+        flashBanner("Please add/select an athlete first.", false);
+        openModal("modalAthlete");
+        return;
+      }
+      openEntryModal();
+    });
+    document.getElementById("btnReset").addEventListener("click", () => openModal("modalReset"));
+
+    document.querySelectorAll("[data-close]").forEach(btn => {
+      btn.addEventListener("click", () => closeModal(btn.getAttribute("data-close")));
+    });
+    document.querySelectorAll(".modalOverlay").forEach(ov => {
+      ov.addEventListener("click", (e) => {
+        if(e.target === ov) ov.classList.remove("show");
+      });
+    });
+
+    document.getElementById("saveAthlete").addEventListener("click", saveAthlete);
+    document.getElementById("saveAthleteEdits").addEventListener("click", saveAthleteEdits);
+    document.getElementById("saveEntry").addEventListener("click", saveEntryMulti);
+    document.getElementById("saveEntryEdits").addEventListener("click", saveEntryEdits);
+    document.getElementById("doReset").addEventListener("click", doResetAll);
+
+    document.getElementById("btnExportJSON").addEventListener("click", exportJSON);
+    document.getElementById("btnExportCSV").addEventListener("click", exportCSV);
+
+    document.getElementById("btnTemplateCSV").addEventListener("click", downloadCSVTemplate);
+    document.getElementById("btnTemplateXLS").addEventListener("click", downloadExcelTemplate);
+    document.getElementById("btnImportCSV").addEventListener("click", importCSVTemplate);
+
+    tabBtns.forEach(btn => btn.addEventListener("click", () => switchTab(btn.dataset.tab)));
+
+    athleteSelect.addEventListener("change", () => {
+      state.activeAthleteId = athleteSelect.value || null;
+      saveState();
+      if(compareAthleteId === state.activeAthleteId) compareAthleteId = null;
+      renderAll();
+    });
+
+    compareSelect.addEventListener("change", () => {
+      compareAthleteId = compareSelect.value || null;
+      renderAll();
+    });
+
+    distanceFilter.addEventListener("change", () => renderAll());
+    locationFilter.addEventListener("input", () => renderAll());
+
+    defaultDistance.addEventListener("change", () => {
+      prefs.defaultDistance = defaultDistance.value;
+      savePrefs();
+      distanceFilter.value = prefs.defaultDistance;
+      renderAll();
+    });
+
+    timeHint.addEventListener("input", () => {
+      prefs.timeHint = timeHint.value.trim() || "00:52.300";
+      savePrefs();
+    });
+
+    const entryRowsEl = document.getElementById("entryRows");
+    document.getElementById("btnAddRow").addEventListener("click", () => addEntryRow());
+
+    recentWrap.addEventListener("click", (e) => {
+      const delBtn = e.target.closest("[data-del-entry-id]");
+      if(delBtn){
+        deleteEntry(delBtn.getAttribute("data-del-entry-id"));
+        return;
+      }
+      const editBtn = e.target.closest("[data-edit-entry-id]");
+      if(editBtn){
+        openEditEntryModal(editBtn.getAttribute("data-edit-entry-id"));
+        return;
+      }
+    });
+
+    canvas.addEventListener("mousemove", onChartMove);
+    canvas.addEventListener("mouseleave", () => {
+      chartTooltip.style.display = "none";
+      if(lastDrawMeta) drawChart(lastDrawMeta.entries, lastDrawMeta.dist, lastDrawMeta.loc);
+    });
+
+    init();
+
+    function init(){
+      if(!state.athletes) state = structuredClone(defaultState);
+      if(!prefs) prefs = structuredClone(defaultPrefs);
+
+      defaultDistance.value = prefs.defaultDistance;
+      timeHint.value = prefs.timeHint;
+      distanceFilter.value = prefs.defaultDistance;
+
+      renderAll();
+    }
+
+    function switchTab(tab){
+      tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+      Object.keys(screens).forEach(k => screens[k].classList.toggle("active", k === tab));
+      renderAll();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openModal(id){
+      clearErrors();
+      document.getElementById(id).classList.add("show");
+    }
+    function closeModal(id){
+      document.getElementById(id).classList.remove("show");
+    }
+
+    function clearErrors(){
+      ["athleteErr","entryErr","resetErr","importMsg","editAthErr"].forEach(id=>{
+        const el = document.getElementById(id);
+        if(el){ el.classList.remove("show"); el.textContent=""; }
+      });
+      if(editEntryErr){ editEntryErr.classList.remove("show"); editEntryErr.textContent=""; }
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(LS_KEY);
+        return raw ? JSON.parse(raw) : structuredClone(defaultState);
+      }catch(e){
+        return structuredClone(defaultState);
+      }
+    }
+    function saveState(){
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+    }
+    function loadPrefs(){
+      try{
+        const raw = localStorage.getItem(LS_PREF);
+        return raw ? JSON.parse(raw) : structuredClone(defaultPrefs);
+      }catch(e){
+        return structuredClone(defaultPrefs);
+      }
+    }
+    function savePrefs(){
+      localStorage.setItem(LS_PREF, JSON.stringify(prefs));
+    }
+
+    function getActiveAthlete(){
+      return state.athletes.find(a => a.id === state.activeAthleteId) || null;
+    }
+    function getAthleteById(id){
+      return state.athletes.find(a => a.id === id) || null;
+    }
+    function uid(){
+      return "a_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+    }
+
+    function normalizeLoc(s){
+      return (s || "").trim().toLowerCase();
+    }
+
+    function parseTimeToMs(t){
+      if(!t) return null;
+      t = (""+t).trim();
+      if(/^\d+(\.\d{1,3})?$/.test(t)){
+        const sec = Number(t);
+        return Math.round(sec * 1000);
+      }
+      const m = t.match(/^(\d{1,2}):([0-5]\d)(?:\.(\d{1,3}))?$/);
+      if(!m) return null;
+      const mm = Number(m[1]);
+      const ss = Number(m[2]);
+      const ms = Number((m[3] || "0").padEnd(3,"0"));
+      return (mm*60 + ss)*1000 + ms;
+    }
+
+    function msToTime(ms){
+      if(ms == null || isNaN(ms)) return "—";
+      const totalSec = Math.floor(ms/1000);
+      const mm = Math.floor(totalSec/60);
+      const ss = totalSec % 60;
+      const msec = ms % 1000;
+      return String(mm).padStart(2,"0")+":"+String(ss).padStart(2,"0")+"."+String(msec).padStart(3,"0");
+    }
+
+    function fmtDate(iso){
+      if(!iso) return "—";
+      try{
+        const d = new Date(iso);
+        return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
+      }catch(e){ return iso; }
+    }
+
+    function sortByDateDesc(entries){
+      return [...entries].sort((a,b)=> new Date(b.date) - new Date(a.date));
+    }
+
+    function mean(arr){
+      if(!arr.length) return null;
+      return arr.reduce((s,x)=>s+x,0)/arr.length;
+    }
+
+    function computePBMap(entries){
+      const pb = {};
+      for(const e of entries){
+        const ms = parseTimeToMs(e.time);
+        if(ms == null) continue;
+        if(!pb[e.distance] || ms < pb[e.distance].ms){
+          pb[e.distance] = { ...e, ms };
+        }
+      }
+      return pb;
+    }
+
+    function showError(id, msg){
+      const el = document.getElementById(id);
+      el.textContent = msg;
+      el.classList.add("show");
+    }
+
+    function flashBanner(msg, isPB){
+      pbBannerText.textContent = msg;
+      pbBanner.style.borderColor = isPB ? "rgba(200,139,0,.25)" : "rgba(28,88,255,.22)";
+      pbBanner.style.background = "rgba(255,255,255,.78)";
+      pbBanner.classList.add("show");
+      clearTimeout(flashBanner._t);
+      flashBanner._t = setTimeout(()=> pbBanner.classList.remove("show"), 4200);
+    }
+
+    function saveAthlete(){
+      clearErrors();
+      const name = document.getElementById("athName").value.trim();
+      const year = document.getElementById("athYear").value.trim();
+
+      if(!name){
+        showError("athleteErr","Please enter a name.");
+        return;
+      }
+      if(year && !/^\d{4}$/.test(year)){
+        showError("athleteErr","Birth year should be 4 digits (e.g., 2014).");
+        return;
+      }
+
+      const newAth = {
+        id: uid(),
+        name,
+        birthYear: year || "",
+        createdAt: new Date().toISOString(),
+        entries: []
+      };
+
+      state.athletes.push(newAth);
+      state.activeAthleteId = newAth.id;
+      saveState();
+
+      document.getElementById("athName").value = "";
+      document.getElementById("athYear").value = "";
+      closeModal("modalAthlete");
+
+      flashBanner(`Athlete added: ${name}`, false);
+      renderAll();
+    }
+
+    function openEditAthlete(){
+      const ath = getActiveAthlete();
+      if(!ath){
+        flashBanner("No athlete selected.", false);
+        return;
+      }
+      document.getElementById("editAthName").value = ath.name || "";
+      document.getElementById("editAthYear").value = ath.birthYear || "";
+      openModal("modalEditAthlete");
+    }
+
+    function saveAthleteEdits(){
+      clearErrors();
+      const ath = getActiveAthlete();
+      if(!ath){
+        showError("editAthErr","No athlete selected.");
+        return;
+      }
+
+      const name = document.getElementById("editAthName").value.trim();
+      const year = document.getElementById("editAthYear").value.trim();
+
+      if(!name){
+        showError("editAthErr","Please enter a name.");
+        return;
+      }
+      if(year && !/^\d{4}$/.test(year)){
+        showError("editAthErr","Birth year should be 4 digits (e.g., 2014).");
+        return;
+      }
+
+      ath.name = name;
+      ath.birthYear = year || "";
+      saveState();
+      closeModal("modalEditAthlete");
+
+      flashBanner("Athlete updated.", false);
+      renderAll();
+    }
+
+    function openEntryModal(){
+      clearErrors();
+      const dateEl = document.getElementById("enDate");
+      dateEl.valueAsDate = new Date();
+
+      document.getElementById("enLocation").value = "";
+      document.getElementById("enNotes").value = "";
+
+      entryRowsEl.innerHTML = "";
+      addEntryRow("400m", "", true);
+      openModal("modalEntry");
+    }
+
+    function addEntryRow(distance="500m", time="", isFirst=false){
+      const row = document.createElement("div");
+      row.className = "entryRow";
+
+      row.innerHTML = `
+        <div class="field" style="min-width:0;">
+          <label>Distance</label>
+          <select class="select2 jsDist">
+            <option value="111m">111m</option>
+            <option value="222m">222m</option>
+            <option value="333m">333m</option>
+            <option value="400m">400m</option>
+            <option value="500m">500m</option>
+            <option value="800m">800m</option>
+            <option value="1000m">1000m</option>
+            <option value="1500m">1500m</option>
+          </select>
+        </div>
+
+        <div class="field" style="min-width:0;">
+          <label>Time (mm:ss.mmm)</label>
+          <input class="input jsTime" placeholder="${escapeHtml(prefs.timeHint || "00:52.300")}" value="${escapeHtml(time || "")}" />
+        </div>
+
+        <div style="display:flex; justify-content:flex-end;">
+          <button class="miniBtn miniBtnDanger jsRemove" ${isFirst ? "disabled style='opacity:.55; cursor:not-allowed;'" : ""}>Remove</button>
+        </div>
+      `;
+
+      entryRowsEl.appendChild(row);
+
+      row.querySelector(".jsDist").value = distance;
+
+      const removeBtn = row.querySelector(".jsRemove");
+      removeBtn.addEventListener("click", () => {
+        if(removeBtn.disabled) return;
+        row.remove();
+      });
+    }
+
+    function saveEntryMulti(){
+      clearErrors();
+      const ath = getActiveAthlete();
+      if(!ath){
+        showError("entryErr","No athlete selected. Add/select an athlete first.");
+        return;
+      }
+
+      const date = document.getElementById("enDate").value;
+      const location = document.getElementById("enLocation").value.trim();
+      const notes = document.getElementById("enNotes").value.trim();
+
+      if(!date){
+        showError("entryErr","Please select a date.");
+        return;
+      }
+      if(!location){
+        showError("entryErr","Please enter a location (e.g., Scarborough).");
+        return;
+      }
+
+      const rows = [...entryRowsEl.querySelectorAll(".entryRow")];
+      if(rows.length === 0){
+        showError("entryErr","Please add at least one distance/time.");
+        return;
+      }
+
+      const beforePBMap = computePBMap(ath.entries || []);
+      let savedCount = 0;
+      let pbMessages = [];
+
+      for(const r of rows){
+        const dist = r.querySelector(".jsDist").value;
+        const timeStr = r.querySelector(".jsTime").value.trim();
+        const ms = parseTimeToMs(timeStr);
+
+        if(ms == null){
+          showError("entryErr",`One or more times are invalid. Use mm:ss.mmm (example: ${prefs.timeHint}).`);
+          return;
+        }
+
+        const beforePB = beforePBMap[dist]?.ms ?? null;
+
+        const entry = {
+          id: "e_" + Math.random().toString(16).slice(2),
+          date,
+          distance: dist,
+          time: timeStr,
+          location,
+          notes
+        };
+
+        ath.entries.push(entry);
+        savedCount++;
+
+        if(beforePB == null || ms < beforePB){
+          const diff = beforePB == null ? null : (beforePB - ms);
+          const msg = diff == null
+            ? `First PB for ${dist}: ${msToTime(ms)}`
+            : `${dist} improved by ${(diff/1000).toFixed(3)}s → ${msToTime(ms)}`;
+          pbMessages.push(msg);
+        }
+      }
+
+      saveState();
+      closeModal("modalEntry");
+
+      if(pbMessages.length){
+        flashBanner(`🏅 ${ath.name}: ${pbMessages[0]}${pbMessages.length>1 ? ` (+${pbMessages.length-1} more)` : ""}`, true);
+      }else{
+        flashBanner(`${savedCount} entr${savedCount===1?"y":"ies"} saved for ${ath.name}.`, false);
+      }
+
+      renderAll();
+    }
+
+    function openEditEntryModal(entryId){
+      clearErrors();
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const entry = (ath.entries || []).find(e => e.id === entryId);
+      if(!entry) return;
+
+      editingEntryId = entryId;
+
+      eeDate.value = entry.date || "";
+      eeLocation.value = entry.location || "";
+      eeDistance.value = entry.distance || "400m";
+      eeTime.value = entry.time || "";
+      eeTime.placeholder = prefs.timeHint || "00:52.300";
+      eeNotes.value = entry.notes || "";
+
+      openModal("modalEditEntry");
+    }
+
+    function saveEntryEdits(){
+      editEntryErr.classList.remove("show");
+      editEntryErr.textContent = "";
+
+      const ath = getActiveAthlete();
+      if(!ath || !editingEntryId){
+        editEntryErr.textContent = "No entry selected to edit.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      const date = eeDate.value;
+      const location = eeLocation.value.trim();
+      const distance = eeDistance.value;
+      const timeStr = eeTime.value.trim();
+      const notes = eeNotes.value.trim();
+
+      if(!date){
+        editEntryErr.textContent = "Please select a date.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+      if(!location){
+        editEntryErr.textContent = "Please enter a location.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+      const ms = parseTimeToMs(timeStr);
+      if(ms == null){
+        editEntryErr.textContent = `Invalid time. Use mm:ss.mmm (example: ${prefs.timeHint}).`;
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      const entry = (ath.entries || []).find(e => e.id === editingEntryId);
+      if(!entry){
+        editEntryErr.textContent = "Entry not found.";
+        editEntryErr.classList.add("show");
+        return;
+      }
+
+      entry.date = date;
+      entry.location = location;
+      entry.distance = distance;
+      entry.time = timeStr;
+      entry.notes = notes;
+
+      saveState();
+      closeModal("modalEditEntry");
+      editingEntryId = null;
+
+      flashBanner("Entry updated.", false);
+      renderAll();
+    }
+
+    function deleteEntry(entryId){
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const entry = (ath.entries || []).find(e => e.id === entryId);
+      if(!entry) return;
+
+      const msg = `Delete this entry?\n\n${fmtDate(entry.date)} • ${entry.location || "—"} • ${entry.distance} • ${entry.time}`;
+      if(!confirm(msg)) return;
+
+      ath.entries = (ath.entries || []).filter(e => e.id !== entryId);
+      saveState();
+      flashBanner("Entry deleted.", false);
+      renderAll();
+    }
+
+    function doResetAll(){
+      clearErrors();
+      const txt = document.getElementById("resetConfirm").value.trim();
+      if(txt !== "RESET"){
+        showError("resetErr","Please type RESET exactly to confirm.");
+        return;
+      }
+      localStorage.removeItem(LS_KEY);
+      state = structuredClone(defaultState);
+      compareAthleteId = null;
+      closeModal("modalReset");
+      flashBanner("All data cleared on this device.", false);
+      renderAll();
+    }
+
+    function renderAll(){
+      renderAthleteSelect();
+      renderCompareSelect();
+      renderLocationDatalist();
+      renderHome();
+      renderAnalytics();
+      renderExport();
+    }
+
+    function renderAthleteSelect(){
+      athleteSelect.innerHTML = "";
+
+      if(state.athletes.length === 0){
+        const opt = document.createElement("option");
+        opt.value = "";
+        opt.textContent = "No athletes yet";
+        athleteSelect.appendChild(opt);
+        state.activeAthleteId = null;
+        saveState();
+        return;
+      }
+
+      if(!state.activeAthleteId || !state.athletes.some(a => a.id === state.activeAthleteId)){
+        state.activeAthleteId = state.athletes[0].id;
+        saveState();
+      }
+
+      for(const a of state.athletes){
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = a.name + (a.birthYear ? ` (${a.birthYear})` : "");
+        athleteSelect.appendChild(opt);
+      }
+      athleteSelect.value = state.activeAthleteId;
+    }
+
+    function renderCompareSelect(){
+      compareSelect.innerHTML = "";
+      const active = getActiveAthlete();
+
+      const none = document.createElement("option");
+      none.value = "";
+      none.textContent = "None (Compare Off)";
+      compareSelect.appendChild(none);
+
+      for(const a of state.athletes){
+        if(active && a.id === active.id) continue;
+        const opt = document.createElement("option");
+        opt.value = a.id;
+        opt.textContent = a.name + (a.birthYear ? ` (${a.birthYear})` : "");
+        compareSelect.appendChild(opt);
+      }
+
+      if(compareAthleteId && state.athletes.some(a => a.id === compareAthleteId)){
+        compareSelect.value = compareAthleteId;
+      }else{
+        compareSelect.value = "";
+        compareAthleteId = null;
+      }
+
+      pillCompare.textContent = compareAthleteId ? "Compare: On" : "Compare: Off";
+    }
+
+    function renderLocationDatalist(){
+      locationList.innerHTML = "";
+      const ath = getActiveAthlete();
+      if(!ath) return;
+
+      const set = new Set();
+      for(const e of (ath.entries || [])){
+        const loc = (e.location || "").trim();
+        if(loc) set.add(loc);
+      }
+      [...set].sort((a,b)=>a.localeCompare(b)).forEach(loc=>{
+        const opt = document.createElement("option");
+        opt.value = loc;
+        locationList.appendChild(opt);
+      });
+    }
+
+    function getFilters(){
+      const dist = distanceFilter.value;
+      const loc = locationFilter.value.trim();
+      return { dist, loc };
+    }
+
+    function applyFilters(entries, dist, loc){
+      let out = [...entries];
+      if(dist !== "ALL") out = out.filter(e => e.distance === dist);
+      if(loc) out = out.filter(e => normalizeLoc(e.location) === normalizeLoc(loc));
+      return out;
+    }
+
+    function renderHome(){
+      const ath = getActiveAthlete();
+      const { dist, loc } = getFilters();
+
+      if(!ath){
+        pillAthlete.textContent = "No athlete selected";
+        pillCount.textContent = "0 races";
+        pillPBCount.textContent = "0 PBs";
+
+        kpiPB.textContent = "—";
+        kpiPBDistance.textContent = "Pick a distance";
+        kpiLatest.textContent = "—";
+        kpiLatestMeta.textContent = "—";
+        kpiAvg10.textContent = "—";
+
+        pbSummaryWrap.innerHTML = `
+          <div class="empty">
+            <strong>No athlete selected</strong>
+            <p>Add an athlete and start entering races to see PBs here.</p>
+          </div>
+        `;
+        recentWrap.innerHTML = `
+          <div class="empty">
+            <strong>Add your first athlete</strong>
+            <p>Click <b>Add Athlete</b>, then add race entries to track PBs, trends, and progress.</p>
+          </div>
+        `;
+        drawChart([], dist, loc);
+        return;
+      }
+
+      pillAthlete.textContent = ath.name + (ath.birthYear ? ` • ${ath.birthYear}` : "");
+
+      const entriesAll = sortByDateDesc(ath.entries || []);
+      const pbMapAll = computePBMap(entriesAll);
+
+      pillPBCount.textContent = `${Object.keys(pbMapAll).length} PBs`;
+
+      // PB Summary (location FIX: always show stored location or "—")
+      if(Object.keys(pbMapAll).length === 0){
+        pbSummaryWrap.innerHTML = `
+          <div class="empty">
+            <strong>No PBs yet</strong>
+            <p>Add race entries and PBs will appear here automatically for each distance.</p>
+          </div>
+        `;
+      }else{
+        const distances = Object.keys(pbMapAll).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+        pbSummaryWrap.innerHTML = `
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Distance</th>
+                <th class="num">PB</th>
+                <th>Date</th>
+                <th>Location</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${distances.map(d=>{
+                const pb = pbMapAll[d];
+                const locTxt = (pb.location && String(pb.location).trim()) ? pb.location : "—";
+                return `
+                  <tr>
+                    <td><span class="badge">${d}</span></td>
+                    <td class="num"><b>${msToTime(pb.ms)}</b></td>
+                    <td>${fmtDate(pb.date)}</td>
+                    <td>${escapeHtml(locTxt)}</td>
+                  </tr>
+                `;
+              }).join("")}
+            </tbody>
+          </table>
+        `;
+      }
+
+      const filtered = applyFilters(entriesAll, dist, loc);
+      pillCount.textContent = `${filtered.length} races`;
+
+      const latest = filtered[0] || null;
+      if(latest){
+        kpiLatest.textContent = latest.time;
+        kpiLatestMeta.textContent = `${latest.distance} • ${latest.location || "—"} • ${fmtDate(latest.date)}`;
+      }else{
+        kpiLatest.textContent = "—";
+        kpiLatestMeta.textContent = dist === "ALL" && !loc ? "No entries yet" : "No entries for current filters";
+      }
+
+      if(dist !== "ALL"){
+        let pbMs = null;
+        if(loc){
+          const pbMapLoc = computePBMap(filtered);
+          pbMs = pbMapLoc[dist]?.ms ?? null;
+          kpiPBDistance.textContent = pbMs != null ? `${dist} best (this location)` : `No PB for ${dist} here`;
+        }else{
+          pbMs = pbMapAll[dist]?.ms ?? null;
+          kpiPBDistance.textContent = pbMs != null ? `${dist} best` : `No PB for ${dist}`;
+        }
+        kpiPB.textContent = pbMs != null ? msToTime(pbMs) : "—";
+      }else{
+        const allPBs = Object.values(pbMapAll).map(x => x.ms);
+        const best = allPBs.length ? Math.min(...allPBs) : null;
+        kpiPB.textContent = best != null ? msToTime(best) : "—";
+        kpiPBDistance.textContent = best != null ? "Fastest PB (any distance)" : "No PBs yet";
+      }
+
+      const last10 = filtered.slice(0,10).map(e => parseTimeToMs(e.time)).filter(x => x!=null);
+      const avg10 = last10.length ? mean(last10) : null;
+      kpiAvg10.textContent = avg10 != null ? msToTime(Math.round(avg10)) : "—";
+
+      renderSessions(filtered, pbMapAll);
+      drawChart(filtered, dist, loc);
+    }
+
+    function renderSessions(entriesFiltered, pbMapAll){
+      if(entriesFiltered.length === 0){
+        recentWrap.innerHTML = `
+          <div class="empty">
+            <strong>No sessions for current filters</strong>
+            <p>Try clearing the location filter or choosing “All distances”.</p>
+          </div>
+        `;
+        return;
+      }
+
+      const groups = new Map();
+      for(const e of entriesFiltered){
+        const key = `${e.date}__${normalizeLoc(e.location)}`;
+        if(!groups.has(key)){
+          groups.set(key, { date: e.date, location: e.location || "", items: [] });
+        }
+        groups.get(key).items.push(e);
+      }
+
+      const groupArr = [...groups.values()].sort((a,b)=> new Date(b.date) - new Date(a.date));
+      const show = groupArr.slice(0,10);
+
+      recentWrap.innerHTML = show.map(g=>{
+        const items = [...g.items].sort((a,b)=> a.distance.localeCompare(b.distance, undefined, {numeric:true}));
+        const rows = items.map(e=>{
+          const ms = parseTimeToMs(e.time);
+          const isPB = pbMapAll[e.distance] && ms != null && ms === pbMapAll[e.distance].ms;
+          const badge = isPB
+            ? `<span class="badge badgePB">🏅 PB</span>`
+            : `<span class="badge badgeOK">Saved</span>`;
+
+          return `
+            <tr>
+              <td><span class="badge">${e.distance}</span></td>
+              <td class="num"><b>${escapeHtml(e.time)}</b></td>
+              <td>${badge}</td>
+              <td style="color:rgba(10,12,20,.78)">${e.notes ? escapeHtml(e.notes) : "—"}</td>
+              <td style="width:92px;">
+                <button class="iconBtn" title="Edit entry" data-edit-entry-id="${e.id}">✏️</button>
+                <button class="iconBtn iconBtnDanger" title="Delete entry" data-del-entry-id="${e.id}">🗑️</button>
+              </td>
+            </tr>
+          `;
+        }).join("");
+
+        return `
+          <div class="sessionBlock">
+            <div class="sessionHead">
+              <div class="sessionTitle">${fmtDate(g.date)} • ${escapeHtml(g.location || "—")}</div>
+              <div class="sessionMeta">${items.length} entr${items.length===1?"y":"ies"}</div>
+            </div>
+
+            <table class="table" style="margin-top:0;">
+              <thead>
+                <tr>
+                  <th>Distance</th>
+                  <th class="num">Time</th>
+                  <th>Status</th>
+                  <th>Notes</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderAnalytics(){
+      const ath = getActiveAthlete();
+      const { dist } = getFilters();
+
+      if(!ath){
+        pillAnalytics.textContent = "No athlete";
+        anBest90.textContent = "—";
+        anBest90Meta.textContent = "—";
+        anImp5.textContent = "—";
+        anTotal.textContent = "—";
+        pbTableBody.innerHTML = `<tr><td colspan="5">No athlete selected.</td></tr>`;
+        return;
+      }
+
+      const entriesAll = ath.entries || [];
+      pillAnalytics.textContent = ath.name + (dist !== "ALL" ? ` • Focus: ${dist}` : "");
+      anTotal.textContent = String(entriesAll.length);
+
+      const pbMap = computePBMap(entriesAll);
+
+      const now = new Date();
+      const cutoff = new Date(now.getTime() - 90*24*3600*1000);
+      const scoped = entriesAll
+        .filter(e => dist === "ALL" ? true : e.distance === dist)
+        .filter(e => new Date(e.date) >= cutoff);
+
+      const scopedMs = scoped.map(e => parseTimeToMs(e.time)).filter(x=>x!=null);
+      if(scopedMs.length){
+        const best = Math.min(...scopedMs);
+        anBest90.textContent = msToTime(best);
+        anBest90Meta.textContent = dist === "ALL" ? "Any distance • last 90 days" : `${dist} • last 90 days`;
+      }else{
+        anBest90.textContent = "—";
+        anBest90Meta.textContent = "No entries in last 90 days";
+      }
+
+      const focusEntries = sortByDateDesc(entriesAll).filter(e => dist==="ALL" ? true : e.distance===dist);
+      const last5 = focusEntries.slice(0,5).map(e=>parseTimeToMs(e.time)).filter(x=>x!=null);
+      if(last5.length >= 2){
+        const imp = last5[last5.length-1] - last5[0];
+        const improved = imp > 0;
+        const val = (Math.abs(imp)/1000).toFixed(3) + "s";
+        anImp5.textContent = improved ? ("↓ " + val) : ("↑ " + val);
+      }else{
+        anImp5.textContent = "—";
+      }
+
+      const comp = compareAthleteId ? getAthleteById(compareAthleteId) : null;
+      if(comp){
+        const pbMap2 = computePBMap(comp.entries || []);
+        const allD = new Set([...Object.keys(pbMap), ...Object.keys(pbMap2)]);
+        const distances = [...allD].sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+
+        pbHeadRow.innerHTML = `
+          <th>Distance</th>
+          <th class="num">${escapeHtml(ath.name)} PB</th>
+          <th class="num">${escapeHtml(comp.name)} PB</th>
+          <th>${escapeHtml(ath.name)} Date/Loc</th>
+          <th>${escapeHtml(comp.name)} Date/Loc</th>
+        `;
+
+        pbTableBody.innerHTML = distances.length ? distances.map(d=>{
+          const a1 = pbMap[d];
+          const a2 = pbMap2[d];
+          return `
+            <tr>
+              <td><span class="badge">${d}</span></td>
+              <td class="num"><b>${a1 ? msToTime(a1.ms) : "—"}</b></td>
+              <td class="num"><b>${a2 ? msToTime(a2.ms) : "—"}</b></td>
+              <td style="color:rgba(10,12,20,.78)">${a1 ? `${fmtDate(a1.date)} • ${escapeHtml(a1.location||"—")}` : "—"}</td>
+              <td style="color:rgba(10,12,20,.78)">${a2 ? `${fmtDate(a2.date)} • ${escapeHtml(a2.location||"—")}` : "—"}</td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="5">No PBs yet.</td></tr>`;
+      }else{
+        pbHeadRow.innerHTML = `
+          <th>Distance</th>
+          <th class="num">PB Time</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Notes</th>
+        `;
+
+        const distances = Object.keys(pbMap).sort((a,b)=> a.localeCompare(b, undefined, {numeric:true}));
+        pbTableBody.innerHTML = distances.length ? distances.map(d=>{
+          const pb = pbMap[d];
+          const locTxt = (pb.location && String(pb.location).trim()) ? pb.location : "—";
+          return `
+            <tr>
+              <td><span class="badge">${d}</span></td>
+              <td class="num"><b>${msToTime(pb.ms)}</b></td>
+              <td>${fmtDate(pb.date)}</td>
+              <td>${escapeHtml(locTxt)}</td>
+              <td style="color:rgba(10,12,20,.78)">${pb.notes ? escapeHtml(pb.notes) : "—"}</td>
+            </tr>
+          `;
+        }).join("") : `<tr><td colspan="5">No PBs yet. Add race entries.</td></tr>`;
+      }
+    }
+
+    function renderExport(){
+      const ath = getActiveAthlete();
+      pillExport.textContent = ath ? `Selected: ${ath.name}` : "No athlete";
+    }
+
+    function drawChart(entries, dist, loc){
+      const data = [...entries]
+        .filter(e => parseTimeToMs(e.time)!=null)
+        .sort((a,b)=> new Date(a.date)-new Date(b.date));
+
+      const points = data.map(e => ({
+        x: new Date(e.date).getTime(),
+        y: parseTimeToMs(e.time),
+        meta: e
+      }));
+
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      lastDrawMeta = { entries, dist, loc, points, data };
+
+      if(points.length < 2){
+        ctx.fillStyle = "rgba(10,12,20,.88)";
+        ctx.font = "900 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+        ctx.fillText("Add race entries to see trend", 50, 210);
+        ctx.fillStyle = "rgba(10,12,20,.62)";
+        ctx.font = "800 16px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+        ctx.fillText("Tip: pick a distance + location for the cleanest trend line.", 50, 240);
+        return;
+      }
+
+      const padL = 70, padR=30, padT=28, padB=56;
+      const W = canvas.width - padL - padR;
+      const H = canvas.height - padT - padB;
+
+      const xs = points.map(p=>p.x);
+      const ys = points.map(p=>p.y);
+
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+
+      let minY = Math.min(...ys);
+      let maxY = Math.max(...ys);
+
+      const padY = Math.max(120, (maxY-minY)*0.12);
+      minY = minY - padY;
+      maxY = maxY + padY;
+
+      ctx.strokeStyle = "rgba(10,12,20,.08)";
+      ctx.lineWidth = 1;
+      const gridCount = 5;
+      for(let i=0;i<=gridCount;i++){
+        const y = padT + (H/gridCount)*i;
+        ctx.beginPath();
+        ctx.moveTo(padL, y);
+        ctx.lineTo(padL+W, y);
+        ctx.stroke();
+      }
+
+      ctx.fillStyle = "rgba(10,12,20,.70)";
+      ctx.font = "900 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+      for(let i=0;i<=gridCount;i++){
+        const y = padT + (H/gridCount)*i;
+        const val = maxY - ( (maxY-minY)/gridCount )*i;
+        ctx.fillText(msToTime(Math.round(val)), 14, y+5);
+      }
+
+      ctx.fillStyle = "rgba(10,12,20,.70)";
+      ctx.font = "900 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+      ctx.fillText(fmtDate(new Date(minX).toISOString().slice(0,10)), padL, canvas.height-18);
+      const endLabel = fmtDate(new Date(maxX).toISOString().slice(0,10));
+      const endWidth = ctx.measureText(endLabel).width;
+      ctx.fillText(endLabel, padL+W-endWidth, canvas.height-18);
+
+      const toX = (x)=> padL + ((x-minX)/(maxX-minX))*W;
+      const toY = (y)=> padT + ((maxY-y)/(maxY-minY))*H;
+
+      const grad = ctx.createLinearGradient(padL,0,padL+W,0);
+      grad.addColorStop(0, "rgba(11,43,122,.95)");
+      grad.addColorStop(1, "rgba(28,88,255,.95)");
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 4;
+      ctx.beginPath();
+      points.forEach((p,idx)=>{
+        const x = toX(p.x);
+        const y = toY(p.y);
+        if(idx===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+      ctx.stroke();
+
+      points.forEach((p)=>{
+        const x = toX(p.x);
+        const y = toY(p.y);
+        ctx.fillStyle = "rgba(10,12,20,.92)";
+        ctx.beginPath();
+        ctx.arc(x,y,4.5,0,Math.PI*2);
+        ctx.fill();
+        ctx.fillStyle = "rgba(255,255,255,.95)";
+        ctx.beginPath();
+        ctx.arc(x,y,2.4,0,Math.PI*2);
+        ctx.fill();
+      });
+
+      let pbIdx = 0;
+      for(let i=1;i<points.length;i++){
+        if(points[i].y < points[pbIdx].y) pbIdx = i;
+      }
+      const pbP = points[pbIdx];
+      const pbX = toX(pbP.x);
+      const pbY = toY(pbP.y);
+
+      ctx.strokeStyle = "rgba(200,139,0,.95)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(pbX, pbY, 8.5, 0, Math.PI*2);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(200,139,0,.12)";
+      ctx.beginPath();
+      ctx.arc(pbX, pbY, 10.5, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.fillStyle = "rgba(200,139,0,.95)";
+      ctx.font = "900 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+      ctx.fillText("PB", pbX + 12, pbY + 5);
+
+      lastDrawMeta.t = { padL,padR,padT,padB,W,H,minX,maxX,minY,maxY,toX,toY };
+    }
+
+    function onChartMove(ev){
+      if(!lastDrawMeta || !lastDrawMeta.points || lastDrawMeta.points.length < 2) return;
+
+      const rect = canvas.getBoundingClientRect();
+      const mx = ((ev.clientX - rect.left) / rect.width) * canvas.width;
+      const my = ((ev.clientY - rect.top) / rect.height) * canvas.height;
+
+      const t = lastDrawMeta.t;
+      if(!t) return;
+
+      if(mx < t.padL || mx > t.padL + t.W || my < t.padT || my > t.padT + t.H){
+        chartTooltip.style.display = "none";
+        return;
+      }
+
+      let best = null;
+      for(const p of lastDrawMeta.points){
+        const px = t.toX(p.x);
+        const py = t.toY(p.y);
+        const dx = px - mx;
+        const dy = py - my;
+        const d2 = dx*dx + dy*dy;
+        if(!best || d2 < best.d2) best = { p, px, py, d2 };
+      }
+      if(!best) return;
+
+      drawChart(lastDrawMeta.entries, lastDrawMeta.dist, lastDrawMeta.loc);
+
+      ctx.strokeStyle = "rgba(28,88,255,.22)";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(best.px, t.padT);
+      ctx.lineTo(best.px, t.padT + t.H);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.moveTo(t.padL, best.py);
+      ctx.lineTo(t.padL + t.W, best.py);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(28,88,255,.16)";
+      ctx.beginPath();
+      ctx.arc(best.px, best.py, 11, 0, Math.PI*2);
+      ctx.fill();
+
+      ctx.strokeStyle = "rgba(11,43,122,.95)";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.arc(best.px, best.py, 7.5, 0, Math.PI*2);
+      ctx.stroke();
+
+      const e = best.p.meta;
+      chartTooltip.innerHTML = `
+        <div class="tTitle">${escapeHtml(e.distance)} • <b>${escapeHtml(e.time)}</b></div>
+        <div class="tRow"><b>Date:</b> ${fmtDate(e.date)}</div>
+        <div class="tRow"><b>Location:</b> ${escapeHtml(e.location || "—")}</div>
+        <div class="tRow"><b>Notes:</b> ${escapeHtml(e.notes || "—")}</div>
+      `;
+
+      const tx = ev.clientX - rect.left + 12;
+      const ty = ev.clientY - rect.top + 12;
+
+      chartTooltip.style.left = Math.min(tx, rect.width - 210) + "px";
+      chartTooltip.style.top = Math.min(ty, rect.height - 120) + "px";
+      chartTooltip.style.display = "block";
+    }
+
+    function exportJSON(){
+      const blob = new Blob([JSON.stringify({ state, prefs }, null, 2)], { type:"application/json" });
+      downloadBlob(blob, "PB-VelocityBoard-backup.json");
+      flashBanner("JSON backup downloaded.", false);
+    }
+
+    function exportCSV(){
+      const ath = getActiveAthlete();
+      if(!ath){
+        flashBanner("No athlete selected.", false);
+        return;
+      }
+      const rows = [["Athlete","BirthYear","Date","Location","Distance","Time","Notes"]];
+      for(const e of sortByDateDesc(ath.entries || [])){
+        rows.push([ath.name, ath.birthYear || "", e.date, e.location || "", e.distance, e.time, (e.notes||"")]);
+      }
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replaceAll('"','""')}"`).join(",")).join("\n");
+      const blob = new Blob([csv], { type:"text/csv" });
+      downloadBlob(blob, `PB-${ath.name.replaceAll(" ","_")}.csv`);
+      flashBanner("CSV downloaded.", false);
+    }
+
+    /* ---------- Templates ---------- */
+    function downloadCSVTemplate(){
+      const rows = [
+        ["Athlete","BirthYear","Date","Location","Distance","Time","Notes"],
+        ["Samarveer","2014","2025-02-16","Scarborough","400m","00:52.300","PB race"]
+      ];
+      const csv = rows.map(r => r.map(cell => `"${String(cell).replaceAll('"','""')}"`).join(",")).join("\n");
+      downloadBlob(new Blob([csv], {type:"text/csv"}), "PB-VelocityBoard-Template.csv");
+      flashBanner("CSV template downloaded.", false);
+    }
+
+    function downloadExcelTemplate(){
+      // SpreadsheetML (Excel opens this)
+      const header = ["Athlete","BirthYear","Date","Location","Distance","Time","Notes"];
+      const sample = ["Samarveer","2014","2025-02-16","Scarborough","400m","00:52.300","PB race"];
+      const sheetXML = spreadsheetML([header, sample]);
+      const blob = new Blob([sheetXML], { type:"application/vnd.ms-excel" });
+      downloadBlob(blob, "PB-VelocityBoard-Template.xls");
+      flashBanner("Excel template downloaded.", false);
+    }
+
+    function spreadsheetML(rows){
+      const esc = (s)=> String(s ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;");
+
+      const rowXml = rows.map(r=>{
+        const cells = r.map(v=>`<Cell><Data ss:Type="String">${esc(v)}</Data></Cell>`).join("");
+        return `<Row>${cells}</Row>`;
+      }).join("");
+
+      return `<?xml version="1.0"?>
+<?mso-application progid="Excel.Sheet"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:o="urn:schemas-microsoft-com:office:office"
+ xmlns:x="urn:schemas-microsoft-com:office:excel"
+ xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
+ xmlns:html="http://www.w3.org/TR/REC-html40">
+ <Worksheet ss:Name="Template">
+  <Table>
+   ${rowXml}
+  </Table>
+ </Worksheet>
+</Workbook>`;
+    }
+
+    /* ---------- Import CSV Template ---------- */
+    function importCSVTemplate(){
+      clearErrors();
+      const file = importCSVFile.files && importCSVFile.files[0];
+      if(!file){
+        showError("importMsg","Please choose a CSV file first.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const text = String(reader.result || "");
+          const rows = parseCSV(text);
+          if(rows.length < 2){
+            showError("importMsg","CSV looks empty. Please use the template format.");
+            return;
+          }
+
+          const header = rows[0].map(h => (h||"").trim());
+          const idx = {
+            athlete: header.findIndex(h => h.toLowerCase() === "athlete"),
+            birth: header.findIndex(h => h.toLowerCase() === "birthyear"),
+            date: header.findIndex(h => h.toLowerCase() === "date"),
+            loc: header.findIndex(h => h.toLowerCase() === "location"),
+            dist: header.findIndex(h => h.toLowerCase() === "distance"),
+            time: header.findIndex(h => h.toLowerCase() === "time"),
+            notes: header.findIndex(h => h.toLowerCase() === "notes")
+          };
+
+          const must = ["athlete","date","loc","dist","time"];
+          for(const k of must){
+            if(idx[k] === -1){
+              showError("importMsg","Missing required column: " + k + ". Please download the template and follow it.");
+              return;
+            }
+          }
+
+          let added = 0;
+          let skipped = 0;
+
+          for(let i=1;i<rows.length;i++){
+            const r = rows[i];
+            if(!r || r.every(x => !String(x||"").trim())) continue;
+
+            const name = String(r[idx.athlete]||"").trim();
+            const birthYear = idx.birth>=0 ? String(r[idx.birth]||"").trim() : "";
+            const date = String(r[idx.date]||"").trim();
+            const location = String(r[idx.loc]||"").trim();
+            const distance = String(r[idx.dist]||"").trim();
+            const time = String(r[idx.time]||"").trim();
+            const notes = idx.notes>=0 ? String(r[idx.notes]||"").trim() : "";
+
+            if(!name || !date || !location || !distance || !time){
+              skipped++;
+              continue;
+            }
+            if(!/^\d{4}-\d{2}-\d{2}$/.test(date)){
+              skipped++;
+              continue;
+            }
+            if(parseTimeToMs(time) == null){
+              skipped++;
+              continue;
+            }
+
+            // find or create athlete
+            let ath = state.athletes.find(a => (a.name||"").trim().toLowerCase() === name.toLowerCase());
+            if(!ath){
+              ath = { id: uid(), name, birthYear: (birthYear && /^\d{4}$/.test(birthYear)) ? birthYear : "", createdAt: new Date().toISOString(), entries: [] };
+              state.athletes.push(ath);
+              if(!state.activeAthleteId) state.activeAthleteId = ath.id;
+            }else{
+              if(!ath.birthYear && birthYear && /^\d{4}$/.test(birthYear)) ath.birthYear = birthYear;
+            }
+
+            ath.entries.push({
+              id: "e_" + Math.random().toString(16).slice(2),
+              date,
+              location,
+              distance,
+              time,
+              notes
+            });
+
+            added++;
+          }
+
+          saveState();
+          importMsg.classList.remove("show");
+          flashBanner(`CSV import complete. Added ${added} rows${skipped ? `, skipped ${skipped}` : ""}.`, false);
+          renderAll();
+
+        }catch(e){
+          showError("importMsg","Could not import CSV. Please use the template format.");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Simple CSV parser (handles quotes)
+    function parseCSV(text){
+      const rows = [];
+      let row = [];
+      let cur = "";
+      let inQuotes = false;
+
+      for(let i=0;i<text.length;i++){
+        const ch = text[i];
+        const next = text[i+1];
+
+        if(ch === '"' && inQuotes && next === '"'){
+          cur += '"';
+          i++;
+          continue;
+        }
+        if(ch === '"'){
+          inQuotes = !inQuotes;
+          continue;
+        }
+        if(ch === ',' && !inQuotes){
+          row.push(cur);
+          cur = "";
+          continue;
+        }
+        if((ch === '\n' || ch === '\r') && !inQuotes){
+          if(ch === '\r' && next === '\n') i++;
+          row.push(cur);
+          rows.push(row);
+          row = [];
+          cur = "";
+          continue;
+        }
+        cur += ch;
+      }
+      row.push(cur);
+      rows.push(row);
+      return rows;
+    }
+
+    function downloadBlob(blob, filename){
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+  </script>
+
+</body>
+</html>
