@@ -933,6 +933,13 @@
         <div class="chart">
           <div class="chartHint">Trend (Time vs Race Date)</div>
           <canvas id="trendCanvas" width="1200" height="420"></canvas>
+          <div id="chartTip"
+            style="position:fixed;display:none;pointer-events:none;
+            background:rgba(255,255,255,.92);
+            border-radius:14px;padding:10px 12px;
+            font-weight:900;font-size:12px;
+            box-shadow:0 18px 40px rgba(0,0,0,.18)">
+            </div>
         </div>
       </div>
     </section>
@@ -1614,6 +1621,16 @@
         return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
       }catch(e){ return iso; }
     }
+    function fmtDateAxis(iso){
+      const d=new Date(iso);
+      return d.toLocaleDateString(undefined,{
+        day:"2-digit",
+        month:"short",
+        year:"2-digit"
+      });
+    }
+
+
 
     // ✅ DD-MON-YY (for X-axis)
     function fmtDateAxis(iso){
@@ -2177,116 +2194,102 @@
     // Chart (with X-axis date labels DD-MON-YY)
     // -----------------------------
     function drawChart(entries){
-      const data = [...entries]
-        .filter(e => parseTimeSmart(e.time).ms!=null)
-        .sort((a,b)=> new Date(a.date)-new Date(b.date));
+  const tip = document.getElementById("chartTip");
 
-      const points = data.map(e => ({ x: new Date(e.date).getTime(), y: parseTimeSmart(e.time).ms, iso: e.date }));
+  const data = [...entries]
+    .filter(e => parseTimeSmart(e.time).ms != null && e.date)
+    .sort((a,b)=> new Date(a.date) - new Date(b.date));
 
-      ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-      const labelCol = "rgba(15,21,38,.70)";
-      const gridCol  = "rgba(15,21,38,.10)";
+  if(data.length < 2){
+    ctx.fillStyle = "rgba(15,21,38,.75)";
+    ctx.font = "900 18px system-ui";
+    ctx.fillText("Add at least 2 races to see a trend", 50, 200);
+    return;
+  }
 
-      if(points.length < 2){
-        ctx.fillStyle = labelCol;
-        ctx.font = "800 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-        ctx.fillText("Select a distance and add entries to see trend", 50, 210);
-        return;
-      }
+  const pts = data.map((e,i)=>({
+    idx:i,
+    date:e.date,
+    label: fmtDateAxis(e.date),
+    ms: parseTimeSmart(e.time).ms,
+    time: parseTimeSmart(e.time).normalized
+  }));
 
-      const padL = 70, padR=30, padT=28, padB=66; // a bit more for x labels
-      const W = canvas.width - padL - padR;
-      const H = canvas.height - padT - padB;
+  const pb = pts.reduce((b,p)=> p.ms<b.ms?p:b, pts[0]);
 
-      const xs = points.map(p=>p.x);
-      const ys = points.map(p=>p.y);
+  const padL=80,padR=30,padT=30,padB=70;
+  const W=canvas.width-padL-padR;
+  const H=canvas.height-padT-padB;
 
-      const minX = Math.min(...xs);
-      const maxX = Math.max(...xs);
+  let minY=Math.min(...pts.map(p=>p.ms));
+  let maxY=Math.max(...pts.map(p=>p.ms));
+  const pad=(maxY-minY)*0.08 || 120;
 
-      let minY = Math.min(...ys);
-      let maxY = Math.max(...ys);
+  minY-=pad; maxY+=pad;
 
-      const padY = Math.max(120, (maxY-minY)*0.12);
-      minY -= padY;
-      maxY += padY;
+  const toX=i=>padL+(i/(pts.length-1))*W;
+  const toY=y=>padT+((maxY-y)/(maxY-minY))*H;
 
-      // Y grid
-      ctx.strokeStyle = gridCol;
-      ctx.lineWidth = 1;
+  ctx.strokeStyle="rgba(15,21,38,.10)";
+  ctx.fillStyle="rgba(15,21,38,.65)";
+  ctx.font="900 12px system-ui";
 
-      const gridCount = 5;
-      for(let i=0;i<=gridCount;i++){
-        const y = padT + (H/gridCount)*i;
-        ctx.beginPath();
-        ctx.moveTo(padL, y);
-        ctx.lineTo(padL+W, y);
-        ctx.stroke();
-      }
+  for(let i=0;i<=5;i++){
+    const y=padT+(H/5)*i;
+    ctx.beginPath();
+    ctx.moveTo(padL,y);
+    ctx.lineTo(padL+W,y);
+    ctx.stroke();
+    ctx.fillText(msToTime(maxY-((maxY-minY)/5)*i),padL-10,y+4);
+  }
 
-      // Y labels
-      ctx.fillStyle = labelCol;
-      ctx.font = "800 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-      for(let i=0;i<=gridCount;i++){
-        const y = padT + (H/gridCount)*i;
-        const val = maxY - ((maxY-minY)/gridCount)*i;
-        ctx.fillText(msToTime(Math.round(val)), 14, y+5);
-      }
+  // PB reference
+  ctx.setLineDash([6,6]);
+  ctx.strokeStyle="rgba(200,139,0,.6)";
+  ctx.beginPath();
+  ctx.moveTo(padL,toY(pb.ms));
+  ctx.lineTo(padL+W,toY(pb.ms));
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle="rgba(200,139,0,.95)";
+  ctx.font="900 12px system-ui";
+  ctx.textAlign="left";
+  ctx.fillText(`PB ${msToTime(pb.ms)}`, padL + 8, toY(pb.ms) - 8);
 
-      const toX = (x)=> padL + ((x-minX)/(maxX-minX))*W;
-      const toY = (y)=> padT + ((maxY-y)/(maxY-minY))*H;
 
-      // X-axis labels (DD-MON-YY)
-      const tickCount = Math.min(6, Math.max(3, Math.round(points.length/2)));
-      ctx.fillStyle = labelCol;
-      ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-      ctx.textAlign = "center";
+  // Line
+  const grad=ctx.createLinearGradient(padL,0,padL+W,0);
+  grad.addColorStop(0,"#2f6bff");
+  grad.addColorStop(1,"#2bb7ff");
 
-      for(let i=0;i<tickCount;i++){
-        const idx = Math.round((points.length-1) * (i/(tickCount-1)));
-        const p = points[idx];
-        const x = toX(p.x);
-        const yBase = padT + H + 22;
+  ctx.strokeStyle=grad;
+  ctx.lineWidth=4;
+  ctx.beginPath();
+  pts.forEach((p,i)=>{
+    const x=toX(p.idx),y=toY(p.ms);
+    i?ctx.lineTo(x,y):ctx.moveTo(x,y);
+  });
+  ctx.stroke();
 
-        // small tick
-        ctx.strokeStyle = "rgba(15,21,38,.16)";
-        ctx.beginPath();
-        ctx.moveTo(x, padT + H);
-        ctx.lineTo(x, padT + H + 6);
-        ctx.stroke();
+  // Points
+  pts.forEach(p=>{
+    const x=toX(p.idx),y=toY(p.ms);
+    ctx.fillStyle=p===pb?"#c88b00":"#fff";
+    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle="#0f1526";
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+  });
 
-        ctx.fillStyle = labelCol;
-        ctx.fillText(fmtDateAxis(p.iso), x, yBase);
-      }
-      ctx.textAlign = "start";
-
-      // Line
-      const grad = ctx.createLinearGradient(padL,0,padL+W,0);
-      grad.addColorStop(0, "rgba(47,107,255,.95)");
-      grad.addColorStop(1, "rgba(43,183,255,.95)");
-
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      points.forEach((p,idx)=>{
-        const x = toX(p.x);
-        const y = toY(p.y);
-        if(idx===0) ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-      });
-      ctx.stroke();
-
-      // Points
-      ctx.fillStyle = "rgba(15,21,38,.85)";
-      points.forEach(p=>{
-        const x = toX(p.x);
-        const y = toY(p.y);
-        ctx.beginPath();
-        ctx.arc(x,y,4,0,Math.PI*2);
-        ctx.fill();
-      });
-    }
+  // X axis labels (clean & readable)
+  ctx.textAlign="center";
+  for(let i=0;i<Math.min(6,pts.length);i++){
+    const idx=Math.round((pts.length-1)*(i/5));
+    const p=pts[idx];
+    ctx.fillText(p.label,toX(p.idx),padT+H+26);
+  }
+}
 
     // -----------------------------
     // Excel export/template
