@@ -2191,8 +2191,7 @@
     function downloadTemplateXLSX(){
       const sample = [
         ["Athlete","BirthYear","Date","Location","Distance","Time","Notes"],
-        ["Samarveer","2014","2025-11-29","Ontario Provincial Circuit - Brampton","400m","00:48.720","Sample row"],
-        ["Samarveer","2014","2025-12-01","Training","700m","01:14.000","Example of custom distance (auto appears in dropdown)"]
+        ["Alex","2015","2025-11-29","Ontario Provincial Circuit - Brampton","400m","00:49.720","Sample row- optional"],
       ];
       const ws = XLSX.utils.aoa_to_sheet(sample);
       const wb = XLSX.utils.book_new();
