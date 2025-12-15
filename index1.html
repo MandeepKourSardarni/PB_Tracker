@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PB VelocityBoard</title>
+  <title>PERSONAL BEST TRACKER</title>
 
   <!-- SheetJS for Excel import/export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -829,16 +829,17 @@
       <div class="brand">
         <div class="avatar" id="avatarBtn" title="Click to set athlete avatar"></div>
         <div class="brandText">
-          <strong>PB VelocityBoard</strong>
+          <strong>PERSONAL BEST TRACKER</strong>
           <span>Track • Improve • Celebrate</span>
         </div>
       </div>
 
       <!-- ✅ EXPORT TAB REMOVED -->
-      <div class="tabs" role="tablist" aria-label="PB VelocityBoard Tabs">
+      <div class="tabs" role="tablist" aria-label="PERSONAL BEST TRACKER Tabs">
         <button class="tabBtn active" data-tab="home">Home</button>
         <button class="tabBtn" data-tab="analytics">Analytics</button>
         <button class="tabBtn" data-tab="settings">Settings</button>
+        <button class="giftBtn" id="btnHelp" title="Help / Instructions">❓</button>
         <button class="giftBtn" id="btnDonate" title="Donate / Support">🎁</button>
       </div>
 
@@ -933,6 +934,13 @@
         <div class="chart">
           <div class="chartHint">Trend (Time vs Race Date)</div>
           <canvas id="trendCanvas" width="1200" height="420"></canvas>
+          <div id="chartTip"
+            style="position:fixed;display:none;pointer-events:none;
+            background:rgba(255,255,255,.92);
+            border-radius:14px;padding:10px 12px;
+            font-weight:900;font-size:12px;
+            box-shadow:0 18px 40px rgba(0,0,0,.18)">
+            </div>
         </div>
       </div>
     </section>
@@ -1272,6 +1280,8 @@
 
     const canvas = document.getElementById("trendCanvas");
     const ctx = canvas.getContext("2d");
+    let chartLast = null;   // ✅ store plotted points for click/hover
+
 
     // -----------------------------
     // Events
@@ -1289,11 +1299,10 @@
     });
 
     document.getElementById("btnReset").addEventListener("click", () => openModal("modalReset"));
-
+// ❓ Help button
+    document.getElementById("btnHelp").addEventListener("click", () => {openModal("modalHelp");});
     document.getElementById("btnDonate").addEventListener("click", () => openModal("modalDonate"));
-    document.querySelectorAll("[data-donate]").forEach(b=>{
-      b.addEventListener("click", ()=> donateAmount(b.getAttribute("data-donate")));
-    });
+    
     document.getElementById("btnDonateCustom").addEventListener("click", ()=>{
       const v = document.getElementById("donateCustom").value.trim();
       donateAmount(v);
@@ -1309,17 +1318,7 @@
     });
 
     document.getElementById("btnSaveEntryEdits").addEventListener("click", saveEntryEdits);
-    document.getElementById("btnDeleteEntry").addEventListener("click", deleteEntryFromEditModal);
-
-    document.querySelectorAll("[data-close]").forEach(btn => {
-      btn.addEventListener("click", () => closeModal(btn.getAttribute("data-close")));
-    });
-    document.querySelectorAll(".modalOverlay").forEach(ov => {
-      ov.addEventListener("click", (e) => {
-        if(e.target === ov) ov.classList.remove("show");
-      });
-    });
-
+    document.getElementById("btnDeleteEntry").addEventListener("click", deleteEntryFromEditModal)
     document.getElementById("saveAthlete").addEventListener("click", saveAthlete);
     document.getElementById("saveAthleteEdits").addEventListener("click", saveAthleteEdits);
     document.getElementById("saveEntry").addEventListener("click", saveEntryMulti);
@@ -1379,63 +1378,100 @@
     });
 
     // -----------------------------
-    // Init
-    // -----------------------------
-    init();
+// Init
+// -----------------------------
+init();
 
-    function init(){
-      if(!state.athletes) state = structuredClone(defaultState);
-      if(!prefs) prefs = structuredClone(defaultPrefs);
+function init(){
+  if(!state.athletes) state = structuredClone(defaultState);
+  if(!prefs) prefs = structuredClone(defaultPrefs);
 
-      applyTheme();
+  applyTheme();
 
-      timeHint.value = prefs.timeHint || "00:52.300";
-      themeSelect.value = prefs.theme || "dark";
+  timeHint.value = prefs.timeHint || "00:52.300";
+  themeSelect.value = prefs.theme || "dark";
 
-      renderAll(true);
-      syncAppbarHeight();
-      window.addEventListener("resize", syncAppbarHeight);
-    }
+  renderAll(true);
+  syncAppbarHeight();
+  window.addEventListener("resize", syncAppbarHeight);
+}
 
-    function applyTheme(){
-      const t = prefs.theme || "dark";
-      document.documentElement.setAttribute("data-theme", t);
-      syncAppbarHeight();
-    }
+function applyTheme(){
+  const t = prefs.theme || "dark";
+  document.documentElement.setAttribute("data-theme", t);
+  syncAppbarHeight();
+}
 
-    function syncAppbarHeight(){
-      const appbar = document.querySelector(".appbar");
-      if(!appbar) return;
-      const h = appbar.offsetHeight || 84;
-      document.documentElement.style.setProperty("--appbarH", h + "px");
-    }
+function syncAppbarHeight(){
+  const appbar = document.querySelector(".appbar");
+  if(!appbar) return;
+  const h = appbar.offsetHeight || 84;
+  document.documentElement.style.setProperty("--appbarH", h + "px");
+}
 
-    function switchTab(tab){
-      tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
-      Object.keys(screens).forEach(k => screens[k].classList.toggle("active", k === tab));
-      renderAll(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
+function switchTab(tab){
+  tabBtns.forEach(b => b.classList.toggle("active", b.dataset.tab === tab));
+  Object.keys(screens).forEach(k => screens[k].classList.toggle("active", k === tab));
+  renderAll(false);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
 
-    function openModal(id){
-      clearErrors();
-      document.getElementById(id).classList.add("show");
-      document.body.style.overflow = "hidden";
-      syncAppbarHeight();
-    }
-    function closeModal(id){
-      document.getElementById(id).classList.remove("show");
-      const anyOpen = [...document.querySelectorAll(".modalOverlay")].some(x => x.classList.contains("show"));
-      if(!anyOpen) document.body.style.overflow = "";
-      syncAppbarHeight();
-    }
+function openModal(id){
+  clearErrors();
+  const el = document.getElementById(id);
+  if(!el) return;
+  el.classList.add("show");
+  document.body.style.overflow = "hidden";
+  syncAppbarHeight();
+}
 
-    function clearErrors(){
-      ["athleteErr","entryErr","resetErr","importMsg","editAthErr","donateErr","editEntryErr"].forEach(id=>{
-        const el = document.getElementById(id);
-        if(el){ el.classList.remove("show"); el.textContent=""; }
-      });
-    }
+function closeModal(id){
+  const el = document.getElementById(id);
+  if(!el) return;
+
+  el.classList.remove("show");
+
+  const anyOpen = [...document.querySelectorAll(".modalOverlay")]
+    .some(x => x.classList.contains("show"));
+
+  if(!anyOpen) document.body.style.overflow = "";
+  syncAppbarHeight();
+}
+
+/* =========================================================
+   ✅ GLOBAL MODAL CLOSE HANDLER (FIXES ❓ + 🎁 ISSUE)
+   ========================================================= */
+
+// Close button + backdrop (works even if modal HTML is added later)
+document.addEventListener("click", (e) => {
+
+  // 1) Close buttons (✕ / Close / any element with data-close)
+  const closeBtn = e.target.closest("[data-close]");
+  if (closeBtn) {
+    const id = closeBtn.getAttribute("data-close");
+    if (id) closeModal(id);
+    return;
+  }
+
+  // 2) Click on dark overlay closes modal
+  const overlay = e.target.classList.contains("modalOverlay") ? e.target : null;
+  if (overlay?.id) closeModal(overlay.id);
+});
+
+// 3) ESC closes the top-most open modal
+document.addEventListener("keydown", (e) => {
+  if (e.key !== "Escape") return;
+  const open = [...document.querySelectorAll(".modalOverlay.show")];
+  const top = open[open.length - 1];
+  if (top?.id) closeModal(top.id);
+});
+
+function clearErrors(){
+  ["athleteErr","entryErr","resetErr","importMsg","editAthErr","donateErr","editEntryErr"].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el){ el.classList.remove("show"); el.textContent=""; }
+  });
+}
 
     // -----------------------------
     // Storage
@@ -1600,12 +1636,14 @@
 
     function msToTime(ms){
       if(ms == null || isNaN(ms)) return "—";
+      ms = Math.max(0, Math.round(ms)); // ✅ prevents long decimal milliseconds
       const totalSec = Math.floor(ms/1000);
       const mm = Math.floor(totalSec/60);
       const ss = totalSec % 60;
       const msec = ms % 1000;
-      return String(mm).padStart(2,"0")+":"+String(ss).padStart(2,"0")+"."+String(msec).padStart(3,"0");
+      return String(mm).padStart(2,"0")+":"+String(ss).padStart(2,"0")+"."+String(msec).padStart(3,"0")
     }
+
 
     function fmtDate(iso){
       if(!iso) return "—";
@@ -1614,6 +1652,16 @@
         return d.toLocaleDateString(undefined, { year:"numeric", month:"short", day:"2-digit" });
       }catch(e){ return iso; }
     }
+    function fmtDateAxis(iso){
+      const d=new Date(iso);
+      return d.toLocaleDateString(undefined,{
+        day:"2-digit",
+        month:"short",
+        year:"2-digit"
+      });
+    }
+
+
 
     // ✅ DD-MON-YY (for X-axis)
     function fmtDateAxis(iso){
@@ -2176,117 +2224,122 @@
     // -----------------------------
     // Chart (with X-axis date labels DD-MON-YY)
     // -----------------------------
-    function drawChart(entries){
-      const data = [...entries]
-        .filter(e => parseTimeSmart(e.time).ms!=null)
-        .sort((a,b)=> new Date(a.date)-new Date(b.date));
+function drawChart(entries){
+  const data = [...entries]
+    .filter(e => parseTimeSmart(e.time).ms != null && e.date)
+    .sort((a,b)=> new Date(a.date) - new Date(b.date));
 
-      const points = data.map(e => ({ x: new Date(e.date).getTime(), y: parseTimeSmart(e.time).ms, iso: e.date }));
+  ctx.clearRect(0,0,canvas.width,canvas.height);
 
-      ctx.clearRect(0,0,canvas.width,canvas.height);
+  // reset saved points
+  chartLast = null;
 
-      const labelCol = "rgba(15,21,38,.70)";
-      const gridCol  = "rgba(15,21,38,.10)";
+  if(data.length < 2){
+    ctx.fillStyle = "rgba(15,21,38,.75)";
+    ctx.font = "900 18px system-ui";
+    ctx.fillText("Add at least 2 races to see a trend", 50, 200);
+    return;
+  }
 
-      if(points.length < 2){
-        ctx.fillStyle = labelCol;
-        ctx.font = "800 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-        ctx.fillText("Select a distance and add entries to see trend", 50, 210);
-        return;
-      }
+  const pts = data.map((e,i)=>{
+    const parsed = parseTimeSmart(e.time);
+    return {
+      idx: i,
+      date: e.date,
+      label: fmtDateAxis(e.date),
+      ms: parsed.ms,
+      time: parsed.normalized
+    };
+  });
 
-      const padL = 70, padR=30, padT=28, padB=66; // a bit more for x labels
-      const W = canvas.width - padL - padR;
-      const H = canvas.height - padT - padB;
+  const pb = pts.reduce((b,p)=> (p.ms < b.ms ? p : b), pts[0]);
 
-      const xs = points.map(p=>p.x);
-      const ys = points.map(p=>p.y);
+  const padL=80, padR=30, padT=30, padB=70;
+  const W = canvas.width - padL - padR;
+  const H = canvas.height - padT - padB;
 
-      const minX = Math.min(...xs);
-      const maxX = Math.max(...xs);
+  let minY = Math.min(...pts.map(p=>p.ms));
+  let maxY = Math.max(...pts.map(p=>p.ms));
+  const pad = (maxY - minY) * 0.2 || 200;
 
-      let minY = Math.min(...ys);
-      let maxY = Math.max(...ys);
+  // ✅ keep axis values clean (integers) to avoid long decimals
+  minY = Math.round(minY - pad);
+  maxY = Math.round(maxY + pad);
 
-      const padY = Math.max(120, (maxY-minY)*0.12);
-      minY -= padY;
-      maxY += padY;
+  const toX = i => padL + (i/(pts.length-1)) * W;
+  const toY = y => padT + ((maxY - y)/(maxY - minY)) * H;
 
-      // Y grid
-      ctx.strokeStyle = gridCol;
-      ctx.lineWidth = 1;
+  // ✅ SAVE pixel positions for clicking points later
+  chartLast = {
+    pts: pts.map(p => ({
+      ...p,
+      px: toX(p.idx),
+      py: toY(p.ms),
+      fullDate: fmtDate(p.date)
+    }))
+  };
 
-      const gridCount = 5;
-      for(let i=0;i<=gridCount;i++){
-        const y = padT + (H/gridCount)*i;
-        ctx.beginPath();
-        ctx.moveTo(padL, y);
-        ctx.lineTo(padL+W, y);
-        ctx.stroke();
-      }
+  // Grid + Y labels
+  ctx.strokeStyle = "rgba(15,21,38,.10)";
+  ctx.fillStyle = "rgba(15,21,38,.65)";
+  ctx.font = "900 12px system-ui";
+  ctx.textAlign = "right";
 
-      // Y labels
-      ctx.fillStyle = labelCol;
-      ctx.font = "800 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-      for(let i=0;i<=gridCount;i++){
-        const y = padT + (H/gridCount)*i;
-        const val = maxY - ((maxY-minY)/gridCount)*i;
-        ctx.fillText(msToTime(Math.round(val)), 14, y+5);
-      }
+  for(let i=0;i<=5;i++){
+    const y = padT + (H/5)*i;
+    ctx.beginPath();
+    ctx.moveTo(padL, y);
+    ctx.lineTo(padL+W, y);
+    ctx.stroke();
 
-      const toX = (x)=> padL + ((x-minX)/(maxX-minX))*W;
-      const toY = (y)=> padT + ((maxY-y)/(maxY-minY))*H;
+    const val = Math.round(maxY - ((maxY-minY)/5)*i);
+    ctx.fillText(msToTime(val), padL-10, y+4);
+  }
 
-      // X-axis labels (DD-MON-YY)
-      const tickCount = Math.min(6, Math.max(3, Math.round(points.length/2)));
-      ctx.fillStyle = labelCol;
-      ctx.font = "900 12px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
-      ctx.textAlign = "center";
+  // PB reference line
+  ctx.setLineDash([6,6]);
+  ctx.strokeStyle = "rgba(200,139,0,.6)";
+  ctx.beginPath();
+  ctx.moveTo(padL, toY(pb.ms));
+  ctx.lineTo(padL+W, toY(pb.ms));
+  ctx.stroke();
+  ctx.setLineDash([]);
 
-      for(let i=0;i<tickCount;i++){
-        const idx = Math.round((points.length-1) * (i/(tickCount-1)));
-        const p = points[idx];
-        const x = toX(p.x);
-        const yBase = padT + H + 22;
+  // Line
+  const grad = ctx.createLinearGradient(padL, 0, padL+W, 0);
+  grad.addColorStop(0, "#2f6bff");
+  grad.addColorStop(1, "#2bb7ff");
 
-        // small tick
-        ctx.strokeStyle = "rgba(15,21,38,.16)";
-        ctx.beginPath();
-        ctx.moveTo(x, padT + H);
-        ctx.lineTo(x, padT + H + 6);
-        ctx.stroke();
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 4;
+  ctx.beginPath();
+  pts.forEach((p,i)=>{
+    const x = toX(p.idx), y = toY(p.ms);
+    i ? ctx.lineTo(x,y) : ctx.moveTo(x,y);
+  });
+  ctx.stroke();
 
-        ctx.fillStyle = labelCol;
-        ctx.fillText(fmtDateAxis(p.iso), x, yBase);
-      }
-      ctx.textAlign = "start";
+  // Points
+  pts.forEach(p=>{
+    const x = toX(p.idx), y = toY(p.ms);
+    ctx.fillStyle = (p === pb) ? "#c88b00" : "#fff";
+    ctx.beginPath(); ctx.arc(x,y,6,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle = "#0f1526";
+    ctx.beginPath(); ctx.arc(x,y,3,0,Math.PI*2); ctx.fill();
+  });
 
-      // Line
-      const grad = ctx.createLinearGradient(padL,0,padL+W,0);
-      grad.addColorStop(0, "rgba(47,107,255,.95)");
-      grad.addColorStop(1, "rgba(43,183,255,.95)");
+  // X axis labels
+  ctx.fillStyle = "rgba(15,21,38,.65)";
+  ctx.font = "900 12px system-ui";
+  ctx.textAlign = "center";
 
-      ctx.strokeStyle = grad;
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      points.forEach((p,idx)=>{
-        const x = toX(p.x);
-        const y = toY(p.y);
-        if(idx===0) ctx.moveTo(x,y);
-        else ctx.lineTo(x,y);
-      });
-      ctx.stroke();
+  for(let i=0;i<Math.min(6,pts.length);i++){
+    const idx = Math.round((pts.length-1)*(i/5));
+    const p = pts[idx];
+    ctx.fillText(p.label, toX(p.idx), padT+H+26);
+  }
+}
 
-      // Points
-      ctx.fillStyle = "rgba(15,21,38,.85)";
-      points.forEach(p=>{
-        const x = toX(p.x);
-        const y = toY(p.y);
-        ctx.beginPath();
-        ctx.arc(x,y,4,0,Math.PI*2);
-        ctx.fill();
-      });
-    }
 
     // -----------------------------
     // Excel export/template
@@ -2469,6 +2522,95 @@
       closeModal("modalDonate");
       flashBanner("Opening PayPal donation page… 💙", false);
     }
+
+
+    
   </script>
+
+<div class="modalOverlay" id="modalHelp">
+  <div class="modal">
+    <div class="modalTop">
+      <div>
+        <h3>❓ Help & Instructions</h3>
+        <p>A gentle guide to use this tracker smoothly.</p>
+      </div>
+      <button class="xbtn" data-close="modalHelp">✕</button>
+    </div>
+
+    <div class="empty" style="margin-top:0;">
+      <strong>Getting Started</strong>
+      <p>
+        • Start by clicking <b>+ Add Athlete</b><br>
+        • Enter name (and optional birth year + avatar emoji)<br>
+        • Select the athlete from the dropdown at the top
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>Add Race Entries</strong>
+      <p>
+        • Click <b>+ Add Race</b><br>
+        • Choose the race <b>date</b> and enter <b>location</b><br>
+        • Add one or more distances in the same race (example: 400m + 500m)<br>
+        • Time formats allowed: <b>mm:ss.mmm</b> (00:52.300) or <b>HH:MM:SS</b> (00:01:00)
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>PB Summary (Home)</strong>
+      <p>
+        • The PB table shows the best time automatically for each distance<br>
+        • You can click any PB row to edit that entry
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>Race Cards (Home)</strong>
+      <p>
+        • Cards are grouped by distance and sorted by latest date<br>
+        • Use <b>Distance Focus</b> to filter cards (or choose “All distances”)<br>
+        • Tap ✏️ to edit, 🗑️ to delete
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>Analytics (Chart)</strong>
+      <p>
+        • Select a distance to see the trend line for that distance<br>
+        • PB for the selected distance is shown above the chart<br>
+        • Tip: Add at least 2 races to see a proper trend
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>Excel Import / Export</strong>
+      <p>
+        • Go to <b>Settings → Excel Import / Template</b><br>
+        • Download template, fill it, and upload it to import<br>
+        • You can download Excel for the selected athlete and upload it on another device
+      </p>
+    </div>
+
+    <div class="empty">
+      <strong>Storage & Reset</strong>
+      <p>
+        • Everything is saved safely on this device (local storage)<br>
+        • If you want a fresh start, click <b>Reset</b><br>
+        • Reset removes data from this device only
+      </p>
+    </div>
+
+    <div class="foot">
+      If something feels confusing, it’s completely okay — just open this help anytime ❄️
+    </div>
+
+    <div class="modalActions">
+      <button class="btn btnPrimary" data-close="modalHelp">Close</button>
+    </div>
+  </div>
+</div>
+
+
+  
 </body>
 </html>
