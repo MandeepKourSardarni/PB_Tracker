@@ -703,6 +703,56 @@
       .focusWrap{ justify-content:flex-start; }
       .focusSelect{ min-width: 100%; }
     }
+
+/* =========================================================
+   DARK THEME: Make key tab headings/subtexts WHITE
+   (and keep LIGHT theme BLACK)
+========================================================= */
+
+/* Only when theme is dark */
+html[data-theme="dark"] .card{
+  /* make the card itself darker so white text makes sense */
+  background: linear-gradient(180deg, rgba(0,0,0,.30), rgba(0,0,0,.18));
+  border: 1px solid rgba(255,255,255,.16);
+  box-shadow: 0 24px 70px rgba(0,0,0,.35), 0 1px 0 rgba(255,255,255,.10) inset;
+  color: var(--pageText);
+}
+
+/* Titles + subtitles (the exact texts you listed) */
+html[data-theme="dark"] .card .title{
+  color: rgba(255,255,255,.95) !important;
+}
+html[data-theme="dark"] .card .sub{
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Pills like: "SAMARVEER • 2014", "31 races", "2 PBs", "Local Storage" etc. */
+html[data-theme="dark"] .card .pill{
+  color: rgba(255,255,255,.90) !important;
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.18);
+}
+
+/* Labels like: Distance Focus (for cards/chart), Theme */
+html[data-theme="dark"] .card .field label{
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Analytics helper text like: "31 total races" */
+html[data-theme="dark"] .card .help,
+html[data-theme="dark"] .card #anCount{
+  color: rgba(255,255,255,.78) !important;
+}
+
+/* Keep table/cards inside readable (optional: only if your table text became too dark/odd) */
+html[data-theme="dark"] .table,
+html[data-theme="dark"] .distCard,
+html[data-theme="dark"] .empty,
+html[data-theme="dark"] .chart{
+  color: var(--surfaceText); /* keep these areas normal since they are light surfaces */
+}
+
+    
   </style>
 </head>
 
