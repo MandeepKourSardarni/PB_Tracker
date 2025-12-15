@@ -2200,157 +2200,125 @@
       flashBanner("Template downloaded.", false);
     }
 
-    function importXLSXIntoSelectedAthlete(){
-      clearErrors();
-      const ath = getActiveAthlete();
-      if(!ath){ showError("importMsg","Please select an athlete first."); return; }
+   function importXLSXIntoSelectedAthlete(){
+  clearErrors();
+  const ath = getActiveAthlete();
+  if(!ath){ showError("importMsg","Please select an athlete first."); return; }
 
-      const file = excelFile.files && excelFile.files[0];
-      if(!file){ showError("importMsg","Please choose an Excel file first."); return; }
+  const file = excelFile.files && excelFile.files[0];
+  if(!file){ showError("importMsg","Please choose an Excel file first."); return; }
 
-      const reader = new FileReader();
+  const reader = new FileReader();
 
-      reader.onload = () => {
-        try{
-          const data = new Uint8Array(reader.result);
-          const wb = XLSX.read(data, { type: "array" });
-          const sheetName = wb.SheetNames[0];
-          const ws = wb.Sheets[sheetName];
+  reader.onload = () => {
+    try{
+      const data = new Uint8Array(reader.result);
+      const wb = XLSX.read(data, { type: "array" });
+      const sheetName = wb.SheetNames[0];
+      const ws = wb.Sheets[sheetName];
 
-          const json = XLSX.utils.sheet_to_json(ws, { defval: "" });
-          if(!json.length){
-            showError("importMsg","Excel looks empty. Please use the template.");
-            return;
-          }
+      const json = XLSX.utils.sheet_to_json(ws, { defval: "" });
+      if(!json.length){
+        showError("importMsg","Excel looks empty. Please use the template.");
+        return;
+      }
 
-          const norm = (s)=> String(s||"").trim().toLowerCase();
-          const get = (row, key)=>{
-            const k = Object.keys(row).find(h => norm(h) === norm(key));
-            return k ? String(row[k] ?? "").trim() : "";
-          };
-
-          let added = 0;
-          let skipped = 0;
-          let firstBad = "";
-
-let lastDate = "";
-let lastLocation = "";
-
-for(let i=0;i<json.length;i++){
-  const row = json[i];
-
-  let date      = get(row,"Date");
-  let location  = get(row,"Location");
-  const distance = normalizeDistance(get(row,"Distance"));
-  let time      = get(row,"Time");
-  const notes   = get(row,"Notes");
-
-  // clean time like " 00: 50.738 "
-  time = String(time || "").replace(/\s+/g,"");
-
-  // ✅ FILL-DOWN logic (Excel-style)
-  if(date) lastDate = date;
-  else date = lastDate;
-
-  if(location) lastLocation = location;
-  else location = lastLocation;
-
-  // Convert Excel Date objects or serials
-  if(Object.prototype.toString.call(row.Date) === "[object Date]" && !isNaN(row.Date)){
-    const d = row.Date;
-    date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-  }
-  else if(typeof row.Date === "number"){
-    const d = XLSX.SSF.parse_date_code(row.Date);
-    if(d){
-      date = `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
-    }
-  }
-  else{
-    // Accept 28-Jan-24
-    const m = String(date||"").match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/);
-    if(m){
-      const months = {jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"};
-      const yyyy = m[3].length === 2 ? `20${m[3]}` : m[3];
-      date = `${yyyy}-${months[m[2].toLowerCase()]}-${String(m[1]).padStart(2,"0")}`;
-    }
-  }
-
-  // Validate after fill-down
-  if(!date || !location || !distance || !time){
-    skipped++;
-    continue;
-  }
-
-  const parsed = parseTimeSmart(time);
-  if(parsed.ms == null){
-    skipped++;
-    if(!firstBad) firstBad = `Row ${i+2}: invalid time "${time}"`;
-    continue;
-  }
-
-  ath.entries.push({
-    id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
-    date,
-    location,
-    distance,
-    time: parsed.normalized,
-    notes: notes || ""
-  });
-  added++;
-}
-
-
-            if(Object.prototype.toString.call(row.Date) === "[object Date]" && !isNaN(row.Date)){
-              const d = row.Date;
-              const yyyy = d.getFullYear();
-              const mm = String(d.getMonth()+1).padStart(2,"0");
-              const dd = String(d.getDate()).padStart(2,"0");
-              date = `${yyyy}-${mm}-${dd}`;
-            } else if(typeof row.Date === "number"){
-              const d = XLSX.SSF.parse_date_code(row.Date);
-              if(d){
-                const yyyy = d.y;
-                const mm = String(d.m).padStart(2,"0");
-                const dd = String(d.d).padStart(2,"0");
-                date = `${yyyy}-${mm}-${dd}`;
-              }
-            }
-
-            const parsed = parseTimeSmart(time);
-            if(parsed.ms == null){
-              skipped++;
-              if(!firstBad) firstBad = `Row ${i+2}: bad time "${time}"`;
-              continue;
-            }
-
-            ath.entries.push({
-              id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
-              date, location, distance, time: parsed.normalized, notes
-            });
-            added++;
-          }
-
-          saveState();
-
-          // ✅ ensure custom distances show instantly
-          refreshDistanceUI();
-
-          if(added === 0){
-            showError("importMsg", `No rows imported. ${firstBad || "Please use the template columns: Date, Location, Distance, Time."}`);
-            return;
-          }
-
-          flashBanner(`Excel import complete: ${added} row(s) added to ${ath.name}${skipped ? ` • ${skipped} skipped` : ""}.`, false);
-          renderAll(true);
-
-        }catch(e){
-          showError("importMsg","Could not import Excel. Please use the template format.");
-        }
+      const norm = (s)=> String(s||"").trim().toLowerCase();
+      const get = (row, key)=>{
+        const k = Object.keys(row).find(h => norm(h) === norm(key));
+        return k ? String(row[k] ?? "").trim() : "";
       };
 
-      reader.readAsArrayBuffer(file);
+      let added = 0;
+      let skipped = 0;
+      let firstBad = "";
+
+      let lastDate = "";
+      let lastLocation = "";
+
+      for(let i=0;i<json.length;i++){
+        const row = json[i];
+
+        let date     = get(row,"Date");
+        let location = get(row,"Location");
+        const distance = normalizeDistance(get(row,"Distance"));
+        let time     = get(row,"Time");
+        const notes  = get(row,"Notes");
+
+        time = String(time || "").replace(/\s+/g,"");
+
+        // ✅ Excel-like fill-down
+        if(date) lastDate = date; else date = lastDate;
+        if(location) lastLocation = location; else location = lastLocation;
+
+        // ✅ Detect actual Date column header (not always "Date")
+        const dateKey = Object.keys(row).find(h => norm(h) === "date");
+        const dateVal = dateKey ? row[dateKey] : null;
+
+        // Convert Excel Date objects / serials
+        if(Object.prototype.toString.call(dateVal) === "[object Date]" && !isNaN(dateVal)){
+          const d = dateVal;
+          date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+        } else if(typeof dateVal === "number"){
+          const d = XLSX.SSF.parse_date_code(dateVal);
+          if(d){
+            date = `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
+          }
+        } else {
+          // Accept 28-Jan-24
+          const m = String(date||"").match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/);
+          if(m){
+            const months = {jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"};
+            const yyyy = m[3].length === 2 ? `20${m[3]}` : m[3];
+            date = `${yyyy}-${months[m[2].toLowerCase()]}-${String(m[1]).padStart(2,"0")}`;
+          }
+        }
+
+        // Validate
+        if(!date || !location || !distance || !time){
+          skipped++;
+          continue;
+        }
+
+        const parsed = parseTimeSmart(time);
+        if(parsed.ms == null){
+          skipped++;
+          if(!firstBad) firstBad = `Row ${i+2}: invalid time "${time}"`;
+          continue;
+        }
+
+        ath.entries.push({
+          id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
+          date,
+          location,
+          distance,
+          time: parsed.normalized,
+          notes: notes || ""
+        });
+
+        added++;
+      }
+
+      saveState();
+      refreshDistanceUI();
+
+      if(added === 0){
+        showError("importMsg", `No rows imported. ${firstBad || "Please use columns: Date, Location, Distance, Time."}`);
+        return;
+      }
+
+      flashBanner(`Excel import complete: ${added} row(s) added to ${ath.name}${skipped ? ` • ${skipped} skipped` : ""}.`, false);
+      renderAll(true);
+
+    }catch(e){
+      console.error(e);
+      showError("importMsg","Could not import Excel. Please use the template format.");
     }
+  };
+
+  reader.readAsArrayBuffer(file);
+}
+
 
     function donateAmount(amountStr){
       clearErrors();
