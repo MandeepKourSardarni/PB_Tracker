@@ -1458,33 +1458,63 @@
 function parseTimeSmart(t){
   if(t == null) return { ms:null, normalized:null, note:null };
 
-  // ✅ Handle Excel numeric time (fraction of day)
+  // ✅ Excel numeric time (fraction of day)
   if(typeof t === "number" && isFinite(t)){
-    // If it's less than 1, Excel likely stored a time-of-day fraction
-    // Convert fraction-of-day to milliseconds
     const totalMs = Math.round(t * 24 * 60 * 60 * 1000);
     if(totalMs >= 0 && totalMs < 24*60*60*1000){
       return { ms: totalMs, normalized: msToTime(totalMs), note: null };
     }
-    // If it's bigger, treat as seconds
-    const totalMs2 = Math.round(t * 1000);
-    return { ms: totalMs2, normalized: msToTime(totalMs2), note: null };
   }
 
   let raw = String(t).trim();
   if(!raw) return { ms:null, normalized:null, note:null };
   raw = raw.replace(/\s+/g,"");
 
-  // mm:ss(.ms)
-  let m = raw.match(/^(\d{1,2}):([0-5]\d)(?:\.(\d+))?$/);
+  // ✅ HH:MM:SS
+  let m = raw.match(/^(\d{1,2}):([0-5]\d):([0-5]\d)$/);
+  if(m){
+    const hh = Number(m[1]);
+    const mm = Number(m[2]);
+    const ss = Number(m[3]);
+    const total = ((hh*3600) + (mm*60) + ss) * 1000;
+    return { ms: total, normalized: msToTime(total), note: null };
+  }
+
+  // ✅ MM:SS(.mmm)
+  m = raw.match(/^(\d{1,2}):([0-5]\d)(?:\.(\d+))?$/);
   if(m){
     const mm = Number(m[1]);
     const ss = Number(m[2]);
-    // ✅ allow ANY decimals, keep only first 3
     const ms = Number((m[3]||"0").slice(0,3).padEnd(3,"0"));
     const total = (mm*60 + ss)*1000 + ms;
     return { ms: total, normalized: msToTime(total), note: null };
   }
+
+  // m.ss  → interpret as minutes.seconds
+  m = raw.match(/^(\d{1,2})\.(\d{1,2})$/);
+  if(m){
+    const mm = Number(m[1]);
+    const ss = Number(m[2]);
+    if(ss < 60){
+      const total = (mm*60 + ss)*1000;
+      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw} as ${msToTime(total)}` };
+    }
+  }
+
+  // seconds(.ms)
+  m = raw.match(/^(\d{1,4})(?:\.(\d+))?$/);
+  if(m){
+    const sec = Number(m[1]);
+    const ms = Number((m[2]||"0").slice(0,3).padEnd(3,"0"));
+    if(isFinite(sec) && sec >= 0){
+      const total = sec*1000 + ms;
+      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw}s as ${msToTime(total)}` };
+    }
+  }
+
+  return { ms:null, normalized:null, note:null };
+}
+
 
   // m.ss  (example 1.03 -> 01:03.000)
   m = raw.match(/^(\d{1,2})\.(\d{1,2})$/);
