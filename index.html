@@ -5,19 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>PB VelocityBoard</title>
 
-  <!-- ✅ SheetJS for Excel import/export -->
+  <!-- SheetJS for Excel import/export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 
   <style>
     :root{
       --bg1:#07162f;
       --bg2:#041022;
+
       --accent:#2f6bff;
       --accent2:#2bb7ff;
 
-      --text:#0f1526;
-      --muted:rgba(15,21,38,.62);
-      --muted2:rgba(15,21,38,.46);
+      /* ✅ text on page background (dark blue) */
+      --pageText: rgba(255,255,255,.92);
+      --pageMuted: rgba(255,255,255,.70);
+      --pageMuted2: rgba(255,255,255,.55);
+
+      /* ✅ text on surfaces (cards/tables/white panels) */
+      --surfaceText:#0f1526;
+      --surfaceMuted:rgba(15,21,38,.62);
+      --surfaceMuted2:rgba(15,21,38,.46);
 
       --danger:#e23b57;
       --ok:#18a965;
@@ -28,7 +35,6 @@
       --shadow2: 0 10px 26px rgba(0,0,0,.14);
 
       --w: 1180px;
-      --gap: 14px;
       --appbarH: 84px;
 
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, "Apple Color Emoji","Segoe UI Emoji";
@@ -37,24 +43,23 @@
     html[data-theme="light"]{
       --bg1:#eef4ff;
       --bg2:#f6fbff;
-      --text:#0f1526;
-      --muted:rgba(15,21,38,.62);
-      --muted2:rgba(15,21,38,.46);
-    }
-    html[data-theme="dark"]{
-      --bg1:#07162f;
-      --bg2:#041022;
-      --text:#0f1526;
-      --muted:rgba(15,21,38,.62);
-      --muted2:rgba(15,21,38,.46);
+
+      --pageText:#0f1526;
+      --pageMuted:rgba(15,21,38,.62);
+      --pageMuted2:rgba(15,21,38,.46);
+
+      --surfaceText:#0f1526;
+      --surfaceMuted:rgba(15,21,38,.62);
+      --surfaceMuted2:rgba(15,21,38,.46);
     }
 
     *{ box-sizing:border-box; }
     html, body{ height:100%; }
+
     body{
       margin:0;
       font-family: var(--font);
-      color: var(--text);
+      color: var(--pageText);
       background:
         radial-gradient(1200px 800px at 12% 8%, rgba(47,107,255,.22), transparent 60%),
         radial-gradient(1000px 700px at 86% 18%, rgba(43,183,255,.16), transparent 58%),
@@ -62,6 +67,7 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
+
     button, input, select{ font-family:inherit; }
 
     .wrap{
@@ -78,6 +84,7 @@
       -webkit-backdrop-filter: blur(14px);
       background: rgba(255,255,255,.80);
       border-bottom:1px solid rgba(15,21,38,.10);
+      color: var(--surfaceText);
     }
     html[data-theme="light"] .appbar{ background: rgba(255,255,255,.88); }
 
@@ -116,34 +123,12 @@
       cursor:pointer;
       user-select:none;
     }
-    .avatar img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .avatar .emoji{
-      font-size: 20px;
-      font-weight: 900;
-      line-height: 1;
-    }
+    .avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+    .avatar .emoji{ font-size: 20px; font-weight: 900; line-height: 1; }
 
-    .brandText{
-      display:flex;
-      flex-direction:column;
-      line-height:1.12;
-      min-width: 160px;
-    }
-    .brandText strong{
-      font-size: 18px;
-      letter-spacing:.2px;
-      font-weight: 950;
-    }
-    .brandText span{
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 800;
-    }
+    .brandText{ display:flex; flex-direction:column; line-height:1.12; min-width: 160px; }
+    .brandText strong{ font-size: 18px; letter-spacing:.2px; font-weight: 950; }
+    .brandText span{ font-size: 13px; color: var(--surfaceMuted); font-weight: 800; }
 
     .tabs{
       display:flex;
@@ -173,9 +158,9 @@
       white-space: nowrap;
       flex: 0 0 auto;
     }
-    .tabBtn:hover{ color: var(--text); background: rgba(15,21,38,.05); }
+    .tabBtn:hover{ color: var(--surfaceText); background: rgba(15,21,38,.05); }
     .tabBtn.active{
-      color: var(--text);
+      color: var(--surfaceText);
       background: rgba(47,107,255,.10);
       border: 1px solid rgba(47,107,255,.18);
     }
@@ -203,6 +188,7 @@
       justify-content:flex-end;
       flex-wrap: wrap;
       flex: 1 1 520px;
+      color: var(--surfaceText);
     }
 
     .selectWrap{ position:relative; flex: 1 1 220px; min-width: 220px; }
@@ -212,7 +198,7 @@
       right: 12px;
       top: 50%;
       transform: translateY(-52%);
-      color: var(--muted);
+      color: var(--surfaceMuted);
       pointer-events:none;
       font-size: 12px;
     }
@@ -223,19 +209,20 @@
       -webkit-appearance:none;
       border:1px solid rgba(15,21,38,.12);
       background: rgba(255,255,255,.92);
-      color: var(--text);
+      color: var(--surfaceText);
       padding: 10px 34px 10px 12px;
       border-radius: 14px;
       font-weight:900;
       outline:none;
       cursor:pointer;
     }
-    select, option{ color: var(--text); background-color: #ffffff; }
+
+    select, option{ color: var(--surfaceText); background-color: #ffffff; }
 
     .btn{
       border:1px solid rgba(15,21,38,.12);
       background: rgba(255,255,255,.86);
-      color: var(--text);
+      color: var(--surfaceText);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight:900;
@@ -257,10 +244,10 @@
     .btnDanger{
       border: 1px solid rgba(226,59,87,.22);
       background: rgba(226,59,87,.10);
+      color: var(--surfaceText);
     }
 
-    /* ✅ UPDATED: MAIN GLASS PANEL (the “grey section” behind white cards)
-       More transparent + stronger blur + 3D highlight */
+    /* ✅ MAIN GLASS PANEL */
     .card{
       border: 1px solid rgba(255,255,255,.16);
       background:
@@ -274,6 +261,9 @@
       -webkit-backdrop-filter: blur(18px) saturate(120%);
       position: relative;
       overflow: hidden;
+
+      /* ✅ text inside card should be dark (readable on translucent white surface) */
+      color: var(--surfaceText);
     }
     .card:before{
       content:"";
@@ -297,7 +287,7 @@
       margin-bottom: 10px;
     }
     .title{ font-size: 18px; font-weight: 900; letter-spacing:.2px; }
-    .sub{ color: var(--muted); font-size: 13px; margin-top: 3px; }
+    .sub{ color: var(--surfaceMuted); font-size: 13px; margin-top: 3px; }
 
     .pill{
       display:inline-flex;
@@ -314,11 +304,11 @@
     }
 
     .field{ display:flex; flex-direction:column; gap: 6px; }
-    .field label{ font-size: 12px; font-weight: 900; color: var(--muted); letter-spacing:.2px; }
+    .field label{ font-size: 12px; font-weight: 900; color: var(--surfaceMuted); letter-spacing:.2px; }
     .input, .select2{
       border:1px solid rgba(15,21,38,.12);
       background: rgba(255,255,255,.92);
-      color: var(--text);
+      color: var(--surfaceText);
       border-radius: 14px;
       padding: 10px 12px;
       outline:none;
@@ -338,6 +328,7 @@
       border-radius: 16px;
       border:1px solid rgba(15,21,38,.10);
       background: rgba(255,255,255,.80);
+      color: var(--surfaceText);
     }
     .table th, .table td{
       padding: 10px 10px;
@@ -345,7 +336,7 @@
       border-bottom:1px solid rgba(15,21,38,.06);
       text-align:left;
       vertical-align:top;
-      color: var(--text);
+      color: var(--surfaceText);
     }
     .table th{
       color: rgba(15,21,38,.65);
@@ -375,7 +366,7 @@
     .iconBtn{
       border:1px solid rgba(15,21,38,.10);
       background: rgba(15,21,38,.04);
-      color: var(--text);
+      color: var(--surfaceText);
       width: 34px;
       height: 34px;
       border-radius: 12px;
@@ -397,6 +388,7 @@
       overflow:hidden;
       margin-top: 12px;
       position:relative;
+      color: var(--surfaceText);
     }
     .chart canvas{ width:100%; height:100%; display:block; }
     .chartHint{
@@ -417,11 +409,11 @@
       border:1px dashed rgba(15,21,38,.18);
       border-radius: 18px;
       padding: 18px;
-      color: var(--muted);
+      color: var(--surfaceMuted);
       background: rgba(255,255,255,.60);
       margin-top: 10px;
     }
-    .empty strong{ color: var(--text); }
+    .empty strong{ color: var(--surfaceText); }
     .empty p{ margin: 8px 0 0; font-size: 13px; line-height:1.45; }
 
     .banner{
@@ -432,11 +424,11 @@
       border: 1px solid rgba(47,107,255,.18);
       background: rgba(255,255,255,.72);
       box-shadow: 0 18px 50px rgba(0,0,0,.10);
-      color: var(--text);
+      color: var(--surfaceText);
     }
     .banner.show{ display:block; }
     .banner strong{ font-weight: 900; }
-    .banner .small{ color: var(--muted); font-size: 12px; margin-top: 3px; }
+    .banner .small{ color: var(--surfaceMuted); font-size: 12px; margin-top: 3px; }
 
     .handWrap{
       margin-top: 12px;
@@ -470,6 +462,7 @@
       position:relative;
       overflow:hidden;
       min-width: 300px;
+      color: var(--surfaceText);
     }
 
     .distTop{ display:flex; align-items:flex-start; justify-content:space-between; gap: 10px; }
@@ -485,7 +478,7 @@
     }
     .distTitle .small{
       font-size: 12px;
-      color: var(--muted);
+      color: var(--surfaceMuted);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -501,7 +494,7 @@
       border: 1px solid rgba(47,107,255,.16);
       white-space:nowrap;
     }
-    .distStats .count{ font-size: 12px; color: var(--muted); font-weight: 900; white-space:nowrap; }
+    .distStats .count{ font-size: 12px; color: var(--surfaceMuted); font-weight: 900; white-space:nowrap; }
 
     .distList{
       border-radius: 14px;
@@ -538,7 +531,7 @@
     }
     .entryMain .meta{
       font-size: 12px;
-      color: var(--muted);
+      color: var(--surfaceMuted);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -546,7 +539,7 @@
     }
     .entryMain .notes{
       font-size: 12px;
-      color: var(--muted2);
+      color: var(--surfaceMuted2);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -589,6 +582,7 @@
       padding: 16px;
       position: relative;
       z-index: 2;
+      color: var(--surfaceText);
     }
     .modalTop{
       display:flex;
@@ -602,12 +596,12 @@
       padding-bottom: 10px;
       z-index: 3;
     }
-    .modalTop h3{ margin:0; font-size: 16px; font-weight: 900; color: var(--text); }
-    .modalTop p{ margin:4px 0 0; color: var(--muted); font-size: 13px; line-height:1.4; }
+    .modalTop h3{ margin:0; font-size: 16px; font-weight: 900; color: var(--surfaceText); }
+    .modalTop p{ margin:4px 0 0; color: var(--surfaceMuted); font-size: 13px; line-height:1.4; }
     .xbtn{
       border: 1px solid rgba(15,21,38,.10);
       background: rgba(15,21,38,.04);
-      color: var(--text);
+      color: var(--surfaceText);
       border-radius: 12px;
       width: 38px; height: 38px;
       cursor:pointer;
@@ -655,7 +649,7 @@
     .miniBtn{
       border:1px solid rgba(15,21,38,.12);
       background: rgba(255,255,255,.88);
-      color: var(--text);
+      color: var(--surfaceText);
       padding: 10px 12px;
       border-radius: 14px;
       font-weight: 900;
@@ -666,7 +660,12 @@
     .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.96); }
     .miniBtnDanger{ border:1px solid rgba(226,59,87,.22); background: rgba(226,59,87,.10); }
 
-    .foot{ margin-top: 14px; color: var(--muted2); font-size: 12px; line-height:1.45; }
+    .foot{
+      margin-top: 14px;
+      color: var(--surfaceMuted2);
+      font-size: 12px;
+      line-height:1.45;
+    }
 
     .focusWrap{
       display:flex;
@@ -675,9 +674,7 @@
       flex-wrap: wrap;
       justify-content:flex-end;
     }
-    .focusSelect{
-      min-width: 180px;
-    }
+    .focusSelect{ min-width: 180px; }
 
     @media (min-width: 980px){
       .appbarInner{ flex-wrap: nowrap; padding: 10px 18px; }
@@ -804,14 +801,14 @@
           <div class="field">
             <label>Distance Focus (for chart)</label>
             <select id="analyticsDistance" class="select2"></select>
-            <div class="help" id="anCount" style="margin-top:6px; color:var(--muted); font-weight:900;">—</div>
+            <div class="help" id="anCount" style="margin-top:6px; color:var(--surfaceMuted); font-weight:900;">—</div>
           </div>
 
           <div class="field">
             <label>PB (Selected Distance)</label>
             <div class="input" style="display:flex; align-items:center; justify-content:space-between; gap:10px;">
               <div style="font-weight:950;" id="anPB">—</div>
-              <div style="font-size:12px; color:var(--muted); font-weight:900;" id="anPBMeta">Select a distance to display PB</div>
+              <div style="font-size:12px; color:var(--surfaceMuted); font-weight:900;" id="anPBMeta">Select a distance to display PB</div>
             </div>
           </div>
         </div>
@@ -886,7 +883,7 @@
     </section>
   </div>
 
-  <!-- ✅ Distance list for typing + dropdown suggestions -->
+  <!-- Distance list for typing suggestions -->
   <datalist id="distanceList"></datalist>
 
   <!-- MODALS -->
@@ -913,9 +910,6 @@
         <div class="field" style="grid-column:1 / -1;">
           <label>Avatar Emoji (optional)</label>
           <input id="athEmoji" class="input" placeholder="Default ❄️ (example: ⛸️ 🏁 ⭐)" />
-          <div class="help" style="font-size:12px; color:rgba(15,21,38,.55); font-weight:800;">
-            Tip: you can also upload a photo later by clicking the avatar at the top.
-          </div>
         </div>
       </div>
 
@@ -954,43 +948,6 @@
       <div class="modalActions">
         <button class="btn" data-close="modalEditAthlete">Cancel</button>
         <button class="btn btnPrimary" id="saveAthleteEdits">Save Changes</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modalOverlay" id="modalAvatar">
-    <div class="modal">
-      <div class="modalTop">
-        <div>
-          <h3>Set Athlete Avatar</h3>
-          <p>Choose an emoji or upload an image (saved for this athlete on this device).</p>
-        </div>
-        <button class="xbtn" data-close="modalAvatar">✕</button>
-      </div>
-
-      <div class="empty" style="margin-top:0;">
-        <strong>Emoji</strong>
-        <p>Type an emoji (example: ⛸️ 🏁 ⭐) then save.</p>
-        <div class="field" style="margin-top:10px;">
-          <label>Emoji</label>
-          <input id="avatarEmoji" class="input" placeholder="❄️" />
-        </div>
-      </div>
-
-      <div class="empty">
-        <strong>Upload Image</strong>
-        <p>Choose a photo. It will be stored on this device (as a small data file).</p>
-        <div class="field" style="margin-top:10px;">
-          <label>Choose image</label>
-          <input id="avatarFile" class="input" type="file" accept="image/*" capture="environment" />
-        </div>
-      </div>
-
-      <div id="avatarErr" class="error"></div>
-
-      <div class="modalActions">
-        <button class="btn" data-close="modalAvatar">Cancel</button>
-        <button class="btn btnPrimary" id="saveAvatar">Save Avatar</button>
       </div>
     </div>
   </div>
@@ -1067,15 +1024,14 @@
           <input id="editEnNotes" class="input" placeholder="e.g., Meet name, lane, fall, etc." />
         </div>
 
-        <!-- ✅ Changed to input + datalist so user can type 700/777/etc -->
         <div class="field">
           <label>Distance</label>
           <input id="editEnDistance" class="input" list="distanceList" placeholder="e.g., 500m" />
         </div>
 
         <div class="field">
-          <label>Time (mm:ss.mmm)</label>
-          <input id="editEnTime" class="input" placeholder="00:52.300" />
+          <label>Time (mm:ss.mmm or HH:MM:SS)</label>
+          <input id="editEnTime" class="input" placeholder="00:52.300 or 00:01:00" />
         </div>
       </div>
 
@@ -1199,6 +1155,9 @@
     const canvas = document.getElementById("trendCanvas");
     const ctx = canvas.getContext("2d");
 
+    // -----------------------------
+    // Events
+    // -----------------------------
     document.getElementById("btnAddAthlete").addEventListener("click", () => openModal("modalAthlete"));
     document.getElementById("btnEditAthlete").addEventListener("click", openEditAthlete);
 
@@ -1228,12 +1187,8 @@
         openModal("modalAthlete");
         return;
       }
-      const ath = getActiveAthlete();
-      document.getElementById("avatarEmoji").value = (ath.avatarType === "emoji" ? (ath.avatarValue || "❄️") : "❄️");
-      document.getElementById("avatarFile").value = "";
-      openModal("modalAvatar");
+      openAvatarQuick();
     });
-    document.getElementById("saveAvatar").addEventListener("click", saveAvatar);
 
     document.getElementById("btnSaveEntryEdits").addEventListener("click", saveEntryEdits);
     document.getElementById("btnDeleteEntry").addEventListener("click", deleteEntryFromEditModal);
@@ -1304,14 +1259,9 @@
       openEditEntryModal(tr.getAttribute("data-entry-id"));
     });
 
-    function syncAppbarHeight(){
-      const appbar = document.querySelector(".appbar");
-      if(!appbar) return;
-      const h = appbar.offsetHeight || 84;
-      document.documentElement.style.setProperty("--appbarH", h + "px");
-    }
-    window.addEventListener("resize", syncAppbarHeight);
-
+    // -----------------------------
+    // Init
+    // -----------------------------
     init();
 
     function init(){
@@ -1325,12 +1275,20 @@
 
       renderAll(true);
       syncAppbarHeight();
+      window.addEventListener("resize", syncAppbarHeight);
     }
 
     function applyTheme(){
       const t = prefs.theme || "dark";
       document.documentElement.setAttribute("data-theme", t);
       syncAppbarHeight();
+    }
+
+    function syncAppbarHeight(){
+      const appbar = document.querySelector(".appbar");
+      if(!appbar) return;
+      const h = appbar.offsetHeight || 84;
+      document.documentElement.style.setProperty("--appbarH", h + "px");
     }
 
     function switchTab(tab){
@@ -1354,12 +1312,15 @@
     }
 
     function clearErrors(){
-      ["athleteErr","entryErr","resetErr","importMsg","editAthErr","donateErr","avatarErr","editEntryErr"].forEach(id=>{
+      ["athleteErr","entryErr","resetErr","importMsg","editAthErr","donateErr","editEntryErr"].forEach(id=>{
         const el = document.getElementById(id);
         if(el){ el.classList.remove("show"); el.textContent=""; }
       });
     }
 
+    // -----------------------------
+    // Storage
+    // -----------------------------
     function loadState(){
       try{
         const raw = localStorage.getItem(LS_KEY);
@@ -1369,6 +1330,7 @@
       }
     }
     function saveState(){ localStorage.setItem(LS_KEY, JSON.stringify(state)); }
+
     function loadPrefs(){
       try{
         const raw = localStorage.getItem(LS_PREF);
@@ -1379,27 +1341,34 @@
     }
     function savePrefs(){ localStorage.setItem(LS_PREF, JSON.stringify(prefs)); }
 
+    // -----------------------------
+    // Helpers
+    // -----------------------------
     function getActiveAthlete(){
       return state.athletes.find(a => a.id === state.activeAthleteId) || null;
     }
-    function uid(){
-      return "a_" + Math.random().toString(16).slice(2) + Date.now().toString(16);
+    function uid(){ return "a_" + Math.random().toString(16).slice(2) + Date.now().toString(16); }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
     }
 
-    /* ✅ distance normalization + dynamic options */
+    // ✅ distance normalization + dynamic options
     function normalizeDistance(d){
       let s = String(d || "").trim();
       if(!s) return "";
       s = s.replace(/\s+/g,"");
-      // if someone types "500" -> "500m"
       if(/^\d+$/i.test(s)) return `${s}m`;
-      // if someone types "500M" -> "500m"
       const m = s.match(/^(\d+)([a-zA-Z]+)$/);
       if(m){
         const num = m[1];
         const unit = m[2].toLowerCase();
         if(unit === "m") return `${num}m`;
-        // keep other units as typed but normalized
         return `${num}${unit}`;
       }
       return s;
@@ -1416,7 +1385,6 @@
         }
       }
 
-      // sort numeric distances first (100m, 200m, ...), then others
       const arr = [...set];
       arr.sort((a,b)=>{
         const na = a.match(/^(\d+)\s*m$/i);
@@ -1432,12 +1400,10 @@
     function refreshDistanceUI(){
       const list = getDistanceOptionsForActive();
 
-      // datalist
       distanceList.innerHTML = list.map(d => `<option value="${escapeHtml(d)}"></option>`).join("");
 
-      // dropdowns
-      const currentHome = distanceFilter.value || "ALL";
-      const currentAn   = analyticsDistance.value || "ALL";
+      const currentHome = distanceFilter.value || prefs.defaultDistance || "ALL";
+      const currentAn   = analyticsDistance.value || prefs.defaultDistance || "ALL";
 
       const optHtml = `<option value="ALL">All distances</option>` +
         list.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d.replace(/m$/i,""))}</option>`).join("");
@@ -1445,107 +1411,65 @@
       distanceFilter.innerHTML = optHtml;
       analyticsDistance.innerHTML = optHtml;
 
-      // preserve selection if still possible, otherwise fallback
       distanceFilter.value = (currentHome === "ALL" || list.includes(currentHome)) ? currentHome : "ALL";
       analyticsDistance.value = (currentAn === "ALL" || list.includes(currentAn)) ? currentAn : "ALL";
 
-      // keep prefs synced
       prefs.defaultDistance = distanceFilter.value;
       savePrefs();
     }
 
-    /* ✅ smart time parse + confirmation */
-function parseTimeSmart(t){
-  if(t == null) return { ms:null, normalized:null, note:null };
+    // ✅ TIME PARSER FIXED (supports HH:MM:SS like 00:01:00)
+    function parseTimeSmart(t){
+      if(t == null) return { ms:null, normalized:null, note:null };
 
-  // ✅ Excel numeric time (fraction of day)
-  if(typeof t === "number" && isFinite(t)){
-    const totalMs = Math.round(t * 24 * 60 * 60 * 1000);
-    if(totalMs >= 0 && totalMs < 24*60*60*1000){
-      return { ms: totalMs, normalized: msToTime(totalMs), note: null };
-    }
-  }
+      // Excel numeric time (fraction of day)
+      if(typeof t === "number" && isFinite(t)){
+        const totalMs = Math.round(t * 24 * 60 * 60 * 1000);
+        if(totalMs >= 0 && totalMs < 24*60*60*1000){
+          return { ms: totalMs, normalized: msToTime(totalMs), note: null };
+        }
+      }
 
-  let raw = String(t).trim();
-  if(!raw) return { ms:null, normalized:null, note:null };
-  raw = raw.replace(/\s+/g,"");
+      let raw = String(t).trim();
+      if(!raw) return { ms:null, normalized:null, note:null };
+      raw = raw.replace(/\s+/g,"");
 
-  // ✅ HH:MM:SS
-  let m = raw.match(/^(\d{1,2}):([0-5]\d):([0-5]\d)$/);
-  if(m){
-    const hh = Number(m[1]);
-    const mm = Number(m[2]);
-    const ss = Number(m[3]);
-    const total = ((hh*3600) + (mm*60) + ss) * 1000;
-    return { ms: total, normalized: msToTime(total), note: null };
-  }
+      // HH:MM:SS
+      let m = raw.match(/^(\d{1,2}):([0-5]\d):([0-5]\d)$/);
+      if(m){
+        const hh = Number(m[1]);
+        const mm = Number(m[2]);
+        const ss = Number(m[3]);
+        const total = ((hh*3600) + (mm*60) + ss) * 1000;
+        return { ms: total, normalized: msToTime(total), note: null };
+      }
 
-  // ✅ MM:SS(.mmm)
-  m = raw.match(/^(\d{1,2}):([0-5]\d)(?:\.(\d+))?$/);
-  if(m){
-    const mm = Number(m[1]);
-    const ss = Number(m[2]);
-    const ms = Number((m[3]||"0").slice(0,3).padEnd(3,"0"));
-    const total = (mm*60 + ss)*1000 + ms;
-    return { ms: total, normalized: msToTime(total), note: null };
-  }
+      // MM:SS(.ms)
+      m = raw.match(/^(\d{1,2}):([0-5]\d)(?:\.(\d+))?$/);
+      if(m){
+        const mm = Number(m[1]);
+        const ss = Number(m[2]);
+        const ms = Number((m[3]||"0").slice(0,3).padEnd(3,"0"));
+        const total = (mm*60 + ss)*1000 + ms;
+        return { ms: total, normalized: msToTime(total), note: null };
+      }
 
-  // m.ss  → interpret as minutes.seconds
-  m = raw.match(/^(\d{1,2})\.(\d{1,2})$/);
-  if(m){
-    const mm = Number(m[1]);
-    const ss = Number(m[2]);
-    if(ss < 60){
-      const total = (mm*60 + ss)*1000;
-      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw} as ${msToTime(total)}` };
-    }
-  }
+      // m.ss (minutes.seconds)
+      m = raw.match(/^(\d{1,2})\.(\d{1,2})$/);
+      if(m){
+        const mm = Number(m[1]);
+        const ss = Number(m[2]);
+        if(ss < 60){
+          const total = (mm*60 + ss)*1000;
+          return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw} as ${msToTime(total)}` };
+        }
+      }
 
-  // seconds(.ms)
-  m = raw.match(/^(\d{1,4})(?:\.(\d+))?$/);
-  if(m){
-    const sec = Number(m[1]);
-    const ms = Number((m[2]||"0").slice(0,3).padEnd(3,"0"));
-    if(isFinite(sec) && sec >= 0){
-      const total = sec*1000 + ms;
-      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw}s as ${msToTime(total)}` };
-    }
-  }
-
-  return { ms:null, normalized:null, note:null };
-}
-
-
-  // m.ss  (example 1.03 -> 01:03.000)
-  m = raw.match(/^(\d{1,2})\.(\d{1,2})$/);
-  if(m){
-    const mm = Number(m[1]);
-    const ss = Number(m[2]);
-    if(ss < 60){
-      const total = (mm*60 + ss)*1000;
-      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw} as ${msToTime(total)}` };
-    }
-  }
-
-  // seconds(.ms)
-  m = raw.match(/^(\d{1,4})(?:\.(\d+))?$/);
-  if(m){
-    const sec = Number(m[1]);
-    const ms = Number((m[2]||"0").slice(0,3).padEnd(3,"0"));
-    if(isFinite(sec) && sec >= 0){
-      const total = sec*1000 + ms;
-      return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw}s as ${msToTime(total)}` };
-    }
-  }
-
-  return { ms:null, normalized:null, note:null };
-}
-
-
-      m = raw.match(/^(\d{1,4})(?:\.(\d{1,3}))?$/);
+      // seconds(.ms)
+      m = raw.match(/^(\d{1,4})(?:\.(\d+))?$/);
       if(m){
         const sec = Number(m[1]);
-        const ms = Number((m[2]||"0").padEnd(3,"0"));
+        const ms = Number((m[2]||"0").slice(0,3).padEnd(3,"0"));
         if(isFinite(sec) && sec >= 0){
           const total = sec*1000 + ms;
           return { ms: total, normalized: msToTime(total), note: `Interpreted ${raw}s as ${msToTime(total)}` };
@@ -1605,28 +1529,28 @@ function parseTimeSmart(t){
       flashBanner._t = setTimeout(()=> pbBanner.classList.remove("show"), 4200);
     }
 
+    // -----------------------------
+    // Avatar (simple emoji only for now)
+    // -----------------------------
     function renderAvatar(){
       const ath = getActiveAthlete();
       avatarBtn.innerHTML = "";
-      if(!ath){
-        avatarBtn.innerHTML = `<div class="emoji">❄️</div>`;
-        return;
-      }
-      const type = ath.avatarType || "emoji";
-      const val  = ath.avatarValue || "❄️";
-      if(type === "image" && val){
-        const img = document.createElement("img");
-        img.src = val;
-        img.alt = "Avatar";
-        avatarBtn.appendChild(img);
-      }else{
-        const div = document.createElement("div");
-        div.className = "emoji";
-        div.textContent = val || "❄️";
-        avatarBtn.appendChild(div);
-      }
+      const emoji = ath?.avatarEmoji || "❄️";
+      avatarBtn.innerHTML = `<div class="emoji">${escapeHtml(emoji)}</div>`;
     }
 
+    function openAvatarQuick(){
+      const ath = getActiveAthlete();
+      const emoji = prompt("Set avatar emoji (example: ⛸️ 🏁 ⭐)", ath?.avatarEmoji || "❄️");
+      if(emoji == null) return;
+      ath.avatarEmoji = emoji.trim() || "❄️";
+      saveState();
+      renderAll(false);
+    }
+
+    // -----------------------------
+    // Athlete CRUD
+    // -----------------------------
     function saveAthlete(){
       clearErrors();
       const name = document.getElementById("athName").value.trim();
@@ -1642,8 +1566,7 @@ function parseTimeSmart(t){
         birthYear: year || "",
         createdAt: new Date().toISOString(),
         entries: [],
-        avatarType: "emoji",
-        avatarValue: emoji || "❄️"
+        avatarEmoji: emoji || "❄️"
       };
 
       state.athletes.push(newAth);
@@ -1686,40 +1609,9 @@ function parseTimeSmart(t){
       renderAll(true);
     }
 
-    function saveAvatar(){
-      clearErrors();
-      const ath = getActiveAthlete();
-      if(!ath){ showError("avatarErr","No athlete selected."); return; }
-
-      const emoji = document.getElementById("avatarEmoji").value.trim();
-      const file = document.getElementById("avatarFile").files?.[0];
-
-      if(file){
-        if(!file.type.startsWith("image/")){
-          showError("avatarErr","Please choose a valid image file.");
-          return;
-        }
-        const reader = new FileReader();
-        reader.onload = ()=>{
-          ath.avatarType = "image";
-          ath.avatarValue = String(reader.result || "");
-          saveState();
-          closeModal("modalAvatar");
-          flashBanner("Avatar updated.", false);
-          renderAll(false);
-        };
-        reader.readAsDataURL(file);
-        return;
-      }
-
-      ath.avatarType = "emoji";
-      ath.avatarValue = emoji || "❄️";
-      saveState();
-      closeModal("modalAvatar");
-      flashBanner("Avatar updated.", false);
-      renderAll(false);
-    }
-
+    // -----------------------------
+    // Entry modal
+    // -----------------------------
     function openEntryModal(){
       clearErrors();
       document.getElementById("enDate").valueAsDate = new Date();
@@ -1731,7 +1623,6 @@ function parseTimeSmart(t){
       openModal("modalEntry");
     }
 
-    // ✅ row uses input + datalist so user can type custom distance too
     function addEntryRow(distance="500m", time="", isFirst=false){
       const row = document.createElement("div");
       row.className = "entryRow";
@@ -1743,7 +1634,7 @@ function parseTimeSmart(t){
         </div>
 
         <div class="field">
-          <label>Time (mm:ss.mmm)</label>
+          <label>Time</label>
           <input class="input jsTime" placeholder="${escapeHtml(prefs.timeHint || "00:52.300")}" value="${escapeHtml(time || "")}" />
         </div>
 
@@ -1771,7 +1662,7 @@ function parseTimeSmart(t){
       const notes = document.getElementById("enNotes").value.trim();
 
       if(!date){ showError("entryErr","Please select a date."); return; }
-      if(!location){ showError("entryErr","Please enter a location (e.g., Scarborough)."); return; }
+      if(!location){ showError("entryErr","Please enter a location."); return; }
 
       const rows = [...entryRowsEl.querySelectorAll(".entryRow")];
       if(rows.length === 0){ showError("entryErr","Please add at least one distance/time."); return; }
@@ -1781,15 +1672,14 @@ function parseTimeSmart(t){
       let pbMessages = [];
 
       for(const r of rows){
-        const distRaw = r.querySelector(".jsDist").value;
-        const dist = normalizeDistance(distRaw);
+        const dist = normalizeDistance(r.querySelector(".jsDist").value);
         const timeStr = r.querySelector(".jsTime").value.trim();
 
         if(!dist){ showError("entryErr","Please enter a distance (example: 500m)."); return; }
 
         const parsed = parseTimeSmart(timeStr);
         if(parsed.ms == null){
-          showError("entryErr",`Time looks invalid. Try mm:ss.mmm (example: ${prefs.timeHint}).`);
+          showError("entryErr",`Time looks invalid. Try mm:ss.mmm or HH:MM:SS (example: ${prefs.timeHint} or 00:01:00).`);
           return;
         }
 
@@ -1803,27 +1693,25 @@ function parseTimeSmart(t){
 
         const beforePB = beforePBMap[dist]?.ms ?? null;
 
-        const entry = {
+        ath.entries.push({
           id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
           date, distance: dist, time: parsed.normalized, location, notes
-        };
-
-        ath.entries.push(entry);
+        });
         savedCount++;
 
         if(beforePB == null || parsed.ms < beforePB){
           const diff = beforePB == null ? null : (beforePB - parsed.ms);
-          const msg = diff == null
-            ? `First PB for ${dist}: ${parsed.normalized}`
-            : `${dist} improved by ${(diff/1000).toFixed(3)}s → ${parsed.normalized}`;
-          pbMessages.push(msg);
+          pbMessages.push(
+            diff == null
+              ? `First PB for ${dist}: ${parsed.normalized}`
+              : `${dist} improved by ${(diff/1000).toFixed(3)}s → ${parsed.normalized}`
+          );
         }
       }
 
       saveState();
       closeModal("modalEntry");
 
-      // ✅ refresh distances so any new distance appears immediately
       refreshDistanceUI();
 
       if(pbMessages.length){
@@ -1875,15 +1763,8 @@ function parseTimeSmart(t){
 
       const parsed = parseTimeSmart(timeStr);
       if(parsed.ms == null){
-        showError("editEntryErr",`Time looks invalid. Try mm:ss.mmm (example: ${prefs.timeHint}).`);
+        showError("editEntryErr",`Time looks invalid. Try mm:ss.mmm or HH:MM:SS.`);
         return;
-      }
-      if(parsed.note){
-        const ok = confirm(`Just checking 🙂\n\nWe interpreted "${timeStr}" as "${parsed.normalized}".\n\nSave it?`);
-        if(!ok){
-          showError("editEntryErr","Please correct the time and try again.");
-          return;
-        }
       }
 
       e.date = date;
@@ -1893,8 +1774,6 @@ function parseTimeSmart(t){
       e.time = parsed.normalized;
 
       saveState();
-
-      // ✅ refresh distances so edited new distance appears immediately
       refreshDistanceUI();
 
       closeModal("modalEditEntry");
@@ -1931,6 +1810,9 @@ function parseTimeSmart(t){
       renderAll(true);
     }
 
+    // -----------------------------
+    // Reset
+    // -----------------------------
     function doResetAll(){
       clearErrors();
       const txt = document.getElementById("resetConfirm").value.trim();
@@ -1945,9 +1827,12 @@ function parseTimeSmart(t){
       renderAll(true);
     }
 
+    // -----------------------------
+    // Render
+    // -----------------------------
     function renderAll(allowChartRedraw){
       renderAthleteSelect();
-      refreshDistanceUI();     // ✅ always keep dropdowns + datalist updated
+      refreshDistanceUI();
       renderAvatar();
       renderHome();
       renderAnalytics(allowChartRedraw);
@@ -2155,7 +2040,8 @@ function parseTimeSmart(t){
       pillExport.textContent = ath ? `Selected: ${ath.name}` : "No athlete";
     }
 
-    function drawChart(entries, dist){
+    // Simple chart line
+    function drawChart(entries){
       const data = [...entries]
         .filter(e => parseTimeSmart(e.time).ms!=null)
         .sort((a,b)=> new Date(a.date)-new Date(b.date));
@@ -2169,7 +2055,7 @@ function parseTimeSmart(t){
 
       if(points.length < 2){
         ctx.fillStyle = labelCol;
-        ctx.font = "800 26px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+        ctx.font = "800 22px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
         ctx.fillText("Select a distance and add entries to see trend", 50, 210);
         return;
       }
@@ -2204,7 +2090,7 @@ function parseTimeSmart(t){
       }
 
       ctx.fillStyle = labelCol;
-      ctx.font = "800 15px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
+      ctx.font = "800 14px ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial";
       for(let i=0;i<=gridCount;i++){
         const y = padT + (H/gridCount)*i;
         const val = maxY - ((maxY-minY)/gridCount)*i;
@@ -2230,6 +2116,9 @@ function parseTimeSmart(t){
       ctx.stroke();
     }
 
+    // -----------------------------
+    // Excel export/template
+    // -----------------------------
     function exportXLSX(){
       const ath = getActiveAthlete();
       if(!ath){ flashBanner("No athlete selected.", false); return; }
@@ -2251,7 +2140,9 @@ function parseTimeSmart(t){
     function downloadTemplateXLSX(){
       const sample = [
         ["Athlete","BirthYear","Date","Location","Distance","Time","Notes"],
-        ["Alex","2015","2025-11-29","Ontario Provincial Circuit - Brampton","400m","00:49.720","Sample row- optional"],
+        ["Samarveer","2014","2025-11-29","Ontario Provincial Circuit - Brampton","400m","00:48.700","Sample row"],
+        ["Samarveer","2014","","","500m","00:59.300","(optional) leave date/location blank to fill-down like Excel"],
+        ["Samarveer","2014","","","400m","00:01:00","HH:MM:SS is allowed (Excel style)"]
       ];
       const ws = XLSX.utils.aoa_to_sheet(sample);
       const wb = XLSX.utils.book_new();
@@ -2260,171 +2151,160 @@ function parseTimeSmart(t){
       flashBanner("Template downloaded.", false);
     }
 
-   function importXLSXIntoSelectedAthlete(){
-  clearErrors();
-  const ath = getActiveAthlete();
-  if(!ath){ showError("importMsg","Please select an athlete first."); return; }
+    // ✅ CLEAN IMPORT (no duplicate logic, supports fill-down, supports 28-Jan-24, supports 00:01:00)
+    function importXLSXIntoSelectedAthlete(){
+      clearErrors();
+      const ath = getActiveAthlete();
+      if(!ath){ showError("importMsg","Please select an athlete first."); return; }
 
-  const file = excelFile.files && excelFile.files[0];
-  if(!file){ showError("importMsg","Please choose an Excel file first."); return; }
+      const file = excelFile.files && excelFile.files[0];
+      if(!file){ showError("importMsg","Please choose an Excel file first."); return; }
 
-  const reader = new FileReader();
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const data = new Uint8Array(reader.result);
+          const wb = XLSX.read(data, { type: "array" });
+          const sheetName = wb.SheetNames[0];
+          const ws = wb.Sheets[sheetName];
 
-  reader.onload = () => {
-    try{
-      const data = new Uint8Array(reader.result);
-      const wb = XLSX.read(data, { type: "array" });
-      const sheetName = wb.SheetNames[0];
-      const ws = wb.Sheets[sheetName];
+          const json = XLSX.utils.sheet_to_json(ws, { defval: "" });
+          if(!json.length){
+            showError("importMsg","Excel looks empty. Please use the template.");
+            return;
+          }
 
-      const json = XLSX.utils.sheet_to_json(ws, { defval: "" });
-      if(!json.length){
-        showError("importMsg","Excel looks empty. Please use the template.");
-        return;
-      }
+          const norm = (s)=> String(s||"").trim().toLowerCase();
+          const get = (row, key)=>{
+            const k = Object.keys(row).find(h => norm(h) === norm(key));
+            return k ? row[k] : "";
+          };
 
-      const norm = (s)=> String(s||"").trim().toLowerCase();
-      const get = (row, key)=>{
-        const k = Object.keys(row).find(h => norm(h) === norm(key));
-        return k ? String(row[k] ?? "").trim() : "";
+          let added = 0;
+          let skipped = 0;
+          let firstBad = "";
+
+          let lastDate = "";
+          let lastLocation = "";
+
+          for(let i=0;i<json.length;i++){
+            const row = json[i];
+
+            // read raw
+            let rawDate = get(row,"Date");
+            let rawLocation = get(row,"Location");
+            let rawDistance = get(row,"Distance");
+            let rawTime = get(row,"Time");
+            let notes = String(get(row,"Notes") || "").trim();
+
+            // fill-down date/location
+            if(String(rawDate).trim()) lastDate = rawDate;
+            else rawDate = lastDate;
+
+            if(String(rawLocation).trim()) lastLocation = rawLocation;
+            else rawLocation = lastLocation;
+
+            // normalize
+            let date = excelDateToISO(rawDate);
+            let location = String(rawLocation || "").trim();
+            let distance = normalizeDistance(rawDistance);
+            let timeRaw = (rawTime == null) ? "" : rawTime;
+
+            // remove spaces if string time like " 00: 50.738 "
+            if(typeof timeRaw === "string") timeRaw = timeRaw.replace(/\s+/g,"");
+
+            // validate required fields
+            if(!date || !location || !distance || (timeRaw === "" || timeRaw == null)){
+              skipped++;
+              continue;
+            }
+
+            const parsed = parseTimeSmart(timeRaw);
+            if(parsed.ms == null){
+              skipped++;
+              if(!firstBad) firstBad = `Row ${i+2}: invalid time "${timeRaw}"`;
+              continue;
+            }
+
+            ath.entries.push({
+              id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
+              date,
+              location,
+              distance,
+              time: parsed.normalized,
+              notes: notes || ""
+            });
+            added++;
+          }
+
+          saveState();
+          refreshDistanceUI();
+
+          if(added === 0){
+            showError("importMsg", `No rows imported. ${firstBad || "Please use columns: Date, Location, Distance, Time."}`);
+            return;
+          }
+
+          flashBanner(`Excel import complete: ${added} row(s) added to ${ath.name}${skipped ? ` • ${skipped} skipped` : ""}.`, false);
+          renderAll(true);
+
+        }catch(e){
+          showError("importMsg","Could not import Excel. Please use the template format.");
+        }
       };
-
-      let added = 0;
-      let skipped = 0;
-      let firstBad = "";
-
-      let lastDate = "";
-      let lastLocation = "";
-
-      for(let i=0;i<json.length;i++){
-        const row = json[i];
-
-        let date     = get(row,"Date");
-        let location = get(row,"Location");
-        const distance = normalizeDistance(get(row,"Distance"));
-        let time     = get(row,"Time");
-        // ✅ Grab the actual Time cell value too (could be number)
-        const timeKey = Object.keys(row).find(h => norm(h) === "time");
-        const timeVal = timeKey ? row[timeKey] : null;
-        // If Excel stored time as a number, use it directly
-        if(typeof timeVal === "number" && isFinite(timeVal)){
-          time = timeVal;
-        } else {
-          time = String(time || "").replace(/\s+/g,"");
-        }
-
-
-        // ✅ Excel-like fill-down
-        if(date) lastDate = date; else date = lastDate;
-        if(location) lastLocation = location; else location = lastLocation;
-
-        // ✅ Detect actual Date column header (not always "Date")
-        const dateKey = Object.keys(row).find(h => norm(h) === "date");
-        const dateVal = dateKey ? row[dateKey] : null;
-
-        // Convert Excel Date objects / serials
-        if(Object.prototype.toString.call(dateVal) === "[object Date]" && !isNaN(dateVal)){
-          const d = dateVal;
-          date = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
-        } else if(typeof dateVal === "number"){
-          const d = XLSX.SSF.parse_date_code(dateVal);
-          if(d){
-            date = `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
-          }
-        } else {
-          // Accept 28-Jan-24
-          const m = String(date||"").match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/);
-          if(m){
-            const months = {jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"};
-            const yyyy = m[3].length === 2 ? `20${m[3]}` : m[3];
-            date = `${yyyy}-${months[m[2].toLowerCase()]}-${String(m[1]).padStart(2,"0")}`;
-          }
-        }
-
-        // Validate
-        if(!date || !location || !distance || !time){
-          skipped++;
-          continue;
-        }
-
-        const parsed = parseTimeSmart(time);
-        if(parsed.ms == null){
-          skipped++;
-          if(!firstBad) firstBad = `Row ${i+2}: invalid time "${time}"`;
-          continue;
-        }
-
-        ath.entries.push({
-          id: "e_" + Math.random().toString(16).slice(2) + Date.now().toString(16),
-          date,
-          location,
-          distance,
-          time: parsed.normalized,
-          notes: notes || ""
-        });
-
-        added++;
-      }
-
-      saveState();
-      refreshDistanceUI();
-
-      if(added === 0){
-        showError("importMsg", `No rows imported. ${firstBad || "Please use columns: Date, Location, Distance, Time."}`);
-        return;
-      }
-
-      flashBanner(`Excel import complete: ${added} row(s) added to ${ath.name}${skipped ? ` • ${skipped} skipped` : ""}.`, false);
-      renderAll(true);
-
-    }catch(e){
-      console.error(e);
-      showError("importMsg","Could not import Excel. Please use the template format.");
+      reader.readAsArrayBuffer(file);
     }
-  };
 
-  reader.readAsArrayBuffer(file);
-}
+    function excelDateToISO(v){
+      if(v == null) return "";
+      // if already ISO yyyy-mm-dd
+      const s = String(v).trim();
+      if(/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
 
+      // JS Date
+      if(Object.prototype.toString.call(v) === "[object Date]" && !isNaN(v)){
+        const yyyy = v.getFullYear();
+        const mm = String(v.getMonth()+1).padStart(2,"0");
+        const dd = String(v.getDate()).padStart(2,"0");
+        return `${yyyy}-${mm}-${dd}`;
+      }
 
+      // Excel serial date number
+      if(typeof v === "number" && isFinite(v)){
+        const d = XLSX.SSF.parse_date_code(v);
+        if(d){
+          return `${d.y}-${String(d.m).padStart(2,"0")}-${String(d.d).padStart(2,"0")}`;
+        }
+      }
+
+      // format like 28-Jan-24
+      const m = s.match(/^(\d{1,2})-([A-Za-z]{3})-(\d{2,4})$/);
+      if(m){
+        const months = {jan:"01",feb:"02",mar:"03",apr:"04",may:"05",jun:"06",jul:"07",aug:"08",sep:"09",oct:"10",nov:"11",dec:"12"};
+        const yyyy = m[3].length === 2 ? `20${m[3]}` : m[3];
+        const mon = months[m[2].toLowerCase()];
+        if(mon) return `${yyyy}-${mon}-${String(m[1]).padStart(2,"0")}`;
+      }
+
+      return "";
+    }
+
+    // -----------------------------
+    // Donate
+    // -----------------------------
     function donateAmount(amountStr){
       clearErrors();
-
       const amt = String(amountStr || "").trim();
       const n = Number(amt);
       if(!amt || !isFinite(n) || n <= 0){
         showError("donateErr","Please enter a valid amount (example: 2, 5, 10, 3.50).");
         return;
       }
-
       const base = PAYPAL_ME.replace(/\/+$/,"");
       const url = `${base}/${n}`;
       window.open(url, "_blank", "noopener,noreferrer");
       closeModal("modalDonate");
       flashBanner("Opening PayPal donation page… 💙", false);
-    }
-
-    function doResetAll(){
-      clearErrors();
-      const txt = document.getElementById("resetConfirm").value.trim();
-      if(txt !== "RESET"){ showError("resetErr","Please type RESET exactly to confirm."); return; }
-      localStorage.removeItem(LS_KEY);
-      localStorage.removeItem(LS_PREF);
-      state = structuredClone(defaultState);
-      prefs = structuredClone(defaultPrefs);
-      closeModal("modalReset");
-      flashBanner("All data cleared on this device.", false);
-      applyTheme();
-      renderAll(true);
-    }
-
-    function escapeHtml(str){
-      return String(str)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
     }
   </script>
 </body>
