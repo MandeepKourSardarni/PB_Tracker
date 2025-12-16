@@ -1,10 +1,23 @@
-# 🏁 PERSONAL BEST TRACKER
+# PERSONAL BEST TRACKER
 
 *A gentle, visual personal-best tracker for young speed skaters*
 
 PB TRACKER is a **clean, offline-first web dashboard** designed to help athletes, parents, and coaches **track race results, personal bests (PBs), and performance trends** across multiple distances — all in one place.
 
 Built with care for **young skaters and busy parents**, it focuses on **clarity, flexibility, and ease of use**, without requiring accounts or servers.
+
+## 🔗 Live App Access
+
+👉 **Open PERSONAL BEST TRACKER**  
+https://mandeepkoursardarni.github.io/PB_Tracker/
+Works best on tablets and laptops, and is fully usable on mobile.
+No login required
+
+## 📱 Quick Access (QR Code)
+
+Scan this QR code to open the tracker instantly on your phone or tablet:
+
+![PB VelocityBoard QR Code](https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=https://mandeepkoursardarni.github.io/PB_Tracker/)
 
 ---
 
