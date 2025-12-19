@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2365,9 +2366,7 @@ function drawChart(entries){
     function downloadTemplateXLSX(){
       const sample = [
         ["Athlete","BirthYear","Date","Location","Distance","Time","Notes"],
-        ["Samarveer","2014","2025-11-29","Ontario Provincial Circuit - Brampton","400m","00:48.700","Sample row"],
-        ["Samarveer","2014","","","500m","00:59.300","(optional) leave date/location blank to fill-down like Excel"],
-        ["Samarveer","2014","","","400m","00:01:00","HH:MM:SS is allowed (Excel style)"]
+        ["Alex","2015","2025-11-29","Ontario Provincial Circuit - Milton","500m","00:58.700","Sample row-optional note: Time row is in HH:MM:SS format"],
       ];
       const ws = XLSX.utils.aoa_to_sheet(sample);
       const wb = XLSX.utils.book_new();
